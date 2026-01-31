@@ -27,3 +27,5 @@ rsync -a --delete /home/clawdbot/.ssh/ "$BACKUP_DIR/.ssh/"
 # Guardar timestamp
 date > "$BACKUP_DIR/last-backup.txt"
 echo "Backup completado: $(date)"
+rsync -a --delete /home/clawdbot/.secrets/ "$BACKUP_DIR/.secrets/"
+rsync -a --delete /home/clawdbot/umbra-token/ "$BACKUP_DIR/umbra-token/"
