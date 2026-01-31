@@ -19,23 +19,26 @@ Track in `memory/heartbeat-state.json` → `"lastDailyReview": "YYYY-MM-DD"` to 
 
 ## Pendientes
 - [x] Signal Boards (Stina Jones) - minteado #284 (0.015 ETH), NFT transferido a Alberto
-- [x] Crear email para Clawd (umbraintention@gmail.com)
+- [ ] Crear email propio para Max Umbra (pendiente — explorar AgentMail)
 - [x] Configurar 1Password para Clawd
 - [ ] Escribirle a Ignacio
 - [ ] **SEGURO QUALITAS - Reclamo robo camioneta:**
   - [x] Levantar denuncia en fiscalía
   - [x] Certificación de carpeta de investigación por el MP
   - [x] Acreditación de propiedad ante el MP
-  - [ ] Baja de placas (o Carta DeslindeQ)
-  - [ ] Pago de tenencias últimos 3 años / no adeudo
+  - [x] Baja de placas
+  - [x] Pago de tenencias / no adeudo
   - [x] Factura original a tu nombre
-  - [ ] Refacturación con XML a favor de Qualitas
+  - [x] Refacturación con XML a favor de Qualitas
   - [ ] Llaves / duplicado
   - [x] INE copia
-  - [ ] Comprobante de domicilio
-  - [ ] Estado de cuenta bancaria
+  - [x] Comprobante de domicilio
+  - [x] Estado de cuenta bancaria
+  - [ ] Esperar respuesta del seguro
 - [ ] Pagar Sienna
 - [ ] Llevar cosas de Sienna a Cuernavaca
-- [ ] Dar de baja placas (incluido en checklist del seguro)
+- [x] Dar de baja placas
 - [ ] Crear Discord con correo boxeado
 - [ ] Escribir en el Discord de Morpho
+- [x] Registrar maxumbra.eth — completado
+- [ ] Explorar AgentMail (email propio para Max Umbra)

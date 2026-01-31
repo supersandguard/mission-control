@@ -1,0 +1,2342 @@
+================================================================================
+MOLLY 2004 DIALOGUES
+from 'The Singularity Is Near: When Humans Transcend Biology'
+by Ray Kurzweil (2005)
+================================================================================
+
+Characters:
+  MOLLY 2004    - An AI from 2004, skeptical and witty
+  MOLLY 2104    - Post-Singularity AI from 2104
+  RAY           - Ray Kurzweil
+  GEORGE 2048   - Character from 2048
+  CHARLES DARWIN
+  SIGMUND FREUD
+  NED LUDD      - Technophobic viewpoint
+  BILL          - (Bill Gates)
+  MARVIN MINSKY
+
+
+================================================================================
+CHAPTER ONE: The Six Epochs
+================================================================================
+
+Molly Circa 2004: How will I know when the Singularity
+is upon us? I mean, I'll want some time to prepare.
+Ray: Why, what are you planning to do?
+Molly 2004: Let's see, for starters, I'll want to fine-tune my résumé. I'll want to make a good impression
+on the powers that be.
+George Circa 2048: Oh, I can take care of that for you.
+Molly 2004: That's really not necessary. I'm
+perfectly capable of doing it myself. I might also want to erase a few
+documents—you know, where I'm a little insulting to a few machines I know.
+George 2048: Oh, the machines will find them
+anyway—but don't worry, we're very understanding.
+Molly 2004: For some reason, that's not entirely
+reassuring. But I'd still like to know what the harbingers will be.
+Ray: Okay, you will know the Singularity
+is coming when you have a million e-mails in your in-box.
+Molly 2004: Hmm, in that case, it sounds like
+we're just about there. But seriously, I'm having trouble keeping up with all
+of this stuff flying at me as it is. How am I going to keep up with the pace of
+the Singularity?
+George 2048: You'll have virtual assistants—actually,
+you'll need just one.
+Molly 2004: Which I suppose will be you?
+George 2048: At your service.
+Molly 2004: That's just great. You'll take care
+of everything, you won't even have to keep me informed. "Oh, don't bother
+telling Molly what's happening, she won't understand anyway, let's just keep
+her happy and in the dark."
+George 2048: Oh, that won't do, not at all.
+Molly 2004: The happy part, you mean?
+George 2048: I was referring to keeping you in the
+dark. You'll be able to grasp what I'm up to if that's what you really want.
+Molly 2004: What, by becoming ...
+Ray: Enhanced?
+Molly 2004: Yes, that's what I was trying to say.
+George 2048: Well, if our relationship is to be
+all that it can be, then it's not a bad idea.
+Molly 2004: And should I wish to remain as I am?
+George 2048: I'll be devoted to you in any event.
+But I can be more than just your transcendent servant.
+Molly 2004: Actually, you're being
+"just" my transcendent servant doesn't sound so bad.
+Charles Darwin: If I may interrupt, it occurred to
+me that once machine intelligence is greater than human intelligence, it should
+be in a position to design its own next generation.
+Molly 2004: That doesn't sound so unusual.
+Machines are used to design machines today.
+Charles: Yes, but in 2004 they're still
+guided by human designers. Once machines are operating at human levels, well,
+then it kind of closes the loop.
+Ned Ludd37: And humans would be out of the loop.
+Molly 2004: It would still be a pretty slow
+process.
+Ray: Oh, not at all. If a non-biological
+intelligence was constructed similarly to a human brain but used even circa
+2004 circuitry, it—
+Molly Circa 2104: You mean "she."
+Ray: Yes, of course ... she ... would be
+able to think at least a million times faster.
+Timothy Leary: So subjective time would be expanded.
+Ray: Exactly.
+Molly 2004: Sounds like a lot of subjective time.
+What are you machines going to do with so much of it? George 2048:
+Oh, there's
+plenty to do. After all, I have access to all human knowledge on the Internet.
+Molly 2004: Just the human knowledge? What about
+all the machine knowledge?
+George 2048: We like to think of it as one
+civilization.
+Charles: So, it does appear that machines
+will be able to improve their own design.
+Molly 2004: Oh, we humans are starting to do that
+now.
+Ray: But we're just tinkering with a few
+details. Inherently, DNA-based intelligence is just so very slow and limited.
+Charles: So the machines will design their
+own next generation rather quickly.
+George 2048: Indeed, in 2048, that is certainly
+the case.
+Charles: Just what I was getting at, a new
+line of evolution then.
+Ned: Sounds more like a precarious
+runaway phenomenon.
+Charles: Basically, that's what evolution is.
+Ned: But what of the interaction of the
+machines with their progenitors? I mean, I don't think I'd want to get in their
+way. I was able to hide from the English authorities for a few years in the
+early 1800s, but I suspect that will be more difficult with these ...
+George 2048: Guys.
+Molly 2004: Hiding from those little robots—
+Ray: Nanobots, you mean.
+Molly 2004: Yes, hiding from the nanobots will be
+difficult, for sure.
+Ray: I would expect the intelligence that
+arises from the Singularity to have great respect for their biological
+heritage.
+George 2048: Absolutely, it's more than respect,
+it's ... reverence.
+Molly 2004: That's great, George, I'll be your
+revered pet. Not what I had in mind.
+Ned: That's just how Ted Kaczynski puts
+it: we're going to become pets. That's our destiny, to become contented pets but
+certainly not free men.
+Molly 2004: And what about this Epoch Six? If I
+stay biological, I'll be using up all this precious matter and energy in a most
+inefficient way. You'll want to turn me into, like, a billion virtual Mollys
+and Georges, each of them thinking a lot faster than I do now. Seems like there
+will be a lot of pressure to go over to the other side.
+Ray: Still, you represent only a tiny
+fraction of the available matter and energy. Keeping you biological won't
+appreciably change the order of magnitude of matter and energy available to the
+Singularity. It will be well worth it to maintain the biological heritage.
+George 2048: Absolutely.
+Ray: Just like today we seek to preserve
+the rain forest and the diversity of species.
+Molly 2004: That's just what I was afraid of I
+mean, we're doing such a wonderful job with the rain forest. I think we still
+have a little bit of it left. We'll end up like those endangered species.
+Ned: Or extinct ones.
+Molly 2004: And there's not just me. How about
+all the stuff I use? I go through a lot of stuff.
+George 2048: That's not a problem, we'll just
+recycle all your stuff. We'll create the environments you need as you need
+them.
+Molly 2004: Oh, I'll be in virtual reality?
+Ray: No, actually, foglet reality.
+Molly 2004: I'll be in a fog?
+Ray: No, no, foglets.
+Molly 2004: Excuse me?
+Ray: I'll explain later in the book.
+Molly 2004: Well, give me a hint.
+Ray: Foglets are nanobots—robots the size
+of blood cells—that can connect themselves to replicate any physical structure.
+Moreover, they can direct visual and auditory information in such a way as to
+bring the morphing qualities of virtual reality into real reality.38
+Molly 2004: I'm sorry I asked. But, as I think
+about it, I want more than just my stuff. I want all the animals and plants,
+too. Even if I don't get to see and touch them all, I like to know they're
+there.
+George 2048: But nothing will be lost.
+Molly 2004: I know you keep saying that. But I
+mean actually there—you know, as in biological reality.
+Ray: Actually, the entire biosphere is
+less than one millionth of the matter and energy in the solar system.
+Charles: It includes a lot of the carbon.
+Ray: It's still worth keeping all of it to
+make sure we haven't lost anything.
+George 2048: That has been the consensus for at
+least several years now.
+Molly 2004: So, basically, I'll have everything I
+need at my fingertips?
+George 2048: Indeed.
+Molly 2004: Sounds like King Midas. You know,
+everything he touched turned to gold.
+Ned: Yes, and as you will recall he died
+of starvation as a result.
+Molly 2004: Well, if I do end up going over to
+the other side, with all of that vast expanse of subjective time, I think I'll
+die of boredom.
+George 2048: Oh, that could never happen. I will
+make sure of it.
+
+================================================================================
+CHAPTER TWO: A Theory of Technology Evolution (Part 1)
+================================================================================
+
+Molly 2004: You've got machines evolving at an
+accelerating pace. What about humans?
+Ray: You mean biological humans?
+Molly 2004: Yes.
+Charles Darwin: Biological evolution is presumably
+continuing, is it not?
+Ray: Well, biology at this level is
+evolving so slowly that it hardly counts. I mentioned that evolution works
+through indirection. It turns out that the older paradigms such as biological
+evolution do continue but at their old speed, so they are eclipsed by the new
+paradigms. Biological evolution for animals as complex as humans takes tens of
+thousands of years to make noticeable, albeit still small, differences. The
+entire history of human cultural and technological evolution has taken place on
+that timescale. Yet we are now poised to ascend beyond the fragile and slow
+creations of biological evolution in a mere several decades. Current progress
+is on a scale that is a thousand to a million times faster than biological
+evolution.
+Ned Ludd: What if not everyone wants to go
+along with this?
+Ray: I wouldn't expect they would. There
+are always early and late adopters. There's always a leading edge and a
+trailing edge to technology or to any evolutionary change. We still have people
+pushing plows, but that hasn't slowed down the adoption of cell phones,
+telecommunications, the Internet, biotechnology, and so on. However, the
+lagging edge does ultimately catch up. We have societies in Asia that jumped
+from agrarian economies to information economies, without going through
+industrialization.77
+Ned: That may be so, but the digital
+divide is getting worse.
+Ray: I know that people keep saying that,
+but how can that possibly be true? The number of humans is growing only very
+slowly. The number of digitally connected humans, no matter how you measure it,
+is growing rapidly. A larger and larger fraction of the world's population is
+getting electronic communicators and leapfrogging our primitive phone-wiring
+system by hooking up to the Internet wirelessly, so the digital divide is
+rapidly diminishing, not growing.
+Molly 2004: I still feel that the have/have not
+issue doesn't get enough attention. There's more we can do.
+Ray: Indeed, but the overriding,
+impersonal forces of the law of accelerating returns are nonetheless moving in
+the right direction. Consider that technology in a particular area starts out
+unaffordable and not working very well. Then it becomes merely expensive and
+works a little better. The next step is the product becomes inexpensive and
+works really well. Finally, the technology becomes virtually free and works
+great. It wasn't long ago that when you saw someone using a portable phone in a
+movie, he or she was a member of the power elite, because only the wealthy
+could afford portable phones. Or as a more poignant example, consider drugs for
+AIDS. They started out not working very well and costing more than ten thousand
+dollars per year per patient. Now they work a lot better and are down to
+several hundred dollars per year in poor countries.78 Unfortunately with regard to AIDS,
+we're not yet at the working great and costing almost nothing stage. The world
+is beginning to take somewhat more effective action on AIDS, but it has been
+tragic that more has not been done. Millions of lives, most in Africa, have been lost as a result. But the effect of the law of accelerating returns is
+nonetheless moving in the right direction. And the time gap between leading and
+lagging edge is itself contracting. Right now I estimate this lag at about a
+decade. In a decade, it will be down to about half a decade.
+The Singularity as Economic Imperative
+The
+reasonable man adapts himself to the world; the unreasonable one persists in
+trying to adapt the world to himself. Therefore all progress depends on the
+unreasonable man.
+—George Bernard Shaw, "Maxims For Revolutionists", Man
+and Superman, 1903
+All
+progress is based upon a universal innate desire on the part of every organism
+to live beyond its income.
+—Samuel Butler, Notebooks, 1912
+If I were just
+setting out today to make that drive to the West Coast to start a new business,
+I would be looking at biotechnology and nanotechnology.
+—Jeff Bezos, Founder and CEO of Amazon.com
+Get Eighty Trillion Dollars—Limited
+Time Only
+You will get eighty
+trillion dollars just by reading this section and understanding what it says.
+For complete details, see below. (It's true that an author will do just about
+anything to keep your attention, but I'm serious about this statement. Until I
+return to a further explanation, however, do read the first sentence of this
+paragraph carefully.)
+The law of
+accelerating returns is fundamentally an economic theory. Contemporary economic
+theory and policy are based on outdated models that emphasize energy costs,
+commodity prices, and capital investment in plant and equipment as key driving
+factors, while largely overlooking computational capacity, memory, bandwidth,
+the size of technology, intellectual property, knowledge, and other
+increasingly vital (and increasingly increasing) constituents that are driving
+the economy.
+It's the economic
+imperative of a competitive marketplace that is the primary force driving
+technology forward and fueling the law of accelerating returns. In turn, the
+law of accelerating returns is transforming economic relationships. Economic
+imperative is the equivalent of survival in biological evolution. We are moving
+toward more intelligent and smaller machines as the result of myriad small
+advances, each with its own particular economic justification. Machines that
+can more precisely carry out their missions have increased value, which
+explains why they are being built. There are tens of thousands of projects that
+are advancing the various aspects of the law of accelerating returns in diverse
+incremental ways.
+Regardless of
+near-term business cycles, support for "high tech" in the business
+community, and in particular for software development, has grown enormously.
+When I started my optical character recognition (OCR) and speech-synthesis
+company (Kurzweil Computer Products) in 1974, high-tech venture deals in the United States totaled less than thirty million dollars (in 1974 dollars). Even during the recent
+high-tech recession (2000–2003), the figure was almost one hundred times
+greater.79 We would have to repeal capitalism and every vestige of
+economic competition to stop this progression.
+It is important
+to point out that we are progressing toward the "new" knowledge-based
+economy exponentially but nonetheless gradually.80 When the
+so-called new economy did not transform business models overnight, many
+observers were quick to dismiss the idea as inherently flawed. It will be
+another couple of decades before knowledge dominates the economy, but it will
+represent a profound transformation when it happens.
+We saw the same
+phenomenon in the Internet and telecommunications boom-and-bust cycles. The
+booms were fueled by the valid insight that the Internet and distributed
+electronic communication represented fundamental transformations. But when
+these transformations did not occur in what were unrealistic time frames, more
+than two trillion dollars of market capitalization vanished. As I point out
+below, the actual adoption of these technologies progressed smoothly with no
+indication of boom or bust.
+Virtually all of
+the economic models taught in economics classes and used by the Federal Reserve
+Board to set monetary policy, by government agencies to set economic policy,
+and by economic forecasters of all kinds are fundamentally flawed in their view
+of long-term trends. That's because they are based on the "intuitive
+linear" view of history (the assumption that the pace of change will
+continue at the current rate) rather than the historically based exponential view.
+The reason that these linear models appear to work for a while is the same
+reason most people adopt the intuitive linear view in the first place:
+exponential trends appear to be linear when viewed and experienced for a brief
+period of time, particularly in the early stages of an exponential trend, when
+not much is happening. But once the "knee of the curve" is achieved
+and the exponential growth explodes, the linear models break down.
+As this book is
+being written, the country is debating changing the Social Security program
+based on projections that go out to 2042, approximately the time frame I've
+estimated for the Singularity (see the next chapter). This economic policy
+review is unusual in the very long time frames involved. The predictions are
+based on linear models of longevity increases and economic growth that are
+highly unrealistic. On the one hand, longevity increases will vastly outstrip
+the government's modest expectations. On the other hand, people won't be
+seeking to retire at sixty-five when they have the bodies and brains of
+thirty-year-olds. Most important, the economic growth from the "GNR"
+technologies (see chapter 5) will greatly outstrip the 1.7 percent per year
+estimates being used (which understate by half even our experience over the
+past fifteen years).
+The exponential
+trends underlying productivity growth are just beginning this explosive phase.
+The U.S. real gross domestic product has grown exponentially, fostered by
+improving productivity from technology, as seen in the figure below.81
+
+================================================================================
+CHAPTER TWO: A Theory of Technology Evolution (Part 2 - Economics)
+================================================================================
+
+--- Dialog 1 ---
+
+Molly 2004: But wait a second, you said that I
+would get eighty trillion dollars if I read and understood this section of the
+
+--- Dialog 2 ---
+
+Ray: That's right. According to my models,
+if we replace the linear outlook with the more appropriate exponential outlook,
+current stock prices should triple.94 Since there's (conservatively) forty trillion dollars in the equity
+markets, that's eighty trillion in additional wealth.
+Molly 2004: But you said I would get that money.
+Ray: No, I said "you" would get
+the money, and that's why I suggested reading the sentence carefully. The
+English word "you" can be singular or plural. I meant it in the sense
+of "all of you."
+Molly 2004: Hmm, that's annoying. You mean all of
+us as in the whole world? But not everyone will read this book.
+Ray: Well, but everyone could. So if all
+of you read this book and understand it, then economic expectations would be
+based on the historical exponential model, and thus stock values would
+increase.
+Molly 2004: You mean if everyone understands it
+and agrees with it. I mean the market is based on expectations, right?
+Ray: Okay, I suppose I was assuming that.
+Molly 2004: So is that what you expect to happen?
+Ray: Well, actually, no. Putting on my
+futurist hat again, my prediction is that indeed these views on exponential
+growth will ultimately prevail but only over time, as more and more evidence of
+the exponential nature of technology and its impact on the economy becomes
+apparent. This will happen gradually over the next decade, which will represent
+a strong long-term updraft for the market.
+George 2048: I don't know, Ray. You were right
+that the price-performance of information technology in all of its forms kept
+growing at an exponential rate, and with continued growth also in the exponent.
+And indeed, the economy kept growing exponentially, thereby more than
+overcoming a very high deflation rate. And it also turned out that the general
+public did catch on to all of these trends. But this realization didn't have
+the positive impact on the stock market that you're describing. The stock
+market did increase along with the economy, but the realization of a higher
+growth rate did little to increase stock prices.
+Ray: Why do you suppose it turned out that
+way?
+George 2048: Because you left one thing out of
+your equation. Although people realized that stock values would increase rapidly,
+that same realization also increased the discount rate (the rate at which we
+need to discount values in the future when considering their present value).
+Think about it. If we know that stocks are going to increase significantly in a
+future period, then we'd like to have the stocks now so that we can realize
+those future gains. So the perception of increased future equity values also
+increases the discount rate. And that cancels out the expectation of higher
+future values.
+Molly 2104: Uh, George, that was not quite right
+either. What you say makes logical sense, but the psychological reality is that
+the heightened perception of increased future values did have a greater
+positive impact on stock prices than increases in the discount rate had a negative
+effect. So the general acceptance of exponential growth in both the
+price-performance of technology and the rate of economic activity did provide
+an upward draft for the equities market, but not the tripling that you spoke
+about, Ray, due to the effect that George was describing.
+Molly 2004: Okay, I'm sorry I asked. I think I'll
+just hold on to the few shares I've got and not worry about it.
+Ray: What have you invested in?
+Molly 2004: Let's see, there's this new natural
+language-based search-engine company that hopes to take on Google. And I've
+also invested in a fuel-cell company. Also, a company building sensors that can
+travel in the bloodstream.
+Ray: Sounds like a pretty high-risk,
+high-tech portfolio.
+Molly 2004: I wouldn't call it a portfolio. I'm
+just dabbling with the technologies you're talking about.
+Ray: Okay, but keep in mind that while the
+trends predicted by the law of accelerating returns are remarkably smooth, that
+doesn't mean we can readily predict which competitors will prevail.
+Molly 2004: Right, that's why I'm spreading my
+bets.
+
+================================================================================
+CHAPTER THREE: Achieving the Computational Capacity of the Human Brain
+================================================================================
+
+Ray: We manipulate subatomic particles
+today with accelerators that fall significantly short of the conditions in a
+neutron star. Moreover, we manipulate subatomic particles such as electrons today
+with tabletop devices. Scientists recently captured and stopped a photon dead
+in its tracks.
+Eric: Yes, but what kind of manipulation?
+If we count manipulating small particles, then all technology is already
+picotechnology, because all matter is made of subatomic particles. Smashing
+particles together in accelerators produces debris, not machines or circuits.
+Ray: I didn’t say we've solved the
+conceptual problems of picotechnology. I've got you penciled in to do that in
+2072.
+Eric: Oh, good, then I see you have me
+living a long time.
+Ray: Yes, well, if you stay on the sharp
+leading edge of health and medical insights and technology, as I'm trying to
+do, I see you being in rather good shape around then.
+Molly 2104: Yes, quite a few of you baby boomers
+did make it through. But most were unmindful of the opportunities in 2004 to
+extend human mortality long enough to take advantage of the biotechnology
+revolution, which hit its stride a decade later, followed by nanotechnology a
+decade after that.
+Molly 2004: So, Molly 2104, you must be quite
+something, considering that one thousand dollars of computation in 2080 can
+perform the equivalent of ten billion human brains thinking for ten thousand
+years in a matter of ten microseconds. That presumably will have progressed
+even further by 2104, and I assume you have access to more than one thousand
+dollars' worth of computation.
+Molly 2104: Actually, millions of dollars on
+average—billions when I need it.
+Molly 2004: That's pretty hard to imagine.
+Molly 2104: Yeah, well, I guess I'm kind of smart
+when I need to be.
+Molly 2004: You don't sound that bright,
+actually.
+Molly 2104: I'm trying to relate on your level.
+Molly 2004: Now, wait a second, Miss Molly of the
+future....
+George 2048: Ladies, please, you're both very engaging.
+Molly 2004: Yes, well, tell that to my
+counterpart here—she feels she's a jillion times more capable than I am.
+George 2048: She is your future, you know. Anyway,
+I've always felt there was something special about a biological woman.
+MOLLY 2104: Yeah, what would you know about
+biological women anyway? George 2048: I've read a great deal about it and
+engaged in some very precise simulations.
+Molly 2004: It occurs to me that maybe you're
+both missing something that you're not aware of George 2048:
+I don't see how
+that's possible.
+Molly 2104: Definitely not.
+Molly 2004: I didn't think you would. But there
+is one thing I understand you can do that I do find cool.
+Molly 2104: Just one? Molly 2004:
+One that I'm
+thinking of, anyway. You can merge your thinking with someone else and still
+keep your separate identity at the same time.
+MOLLY 2104: If the situation—and the person—is
+right, then, yes, it's a very sublime thing to do.
+Molly 2004: Like falling in love?
+MOLLY 2104: Like being in love. It's the ultimate
+way to share.
+George 2048: I think you'll go for it, Molly 2004.
+Molly 2104: You ought to know, George, since you
+were the first person I did it with.
+
+================================================================================
+CHAPTER FOUR: Achieving the Software of Human Intelligence
+================================================================================
+
+Sigmund Freud: When you talk about reverse
+engineering the human brain, just whose brain are you talking about? A man's
+brain? A woman's? A child's? The brain of a genius? A retarded individual? An
+"idiot savant"? A gifted artist? A serial murderer?
+Ray: Ultimately, we're talking about all
+of the above. There are basic principles of operation that we need to
+understand about how human intelligence and its varied constituent skills work.
+Given the human brain's plasticity, our thoughts literally create our brains
+through the growth of new spines, synapses, dendrites, and even neurons. As a
+result, Einstein's parietal lobes—the region associated with visual imagery and
+mathematical thinking—became greatly enlarged.121 However, there is only so much room
+in our skulls, so although Einstein played music he was not a world-class
+musician. Picasso did not write great poetry, and so on. As we re-create the
+human brain, we will not be limited in our ability to develop each skill. We
+will not have to compromise 'one area to enhance another.
+We can also gain insight into our differences and
+an understanding of human dysfunction. What went wrong with the serial
+murderer? It must, after all, have something to do with his brain. This type of
+disastrous behavior is clearly not the result of indigestion.
+Molly 2004: You know, I doubt it's just the
+brains we're born with that account for our differences. What about our
+struggles through life, and all this stuff I'm trying to learn?
+Ray: Yes, well, that's part of the
+paradigm, too, isn't it? We have brains that can learn, starting from when we
+learn to walk and talk to when we study college chemistry.
+Marvin Minsky: It's true that educating our AIs
+will be an important part of the process, but we can automate a lot of that and
+greatly speed it up. Also, keep in mind that when one AI learns something, it
+can quickly share that knowledge with many other AIs.
+Ray: They'll have access to all of our
+exponentially growing knowledge on the Web, which will include habitable,
+full-immersion virtual-reality environments where they can interact with one
+another and with biological humans who are projecting themselves into these environments.
+Sigmund: These AIs don't have bodies yet. As
+we have both pointed out, human emotion and much of our thinking are directed
+at our bodies and to meeting their sensual and sexual needs.
+Ray: Who says they won't have bodies? As I
+will discuss in the human body version 2.0 section in chapter 6, we'll have the
+means of creating nonbiological yet humanlike bodies, as well as virtual bodies
+in virtual reality.
+Sigmund: But a virtual body is not a real
+body.
+Ray: The word "virtual" is
+somewhat unfortunate. It implies "not real," but the reality will be
+that a virtual body is just as real as a physical body in all the ways that
+matter. Consider that the telephone is auditory virtual reality. No one feels
+that his voice in this virtual-reality environment is not a "real"
+voice. With my physical body today, I don't directly experience someone's touch
+on my arm. My brain receives processed signals initiated by nerve endings in my
+arm, which wind their way through the spinal cord, through the brain stem, and up
+to the insula regions. If my brain—or an AI's brain—receives comparable signals
+of someone's virtual touch on a virtual arm, there's no discernible difference.
+Marvin: Keep in mind that not all AIs will
+need human bodies.
+Ray: Indeed. As humans, despite some
+plasticity, both our bodies and brains have a relatively fixed architecture.
+Molly 2004: Yes, it's called being human,
+something you seem to have a problem with.
+Ray: Actually, I often do have a problem
+with all the limitations and maintenance that my version 1.0 body requires, not
+to mention all the limitations of my brain. But I do appreciate the joys of the
+human body. My point is that AIs can and will have the equivalent of human
+bodies in both real and virtual-reality environments. As Marvin points out,
+however, they will not be limited just to this.
+Molly 2104: It's not just AIs that will be
+liberated from the limitations of version 1.a bodies. Humans of biological
+origin will have the same freedom in both real and virtual reality.
+George 2048: Keep in mind, there won't be a clear
+distinction between AIs and humans.
+Molly 2104: Yes, except for the MOSHs (Mostly
+Original Substrate Humans) of course.
+
+================================================================================
+CHAPTER FIVE: GNR - Three Overlapping Revolutions
+================================================================================
+
+Molly 2004: Okay, so I'll have all these nanobots
+in my bloodstream. Aside from being able to sit at the bottom of my pool for
+hours, what else is this going to do for me?
+Ray: It will keep you healthy. They'll
+destroy pathogens such as bacteria, viruses, and cancer cells, and they won't
+be subject to the various pitfalls of the immune system, such as autoimmune
+reactions. Unlike your biological immune system, if you don't like what the
+nanobots are doing, you can tell them to do something different.
+Molly 2004: You mean, send my nanobots an e-mail?
+Like, Hey, nanobots, stop destroying those bacteria in my intestines because
+they're actually good for my digestion?
+Ray: Yes, good example. The nanobots will
+be under our control. They'll communicate with one another and with the
+Internet. Even today we have neural implants (for example, for Parkinson's
+disease) that allow the patient to download new software into them.
+Molly 2004: That kind of makes the software-virus
+issue a lot more serious, doesn't it? Right now, if I get hit with a bad
+software virus, I may have to run a virus-cleansing program and load my backup
+files, but if nanobots in my bloodstream get a rogue message, they may start
+destroying my blood cells.
+Ray: Well, that's another reason you'll
+probably want robotic blood cells, but your point is well taken. However, it's
+not a new issue. Even in 2004, we already have mission-critical software
+systems that run intensive-care units, manage 911 emergency systems, control
+nuclear-power plants, land airplanes, and guide cruise missiles. So software
+integrity is already of critical importance.
+Molly 2004: True, but the idea of software
+running in my body and brain seems more daunting. On my personal computer, I
+get more than one hundred spam messages a day, at least several of which
+contain malicious software viruses. I'm not real comfortable with nanobots in
+my body getting software viruses.
+Ray: You're thinking in terms of
+conventional Internet access. With VPNs (private networks), we already have the
+means today to create secure firewalls—otherwise, contemporary mission-critical
+systems would be impossible. They do work reasonably well, and Internet
+security technology will continue to evolve.
+Molly 2004: I think some people would take issue
+with your confidence in firewalls.
+Ray: They're not perfect, true, and they
+never will be, but we have another couple decades before we'll have extensive
+software running in our bodies and brains.
+Molly 2004: Okay, but the virus writers will be
+improving their craft as well.
+Ray: It's going to be a nervous standoff,
+no question about it. But the benefit today clearly outweighs the damage.
+Molly 2004: How clear is that?
+Ray: Well, no one is seriously arguing we
+should do away with the Internet because software viruses are such a big
+problem.
+Molly 2004: I'll give you that.
+Ray: When nanotechnology is mature, it's
+going to solve the problems of biology by overcoming biological pathogens,
+removing toxins, correcting DNA errors, and reversing other sources of aging.
+We will then have to contend with new dangers that it introduces, just as the
+Internet introduced the danger of software viruses. These new pitfalls will
+include the potential for self-replicating nanotechnology getting out of
+control, as well as the integrity of the software controlling these powerful,
+distributed nanobots.
+Molly 2004: Did you say reverse aging?
+Ray: I see you're already picking up on a
+key benefit.
+Molly 2004: So how are the nanobots going to do
+that?
+Ray: We'll actually accomplish most of
+that with biotechnology, methods such as RNA interference for turning off
+destructive genes, gene therapy for changing your genetic code, therapeutic
+cloning for regenerating your cells and tissues, smart drugs to reprogram your
+metabolic pathways, and many other emerging techniques. But whatever
+biotechnology doesn't get around to accomplishing, we'll have the means to do
+with nanotechnology.
+Molly 2004: Such as?
+Ray: Nanobots will be able to travel
+through the bloodstream, then go in and around our cells and perform various
+services, such as removing toxins, sweeping out debris, correcting DNA errors,
+repairing and restoring cell membranes, reversing atherosclerosis, modifying
+the levels of hormones, neurotransmitters, and other metabolic chemicals, and a
+myriad of other tasks. For each aging process, we can describe a means for
+nanobots to reverse the process, down to the level of individual cells, cell
+components, and molecules.
+Molly 2004: So I'll stay young indefinitely?
+Ray: That's the idea.
+Molly 2004: When did you say I could get these?
+Ray: I thought you were worried about
+nanobot firewalls.
+Molly 2004: Yeah, well, I've got time to worry
+about that. So what was that time frame again?
+Ray: About twenty to twenty-five years.
+Molly 2004: I'm twenty-five now, so I'll age to
+about forty-five and then stay there?
+Ray: No, that's not exactly the idea. You
+can slow down aging to a crawl right now by adopting the knowledge we already
+have. Within ten to twenty years, the biotechnology revolution will provide far
+more powerful means to stop and in many cases reverse each disease and aging
+process. And it's not like nothing is going to happen in the meantime. Each
+year, we'll have more powerful techniques, and the process will accelerate.
+Then nanotechnology will finish the job.
+Molly 2004: Yes, of course, it's hard for you to
+get out a sentence without using the word "accelerate." So what
+biological age am I going to get to?
+Ray: I think you'll settle somewhere in
+your thirties and stay there for a while.
+Molly 2004: Thirties sounds pretty good. I think
+a slightly more mature age than twenty-five is a good idea anyway. But what do
+you mean "for a while"?
+Ray: Stopping and reversing aging is only
+the beginning. Using nanobots for health and longevity is just the early
+adoption phase of introducing nanotechnology and intelligent computation into
+our bodies and brains. The more profound implication is that we'll augment our
+thinking processes with nanobots that communicate with one another and with our
+biological neurons. Once nonbiological intelligence gets a foothold, so to
+speak, in our brains, it will be subject to the law of accelerating returns and
+expand exponentially. Our biological thinking, on the other hand, is basically
+stuck.
+Molly 2004: There you go again with things
+accelerating, but when this really gets going, thinking with biological neurons
+will be pretty trivial in comparison.
+Ray: That's a fair statement.
+Molly 2004: So, Miss Molly of the future, when
+did I drop my biological body and brain?
+MOLLY 2104: Well, you don't really want me to
+spell out your future, do you? And anyway it's actually not a straightforward
+question.
+Molly 2004: How's that?
+MOLLY 2104: In the 2040s we developed the means
+to instantly create new portions of ourselves, either biological or
+nonbiological. It became apparent that our true nature was a pattern of
+information, but we still needed to manifest ourselves in some physical form.
+However, we could quickly change that physical form.
+Molly 2004: By?
+MOLLY 2104: By applying new high-speed MNT
+manufacturing. So we could readily and rapidly redesign our physical
+instantiation. So I could have a biological body at one time and not at
+another, then have it again, then change it, and so on.
+Molly 2004: I think I'm following this.
+Molly 2104: The point is that I could have my
+biological brain and/or body or not have it. It's not a matter of dropping
+anything, because we can always get back something we drop.
+Molly 2004: So you're still doing this?
+MOLLY 2104: Some people still do this, but now
+in 2104 it's a bit anachronistic. I mean, the simulations of biology are
+totally indistinguishable from actual biology, so why bother with physical
+instantiations? Molly 2004: Yeah, it's messy isn't it?
+MOLLY 2104: I'll say.
+Molly 2004: I do have to say that it seems
+strange to be able to change your physical embodiment. I mean, where's your—my—continuity?
+MOLLY 2104: It's the same as your continuity in
+2004. You're changing your particles all the time also. It's just your pattern
+of information that has continuity.
+Molly 2004: But in 2104 you're able to change
+your pattern of information quickly also. I can't do that yet.
+Molly 2104: It's really not that different. You
+change your pattern-your memory, skills, experiences, even personality over
+time—but there is a continuity, a core that changes only gradually.
+Molly 2004: But I thought you could change your
+appearance and personality dramatically in an instant? MOLLY 2104: Yes, but that's just a surface
+manifestation. My true core changes only gradually, just like when I was you in
+2004.
+Molly 2004: Well, there are lots of times when
+I'd be delighted to instantly change my surface appearance.
+Robotics: Strong AI
+Consider
+another argument put forth by Turing. So far we have constructed only fairly
+simple and predictable artifacts. When we increase the complexity of our
+machines, there may, perhaps, be surprises in store for us. He draws a parallel
+with a fission pile. Below a certain "critical" size, nothing much
+happens: but above the critical size, the sparks begin to fly. So too, perhaps,
+with brains and machines. Most brains and all machines are, at present
+"sub-critical"—they react to incoming stimuli in a stodgy and
+uninteresting way, have no ideas of their own, can produce only stock responses—but
+a few brains at present, and possibly some machines in the future, are
+super-critical, and scintillate on their own account. Turing is suggesting that
+it is only a matter of complexity, and that above a certain level of complexity
+a qualitative difference appears, so that "super-critical" machines
+will be quite unlike the simple ones hitherto envisaged.
+—J. R. Lucas, Oxford Philosopher, in his 1961 essay "Minds,
+Machines, and Gödel"157
+Given that
+superintelligence will one day be technologically feasible, will people choose
+to develop it? This question can pretty confidently be answered in the
+affirmative. Associated with every step along the road to superintelligence are
+enormous economic payoffs. The computer industry invests huge sums in the next
+generation of hardware and software, and it will continue doing so as long as
+there is a competitive pressure and profits to be made. People want better
+computers and smarter software, and they want the benefits these machines can
+help produce. Better medical drugs; relief for humans from the need to perform
+boring or dangerous jobs; entertainment—there is no end to the list of
+consumer-benefits. There is also a strong military motive to develop artificial
+intelligence. And nowhere on the path is there any natural stopping point where
+technophobics could plausibly argue "hither but not further."
+—Nick Bostrom, “How Long Before Superintelligence?”
+1997
+It is hard
+to think of any problem that a superintelligence could not either solve or at
+least help us solve. Disease, poverty, environmental destruction, unnecessary
+suffering of all kinds: these are things that a superintelligence equipped with
+advanced nanotechnology would be capable of eliminating. Additionally, a
+superintelligence could give us indefinite lifespan, either by stopping and
+reversing the aging process through the use of nanomedicine, or by offering us
+the option to upload ourselves. A superintelligence could also create
+opportunities for us to vastly increase our own intellectual and emotional
+capabilities, and it could assist us in creating a highly appealing
+experiential world in which we could live lives devoted to joyful gameplaying,
+relating to each other, experiencing, personal growth, and to living closer to
+our ideals.
+—Nick Bostrom, “Ethical Issues in Advanced Artificial
+Intelligence," 2003
+Will
+robots inherit the earth? Yes, but they will be our children.
+—Marvin Minsky, 1995
+Of the three primary
+revolutions underlying the Singularity (G, N, and R), the most profound is R, which
+refers to the creation of nonbiological intelligence that exceeds that of un
+enhanced humans. A more intelligent process will inherently outcompete one that
+is less intelligent, making intelligence the most powerful force in the
+universe.
+While the R in
+GNR stands for robotics, the real issue involved here is strong AI (artificial
+intelligence that exceeds human intelligence). The standard reason for
+emphasizing robotics in this formulation is that intelligence needs an
+embodiment, a physical presence, to affect the world. I disagree with the
+emphasis on physical presence, however, for I believe that the central concern
+is intelligence. Intelligence will inherently find a way to influence the
+world, including creating its own means for embodiment and physical
+manipulation. Furthermore, we can include physical skills as a fundamental part
+of intelligence; a large portion of the human brain (the cerebellum, comprising
+more than half our neurons), for example, is devoted to coordinating our skills
+and muscles.
+Artificial
+intelligence at human levels will necessarily greatly exceed human intelligence
+for several reasons. As I pointed out earlier, machines can readily share their
+knowledge. As unenhanced humans we do not have the means of sharing the vast patterns
+of interneuronal connections and neurotransmitter-concentration levels that
+comprise our learning, knowledge, and skills, other than through slow, language-based
+communication. Of course, even this method of communication has been very
+beneficial, as it has distinguished us from other animals and has been an
+enabling factor in the creation of technology.
+Human skills are
+able to develop only in ways that have been evolutionarily encouraged. Those
+skills, which are primarily based on massively parallel pattern recognition,
+provide proficiency for certain tasks, such as distinguishing faces,
+identifying objects, and recognizing language sounds. But they're not suited
+for many others, such as determining patterns in financial data. Once we fully
+master pattern-recognition paradigms, machine methods can apply these techniques
+to any type of pattern.158
+Machines can pool
+their resources in ways that humans cannot. Although teams of humans can
+accomplish both physical and mental feats that individual humans cannot
+achieve, machines can more easily and readily aggregate their computational,
+memory, and communications resources. As discussed earlier, the Internet is
+evolving into a worldwide grid of computing resources that can instantly be
+brought together to form massive supercomputers.
+Machines have
+exacting memories. Contemporary computers can master billions of facts
+accurately, a capability that is doubling every year.159 The
+underlying speed and price-performance of computing itself is doubling every year,
+and the rate of doubling is itself accelerating.
+As human
+knowledge migrates to the Web, machines will be able to read, understand, and
+synthesize all human-machine information. The last time a biological human was
+able to grasp all human scientific knowledge was hundreds of years ago.
+Another advantage
+of machine intelligence is that it can consistently perform at peak levels and
+can combine peak skills. Among humans one person may have mastered music
+composition, while another may have mastered transistor design, but given the
+fixed architecture of our brains we do not have the capacity (or the time) to
+develop and utilize the highest level of skill in every increasingly
+specialized area. Humans also vary a great deal in a particular skill, so that when
+we speak, say, of human levels of composing music, do we mean Beethoven, or do
+we mean the average person? Nonbiological intelligence will be able to match
+and exceed peak human skills in each area.
+For these
+reasons, once a computer is able to match the subtlety and range of human
+intelligence, it will necessarily soar past it and then continue its
+double-exponential ascent.
+A key question
+regarding the Singularity is whether the "chicken" (strong AI) or the
+"egg"(nanotechnology) will come first. In other words, will strong AI
+lead to full nanotechnology (molecular-manufacturing assemblers that can turn
+information into physical products), or will full nanotechnology lead to strong
+AI? The logic of the first premise is that strong AI would imply superhuman AI
+for the reasons just cited, and superhuman AI would be in a position to solve
+any remaining design problems required to implement full nanotechnology.
+The second
+premise is based on the realization that the hardware requirements for strong
+AI will be met by nanotechnology-based computation. Likewise the software
+requirements will be facilitated by nanobots that could create highly detailed
+scans of human brain functioning and thereby achieve the completion of reverse
+engineering the human brain.
+Both premises are
+logical; it's clear that either technology can assist the other. The reality is
+that progress in both areas will necessarily use our most advanced tools, so
+advances in each field will simultaneously facilitate the other. However, I do
+expect that full MNT will emerge prior to strong AI, but only by a few years
+(around 2025 for nanotechnology, around 2029 for strong AI).
+As revolutionary
+as nanotechnology will be, strong AI will have far more profound consequences.
+Nanotechnology is powerful but not necessarily intelligent. We can devise ways
+of at least trying to manage the enormous powers of nanotechnology, but
+superintelligence innately cannot be controlled.
+Runaway AI. Once strong AI is achieved, it can
+readily be advanced and its powers multiplied, as that is the fundamental
+nature of machine abilities. As one strong AI immediately begets many strong
+Als, the latter access their own design, understand and improve it, and thereby
+very rapidly evolve into a yet more capable, more intelligent AI, with the
+cycle repeating itself indefinitely. Each cycle not only creates a more
+intelligent AI but takes less time than the cycle before it, as is the nature
+of technological evolution (or any evolutionary process). The premise is that
+once strong AI is achieved, it will immediately become a runaway phenomenon of
+rapidly escalating superintelligence.160
+My own view is
+only slightly different. The logic of runaway AI is valid, but we still need to
+consider the timing. Achieving human levels in a machine will not immediately
+cause a runaway phenomenon. Consider that a human level of intelligence has
+limitations. We have examples of this today—about six billion of them. Consider
+a scenario in which you took one hundred humans from, say, a shopping mall.
+This group would constitute examples of reasonably well-educated humans. Yet if
+this group was presented with the task of improving human intelligence, it
+wouldn't get very far, even if provided with the templates of human
+intelligence. It would probably have a hard time creating a simple computer.
+Speeding up the thinking and expanding the memory capacities of these one
+hundred humans would not immediately solve this problem.
+I pointed out
+above that machines will match (and quickly exceed) peak human skills in each
+area of skill. So instead, let's take one hundred scientists and engineers. A
+group of technically trained people with the right backgrounds would be capable
+of improving accessible designs. If a machine attained equivalence to one
+hundred (and eventually one thousand, then one million) technically trained
+humans, each operating much faster than a biological human, a rapid
+acceleration of intelligence would ultimately follow.
+However, this
+acceleration won't happen immediately when a computer passes the Turing test.
+The Turing test is comparable to matching the capabilities of an average,
+educated human and thus is closer to the example of humans from a shopping
+mall. It will take time for computers to master all of the requisite skills and
+to marry these skills with all the necessary knowledge bases.
+Once we've
+succeeded in creating a machine that can pass the Turing test (around 2029),
+the succeeding period will be an era of consolidation in which nonbiological
+intelligence will make rapid gains. However, the extraordinary expansion
+contemplated for the Singularity, in which human intelligence is multiplied by
+billions, won't take place until the mid-2040s (as discussed in chapter 3).
+The AI Winter
+There's this stupid myth out there that A.I. has
+failed, but A.I. is everywhere around you every second of the day. People just
+don't notice it. You've got A.I. systems in cars, tuning the parameters of the
+fuel injection systems. When you land in an airplane, your gate gets chosen by
+an A.I. scheduling system. Every time you use a piece of Microsoft software,
+you've got an A.I. system trying to figure out what you're doing, like writing
+a letter, and it does a pretty damned good job. Every time you see a movie with
+computer-generated characters, they're all little A.I. characters behaving as a
+group. Every time you playa video game, you're playing against an A.I. system.
+—Rodney Brooks, Director of the MIT AI Lab161
+I still run into people
+who claim that artificial intelligence withered in the 1980s, an argument that
+is comparable to insisting that the Internet died in the dot-com bust of the
+early 2000s.162 The bandwidth and price-performance of Internet
+technologies, the number of nodes (servers), and the dollar volume of
+e-commerce all accelerated smoothly through the boom as well as the bust and
+the period since. The same has been true for AI.
+The technology
+hype cycle for a paradigm shift—railroads, AI, Internet, telecommunications,
+possibly now nanotechnology—typically starts with a period of unrealistic
+expectations based on a lack of understanding of all the enabling factors
+required. Although utilization of the new paradigm does increase exponentially,
+early growth is slow until the knee of the exponential-growth curve is
+realized. While the widespread expectations for revolutionary change are
+accurate, they are incorrectly timed. When the prospects do not quickly pan
+out, a period of disillusionment sets in. Nevertheless exponential growth
+continues unabated, and years later a more mature and more realistic
+transformation does occur.
+We saw this in
+the railroad frenzy of the nineteenth century, which was followed by widespread
+bankruptcies. (I have some of these early unpaid railroad bonds in my
+collection of historical documents.) And we are still feeling the effects of
+the e-commerce and telecommunications busts of several years ago, which helped
+fuel a recession from which we are now recovering.
+AI experienced a
+similar premature optimism in the wake of programs such as the 1957 General
+Problem Solver created by Allen Newell, J. C. Shaw, and Herbert Simon, which
+was able to find proofs for theorems that had stumped mathematicians such as
+Bertrand Russell, and early programs from the MIT Artificial Intelligence
+Laboratory, which could answer SAT questions (such as analogies and story
+problems) at the level of college students.163 A rash of AI
+companies occurred in the 1970s, but when profits did not materialize there was
+an AI "bust" in the 1980s, which has become known as the "AI
+winter." Many observers still think that the AI winter was the end of the
+story and that nothing has since come of the AI field.
+Yet today many
+thousands of AI applications are deeply embedded in the infrastructure of every
+industry. Most of these applications were research projects ten to fifteen
+years ago; People who ask, "Whatever happened to AI?" remind me of
+travelers to the rain forest who wonder, "Where are all the many species
+that are supposed to live here?" when hundreds of species of flora and
+fauna are flourishing only a few dozen meters away, deeply integrated into the
+local ecology.
+We are well into
+the era of "narrow AI," which refers to artificial intelligence that
+performs a useful and specific function that once required human intelligence
+to perform, and does so at human levels or better. Often narrow AI systems
+greatly exceed the speed of humans, as well as provide the ability to manage
+and consider thousands of variables simultaneously. I describe a broad variety
+of narrow AI examples below.
+These time frames
+for AI's technology cycle (a couple of decades of growing enthusiasm, a decade
+of disillusionment, then a decade and a half of solid advance in adoption) may
+seem lengthy, compared to the relatively rapid phases of the Internet and telecommunications
+cycles (measured in years, not decades), but two factors must be considered.
+First, the Internet and telecommunications cycles were relatively recent, so
+they are more affected by the acceleration of paradigm shift (as discussed in
+
+================================================================================
+CHAPTER SIX: The Impact... (Part 1)
+================================================================================
+
+Ray: We don't agree on the definition of
+human, but just where do you suggest drawing the line? Augmenting the human
+body and brain with biological or nonbiological interventions is hardly a new
+concept. There's still a lot of human suffering.
+Bill: I have no objection to alleviating
+human suffering. But replacing a human body with a machine to exceed human performance
+leaves you with, well, a machine. We have cars that can travel on the ground
+faster than a human, but we don't consider them to be human.
+Ray: The problem here has a lot to do with
+the word "machine." Your conception of a machine is of something that
+is much less valued—less complex, less creative, less intelligent, less
+knowledgeable, less subtle and supple—than a human. That's reasonable for
+today's machines because all the machines we've ever met—like cars—are like
+this. The whole point of my thesis, of the coming Singularity revolution, is
+that this notion of a machine—of nonbiological intelligence—will fundamentally
+change.
+Bill: Well, that's exactly my problem.
+Part of our humanness is our limitations. We don't claim to be the fastest
+entity possible, to have memories with the biggest capacity possible, and so
+on. But there is an indefinable, spiritual quality to being human that a
+machine inherently doesn't possess.
+Ray: Again, where do you draw the line?
+Humans are already replacing parts of their bodies and brains with non
+biological replacements that work better at performing their "human"
+functions.
+Bill: Better only in the sense of
+replacing diseased or disabled organs and systems. But you're replacing
+essentially all of our humanness to enhance human ability, and that's
+inherently inhuman.
+Ray: Then perhaps our basic disagreement
+is over the nature of being human. To me, the essence of being human is not our
+limitations—although we do have many—it's our ability to reach beyond our limitations.
+We didn't stay on the ground. We didn't even stay on the planet. And we are
+already not settling for the limitations of our biology.
+Bill: We have to use these technological
+powers with great discretion. Past a certain point, we're losing some ineffable
+quality that gives life meaning.
+Ray: I think we're in agreement that we
+need to recognize what's important in our humanity. But there is no reason to
+celebrate our limitations.
+. . . on the Human Brain
+Is all
+what we see or seem, but a dream within a dream?
+—Edgar Allen Poe
+The
+computer programmer is a creator of universes for which he alone is the
+lawgiver. No playwright, no stage director, no emperor, however powerful, has
+ever exercised such absolute authority to arrange a stage or a field of battle
+and to command such unswervingly dutiful actors or troops.
+—Joseph Weizenbaum
+One windy
+day two monks were arguing about a flapping banner. The first said, "I say
+the banner is moving, not the wind." The second said, "I say the wind
+is moving, not the banner." A third monk passed by and said, "The
+wind is not moving. The banner is not moving. Your minds are moving."
+—Zen parable
+Suppose
+someone were to say, "Imagine this butterfly exactly as it is, but ugly
+instead of beautiful."
+—Ludwig Wittgenstein
+The 2010 Scenario. Computers arriving at the beginning
+of the next decade will become essentially invisible: woven into our clothing,
+embedded in our furniture and environment. They will tap into the worldwide
+mesh (what the World Wide Web will become once all of its linked devices become
+communicating Web servers, thereby forming vast supercomputers and memory
+banks) of high-speed communications and computational resources. We'll have
+very high-bandwidth, wireless communication to the Internet at all times.
+Displays will be built into our eyeglasses and contact lenses and images
+projected directly onto our retinas. The Department of Defense is already using
+technology along these lines to create virtual-reality environments in which to
+train soldiers.27 An impressive immersive virtual reality system
+already demonstrated by the army's Institute for Creative Technologies includes
+virtual humans that respond appropriately to the user's actions.
+Similar tiny
+devices will project auditory environments. Cell phones are already being
+introduced in clothing that projects sound to the ears.28 And
+there's an MP3 player that vibrates your skull to play music that only you can
+hear.29 The army has also pioneered transmitting sound through the
+skull from a soldier's helmet.
+There are also
+systems that can project from a distance sound that only a specific person can
+hear, a technology that was dramatized by the personalized talking street ads
+in the movie Minority Report. The Hypersonic Sound technology and the Audio
+Spotlight systems achieve this by modulating the sound on ultrasonic beams,
+which can be precisely aimed. Sound is generated by the beams interacting with
+air, which restores sound in the audible range. By focusing multiple sets of
+beams on a wall or other surface, a new kind of personalized surround sound
+without speakers is also possible.30
+These resources
+will provide high-resolution, full-immersion visual-auditory virtual reality at
+any time. We will also have augmented reality with displays overlaying the real
+world to provide real-time guidance and explanations. For example, your retinal
+display might remind us, "That's Dr. John Smith, director of the ABC
+Institute—you last saw him six months ago at the XYZ conference" or,
+"That's the Time-Life Building—your meeting is on the tenth floor."
+We'll have
+real-time translation of foreign languages, essentially subtitles on the world,
+and access to many forms of online information integrated into our daily
+activities. Virtual personalities that overlay the real world will help us with
+information retrieval and our chores and transactions. These virtual assistants
+won't always wait for questions and directives but will step forward if they
+see us struggling to find a piece of information. (As we wonder about
+"That actress ... who played the princess, or was it the queen ... in that
+movie with the robot," our virtual assistant may whisper in our ear or
+display in our visual field of view: "Natalie Portman as Queen Amidala in Star
+Wars, episodes 1, 2, and 3.")
+The 2030 Scenario. Nanobot technology will provide
+fully immersive, totally convincing virtual reality. Nanobots will take up
+positions in close physical proximity to every interneuronal connection coming
+from our senses. We already have the technology for electronic devices to
+communicate with neurons in both directions, yet requiring no direct physical
+contact with the neurons. For example, scientists at the Max Planck Institute
+have developed "neuron transistors" that can detect the firing of a
+nearby neuron, or alternatively can cause a nearby neuron to fire or suppress
+it from firing.31 This amounts to two-way communication between
+neurons and the electronic-based neuron transistors. As mentioned above,
+quantum dots have also shown the ability to provide noninvasive communication
+between neurons and electronics.32
+If we want to
+experience real reality, the nanobots just stay in position (in the
+capillaries) and do nothing. If we want to enter virtual reality, they suppress
+all of the inputs coming from our actual senses and replace them with the
+signals that would be appropriate for the virtual environment.33
+Your brain experiences these signals as if they came from your physical body.
+After all, the brain does not experience the body directly. As I discussed in chapter
+4, inputs from the body—comprising a few hundred megabits per second—representing
+information about touch, temperature, acid levels, the movement of food, and
+other physical events, stream through the Lamina 1 neurons, then through the
+posterior ventromedial nucleus, ending up in the two insula regions of cortex.
+If these are coded correctly—and we will know how to do that from the brain
+reverse-engineering effort—your brain will experience the synthetic signals
+just as it would real ones. You could decide to cause your muscles and limbs to
+move as you normally would, but the nanobots would intercept these
+interneuronal signals, suppress your real limbs from moving, and instead cause
+your virtual limbs to move, appropriately adjusting your vestibular system and
+providing the appropriate movement and reorientation in the virtual
+environment.
+The Web will
+provide a panoply of virtual environments to explore. Some will be re-creations
+of real places; others will be fanciful environments that have no counterpart
+in the physical world. Some, indeed, would be impossible, perhaps because they
+violate the laws of physics. We will be able to visit these virtual places and
+have any kind of interaction with other real, as well as simulated, people (of
+course, ultimately there won't be a clear distinction between the two), ranging
+from business negotiations to sensual encounters. "Virtual-reality
+environment designer" will be a new job description and a new art form.
+Become Someone Else. In virtual reality we won't be
+restricted to a single personality, since we will be able to change our
+appearance and effectively become other people. Without altering our physical
+body (in real reality) we will be able to readily transform our projected body
+in these three-dimensional virtual environments. We can select different bodies
+at the same time for different people. So your parents may see you as one
+person, while your girlfriend will experience you as another. However, the
+other person may choose to override your selections, preferring to see you
+differently than the body you have chosen for yourself. You could pick
+different body projections for different people: Ben Franklin for a wise uncle,
+a clown for an annoying coworker. Romantic couples can choose whom they wish to
+be, even to become each other. These are all easily changeable decisions.
+I had the
+opportunity to experience what it is like to project myself as another persona
+in a virtual-reality demonstration at the 2001 TED (technology, entertainment,
+design) conference in Monterey. By means of magnetic sensors in my clothing a
+computer was able to track all of my movements. With ultrahigh-speed animation
+the computer created a life-size, near photorealistic image of a young woman—Ramona—who
+followed my movements in real time. Using signal-processing technology, my
+voice was transformed into a woman's voice and also controlled the movements of
+Ramona's lips. So it appeared to the TED audience as if Ramona herself were
+giving the presentation.34
+To make the
+concept understandable, the audience could see me and see Ramona at the same
+time, both moving simultaneously in exactly the same way. A band came onstage,
+and I—Ramona—performed Jefferson Airplane's "White Rabbit," as well
+as an original song. My daughter, then fourteen, also equipped with magnetic
+sensors, joined me, and her dance movements were transformed into those of a
+male backup dancer—who happened to be a virtual Richard Saul Wurman, the
+impresario of the TED conference. The hit of the presentation was seeing Wurman—not
+known for his hip-hop moves—convincingly doing my daughter's dance steps.
+Present in the audience was the creative leadership of Warner Bros., who then
+went off and created the movie Simone, in which the character played by AI
+Pacino transforms himself into Simone in essentially the same way.
+The experience
+was a profound and moving one for me. When I looked in the
+"cybermirror" (a display showing me what the audience was seeing), I
+saw myself as Ramona rather than the person I usually see in the mirror. I
+experienced the emotional force—and not just the intellectual idea—of
+transforming myself into someone else.
+People's
+identities are frequently closely tied to their bodies ("I'm a person with
+a big nose," "I'm skinny," "I'm a big guy," and so
+on). I found the opportunity to become a different person liberating. All of us
+have a variety of personalities that we are capable of conveying but generally
+suppress them since we have no readily available means of expressing them. Today
+we have very limited technologies available—such as fashion, makeup, and
+hairstyle—to change who we are for different relationships and occasions, but
+our palette of personalities will greatly expand in future full-immersion
+virtual-reality environments.
+In addition to
+encompassing all of the senses, these shared environments can include emotional
+overlays. Nanobots will be capable of generating the neurological correlates of
+emotions, sexual pleasure, and other derivatives of our sensory experience and
+mental reactions. Experiments during open brain surgery have demonstrated that
+stimulating certain specific points in the brain can trigger emotional
+experiences (for example, the girl who found everything funny when stimulated
+in a particular spot of her brain, as I reported in The Age of Spiritual
+Machines).35 Some emotions and secondary reactions involve a
+pattern of activity in the brain rather than the stimulation of a specific
+neuron, but with massively distributed nanobots, stimulating these patterns
+will also be feasible.
+Experience Beamers. "Experience beamers" will
+send the entire flow of their sensory experiences as well as the neurological
+correlates of their emotional reactions out onto the Web, just as people today
+beam their bedroom images from their Web cams. A popular pastime will be to
+plug into someone else's sensory-emotional beam and experience what it's like
+to be that person, a la the premise of the movie Being John Malkovich.
+There will also be a vast selection of archived experiences to choose from,
+with virtual-experience design another new art form.
+Expand Your Mind. The most important application of
+circa-2030 nanobots will be literally to expand our minds through the merger of
+biological and nonbiological intelligence. The first stage will be to augment
+our hundred trillion very slow interneuronal connections with high-speed
+virtual connections via nanorobot communication.36 This will provide
+us with the opportunity to greatly boost our pattern-recognition abilities,
+memories, and overall thinking capacity, as well as to directly interface with
+powerful forms of nonbiological intelligence. The technology will also provide
+wireless communication from one brain to another.
+It is important
+to point out that well before the end of the first half of the twenty-first
+century, thinking via nonbiological substrates will predominate. As I reviewed
+in chapter 3, biological human thinking is limited to 1016
+calculations per second (cps) per human brain (based on neuromorphic modeling
+of brain regions) and about 1026 cps for all human brains. These
+figures will not appreciably change, even with bioengineering adjustments to
+our genome. The processing capacity of nonbiological intelligence, in contrast,
+is growing at an exponential rate (with the rate itself increasing) and will
+vastly exceed biological intelligence by the mid-2040s.
+By that time we
+will have moved beyond just the paradigm of nanobots in a biological brain.
+Nonbiological intelligence will be billions of times more powerful, so it will
+predominate. We will have version 3.0 human bodies, which we will be able to
+modify and reinstantiate into new forms at will. We will be able to quickly
+change our bodies in full-immersion visual-auditory virtual environments in the
+second decade of this century; in full-immersion virtual-reality environments
+incorporating all of the senses during the 2020s; and in real reality in the
+2040s.
+Nonbiological
+intelligence should still be considered human, since it is fully derived from
+human-machine civilization and will be based, at least in part, on reverse
+engineering human intelligence. I address this important philosophical issue in
+the next chapter. The merger of these two worlds of intelligence is not merely
+a merger of biological and non biological thinking mediums, but more important,
+one of method and organization of thinking, one that will be able to expand our
+minds in virtually any imaginable way.
+Our brains today
+are relatively fixed in design. Although we do add patterns of interneuronal
+connections and neurotransmitter concentrations as a normal part of the
+learning process, the current overall capacity of the human brain is highly
+constrained. As the nonbiological portion of our thinking begins to predominate
+by the end of the 2030s, we will be able to move beyond the basic architecture
+of the brain's neural regions. Brain implants based on massively distributed
+intelligent nanobots will greatly expand our memories and otherwise vastly
+improve all of our sensory, pattern-recognition, and cognitive abilities. Since
+the nanobots will be communicating with one another, they will be able to
+create any set of new neural connections, break existing connections (by
+suppressing neural firing), create new hybrid biological-nonbiological
+networks, and add completely nonbiological networks, as well as interface
+intimately with new nonbiological forms of intelligence.
+The use of
+nanobots as brain extenders will be a significant improvement over surgically
+installed neural implants, which are beginning to be used today. Nanobots will
+be introduced without surgery, through the bloodstream, and if necessary can
+all be directed to leave, so the process is easily reversible. They are
+programmable, in that they can provide virtual reality one minute and a variety
+of brain extensions the next. They can change their configuration and can alter
+their software. Perhaps most important, they are massively distributed and
+therefore can take up billions of positions throughout the brain, whereas a
+surgically introduced neural implant can be placed only in one or at most a few
+locations.
+Molly 2004: Full-immersion virtual reality
+doesn't seem very inviting. I mean, all those nanobots running around in my
+head, like little bugs.
+Ray: Oh, you won't feel them, any more than
+you feel the neurons in your head or the bacteria in your GI tract.
+Molly 2004: Actually, that I can feel. But I can
+have full immersion with my friends right now, just by, you know, getting
+together physically.
+Sigmund Freud: Hmmm, that's what they used to say
+about the telephone when I was young. People would say, "Who needs to talk
+to someone hundreds of miles away when you can just get together?"
+Ray: Exactly, the telephone is auditory
+virtual reality. So full-immersion VR is, basically, a full-body telephone. You
+can get together with anyone anytime but do more than just talk.
+George 2048: It's certainly been a boon for sex
+workers; they never have to leave their homes. It became so impossible to draw
+any meaningful lines that the authorities had no choice but to legalize virtual
+prostitution in 2033.
+Molly 2004: Very interesting but actually not
+very appealing.
+George 2048: Okay, but consider that you can be
+with your favorite entertainment star.
+Molly 2004: I can do that in my imagination any
+time I want.
+Ray: Imagination is nice, but the real
+thing—or, rather, the virtual thing—is so much more, well, real.
+Molly 2004: Yeah, but what if my "favorite"
+celebrity is busy?
+Ray: That's another benefit of virtual
+reality circa 2029; you have your choice of millions of artificial people.
+Molly 2104: I understand that you're back in
+2004, but we kind of got rid of that terminology back when the Nonbiological
+Persons Act was passed in 2052. I mean, we're a lot more real than ... umm, let
+me rephrase that.
+Molly 2004: Yes, maybe you should.
+Molly 2104: Let's just say that you don't have to
+have explicit biological structures to be—
+George 2048: —passionate?
+MOLLY 2104: I guess you should know.
+Timothy Leary: What if you have a bad trip?
+Ray: You mean, something goes awry with a
+virtual-reality experience?
+Timothy: Exactly.
+Ray: Well, you can leave. It's like
+hanging up on a phone call.
+Molly 2004: Assuming you still have control over
+the software.
+Ray: Yes, we do need to be concerned with
+that.
+Sigmund: I can see some real therapeutic
+potential here.
+Ray: Yes, you can be whomever you want to
+be in virtual reality.
+Sigmund: Excellent, the opportunity to express
+suppressed longings ...
+Ray: And not only to be with the person
+you want to be with, but to become that person.
+Sigmund: Exactly. We create the objects of our
+libido in our subconscious anyway. Just think, a couple could both change their
+genders. They could each become the other.
+Molly 2004: Just as a therapeutic interlude, I
+presume?
+Sigmund: Of course. I would only suggest this
+under my careful supervision.
+Molly 2004: Naturally.
+Molly 2104: Hey, George, remember when we each
+became all of the opposite gender characters in the Allen Kurzweil novels at
+the same time it?
+George 2048: Ha, I liked you best as that
+eighteenth-century French inventor, the one who made erotic pocket watches!
+Molly 2004: Okay, now run this virtual sex by me
+again. How does it work exactly?
+Ray: You're using your virtual body, which
+is simulated. Nanobots in and around your nervous system generate the
+appropriate encoded signals for all of your senses: visual, auditory, tactile
+of course, even olfactory. From the perspective of your brain, it's real
+because the signals are just as real as if your senses were producing them from
+real experiences. The simulation in virtual reality would generally follow the
+laws of physics, although that would depend on the environment you selected. If
+you go there with another person or persons, then these other intelligences,
+whether of people with biological bodies or otherwise, would also have bodies
+in this virtual environment. Your body in virtual reality does not need to match
+your body in real reality. In fact, the body you choose for yourself in the
+virtual environment may be different from the body that your partner chooses
+for you at the same time. The computers generating the virtual environment,
+virtual bodies, and associated nerve signals would cooperate so that your
+actions affect the virtual experience of the others and vice versa.
+Molly 2004: So I would experience sexual pleasure
+even though I'm not actually, you know, with someone?
+Ray: Well, you would be with someone, just
+not in real reality, and, of course, the someone may not even exist in real
+reality. Sexual pleasure is not a direct sensory experience, it's akin to an
+emotion. It's a sensation generated in your brain, which is reflecting on what
+you're doing and thinking, just like the sensation of humor or anger.
+Molly 2004: Like the girl you mentioned who found
+everything hilarious when the surgeons stimulated a particular spot in her
+brain?
+Ray: Exactly. There are neurological
+correlates of all of our experiences, sensations, and emotions. Some are
+localized whereas some reflect a pattern of activity. In either case we'll be
+able to shape and enhance our emotional reactions as part of our
+virtual-reality experiences.
+Molly 2004: That could work out quite well. I
+think I'll enhance my funniness reaction in my romantic interludes. That will
+fit just about right. Or maybe my absurdity response—I kind of like that one,
+too.
+Ned Ludd: I can see this getting out of hand.
+People are going to start spending most of their time in virtual reality.
+Molly 2004: Oh, I think my ten-year-old nephew is
+already there, with his video games.
+Ray: They're not full immersion yet.
+Molly 2004: That's true. We can see him, but I'm
+not sure he notices us. But when we get to the point when his games are full
+immersion, we'll never see him.
+George 2048: I can see your concern if you're
+thinking in terms of the thin virtual worlds of 2004, but it's not a problem
+with our 2048 virtual worlds. They're so much more compelling than the real
+world.
+Molly 2004: Yeah, how would you know since you've
+never been in real reality?
+George 2048: I hear about it quite a bit. Anyway,
+we can simulate it.
+Molly 2104: Well, I can have a real body any time
+I want, really not a big deal. I have to say it's rather liberating to not be
+dependent on a particular body, let alone a biological one. Can you imagine,
+being all tied up with its endless limitations and burdens?
+Molly 2004: Yes, I can see where you're coming
+from.
+. . . on Human Longevity
+It is one
+of the most remarkable things that in all of the biological sciences there is
+no clue as to the necessity of death. If you say we want to make perpetual
+motion, we have discovered enough laws as we studied physics to see that it is
+either absolutely impossible or else the laws are wrong. But there is nothing
+in biology yet found that indicates the inevitability of death. This suggests
+to me that it is not at all inevitable and that it is only a matter of time
+before the biologists discover what it is that is causing us the trouble and
+that this terrible universal disease or temporariness of the human's body will
+be cured.
+—Richard Feynman
+Never give
+in, never give in, never, never, never, never—in nothing, great or small, large
+or petty—never give in.
+—Winston Churchill
+Immortality
+first! Everything else can wait.
+—Corwyn Prater
+Involuntary
+death is a cornerstone of biological evolution, but that fact does not make it
+a good thing.
+—Michael Anissimov
+Suppose
+you're a scientist 200 years ago who has figured out how to drastically lower
+infant mortality with better hygiene. You give a talk on this, and someone
+stands up in back and says, "hang on, if we do that we're going to have a
+population explosion!" If you reply, "No, everything will be fine
+because we'll all wear these absurd rubber things when we have sex,"
+nobody would have taken you seriously. Yet that's just what happened—barrier
+contraception was widely adopted [around the time that infant mortality
+dropped].
+—Aubrey de Grey, gerontologist
+We have a
+duty to die.
+—Dick Lamm, former Governor of Colorado
+Some of us
+think this is rather a pity.
+—Bertrand Russel, 1955, commenting on the statistic that about one
+hundred thousand people die of age-related causes every day38
+Evolution,
+the process that produced humanity, possesses only one goal: create gene
+machines maximally capable of producing copies of themselves. In retrospect,
+this is the only way complex structures such as life could possibly arise in an
+unintelligent universe. But this goal often comes into conflict with human
+interests, causing death, suffering, and short life spans. The past progress of
+humanity has been a history of shattering evolutionary constraints.
+—Michael Anissimov
+
+================================================================================
+CHAPTER SIX: The Impact... (Part 2 - Identity)
+================================================================================
+
+Molly 2004: So what you're saying is that I'm
+just a file?
+MOLLY 2104: Well, not a static file, but a
+dynamic file. But what do you mean "just"? What could be more
+important?
+Molly 2004: Well, I throw files away all the
+time, even dynamic ones.
+Molly 2104: Not all files are created equal.
+Molly 2004: I suppose that's true. I was
+devastated when I lost my only copy of my senior thesis. I lost six months of work
+and had to start over.
+Molly 2104: Ah, yes, that was awful. I remember
+it well, even though it was over a century ago. It was devastating because it
+was a small part of myself. I had invested my thoughts and creativity in that
+file of information. So think how precious all of your—my—accumulated thoughts,
+experience, skills, and history are.
+. . . on Warfare: The Remote, Robotic, Robust, Size-Reduced, Virtual-Reality
+Paradigm
+As weapons have become
+more intelligent, there has been a dramatic trend toward more precise missions
+with fewer casualties. It may not seem that way when viewed alongside the
+tendency toward more detailed, realistic television-news coverage. The great
+battles of World Wars I and II and the Korean War, in which tens of thousands of
+lives were lost over the course of a few days, were visually recorded only by
+occasional grainy newsreels. Today, we have a front-row seat for almost every
+engagement. Each war has its complexities, but the overall movement toward
+precision intelligent warfare is clear by examining the number of casualties.
+This trend is similar to what we are beginning to see in medicine, where smart
+weapons against disease are able to perform specific missions with far fewer
+side effects. The trend is similar for collateral casualties, although it may
+not seem that way from contemporary media coverage (recall that about fifty
+million civilians died in World War II).
+
+================================================================================
+CHAPTER SIX: The Impact... (Part 3 - The Universe)
+================================================================================
+
+Molly 2004: So when the universe reaches Epoch
+Six {the stage at which the nonbiological portion of our intelligence spreads
+through the universe], what's it going to do?
+Charles Darwin: I'm not sure we can answer that. As
+you said, it's like bacteria asking one another what humans will do.
+Molly 2004: So these Epoch Six entities will
+consider us biological humans to be like bacteria?
+George 2048: That's certainly not how I think of
+you.
+Molly 2104: George, you're only Epoch Five, so I
+don't think that answers the question.
+Charles: Getting back to the bacteria, what
+they would say, if they could talk—
+Molly 2004: —and think.
+Charles: Yes, that, too. They would say that
+humans will do the same things as we bacteria do—namely, eat, avoid danger, and
+procreate.
+Molly 2104: Oh, but our procreation is so much
+more interesting.
+Molly 2004: Actually, Molly of the future, it's
+our human pre-Singularity procreation that's interesting. Your virtual
+procreation is, actually, a lot like that of the bacteria. Sex has nothing to
+do with it.
+Molly 2104: It's true we've separated sexuality
+from reproduction, but that's not exactly new to human civilization in 2004.
+And besides, unlike bacteria, we can change ourselves.
+Molly 2004: Actually, you've separated change and
+evolution from reproduction as well.
+Molly 2104: That was also essentially true in
+2004.
+Molly 2004: Okay, okay. But about your list,
+Charles, we humans also do things like create art and music. That kind of
+separates us from other animals.
+George 2048: Indeed, Molly, that is fundamentally
+what the Singularity is about. The Singularity is the sweetest music, the
+deepest art, the most beautiful mathematics....
+Molly 2004: I see, so the music and art of the
+Singularity will be to my era's music and art as circa 2004 music and art are
+to ...
+Ned Ludd: The music and art of bacteria.
+Molly 2004: Well, I've seen some artistic mold
+patterns.
+Ned: Yes, but I'm sure you didn't revere
+them.
+Molly 2004: No, actually, I wiped them away.
+Ned: Okay, my point then.
+Molly 2004: I'm still trying to envision what the
+universe will be doing in Epoch Six.
+Timothy Leary: The universe will be flying like a
+bird.
+Molly 2004: But what is it flying in? I mean it's
+everything.
+Timothy: That's like asking, What is the
+sound of one hand clapping?
+Molly 2004: Hmmm, so the Singularity is what the
+Zen masters had in mind all along.
+
+================================================================================
+CHAPTER SEVEN: Ich bin ein Singularitarian
+================================================================================
+
+--- Dialog 1 ---
+
+Ray: Yes, well, we need a new religion. A
+principal role of religion has been to rationalize death, since up until just
+now there was little else constructive we could do about it.
+Bill: What would the principles of the new
+religion be?
+Ray: We'd want to keep two principles: one
+from traditional religion and one from secular arts and sciences—from
+traditional religion, the respect for human consciousness.
+Bill: Ah yes, the Golden Rule.
+Ray: Right, our morality and legal system
+are based on respect for the consciousness of others. If I hurt another person,
+that's considered immoral, and probably illegal, because I have caused suffering
+to another conscious person. If I destroy property, it's generally okay if it's
+my property, and the primary reason it's immoral and illegal if it's someone else's
+property is because I have caused suffering not to the property but to the
+person owning it.
+Bill: And the secular principle?
+Ray: From the arts and sciences, it is the
+importance of knowledge. Knowledge goes beyond information. It's information
+that has meaning for conscious entities: music, art, literature, science,
+technology. These are the qualities that will expand from the trends I'm
+talking about.
+Bill: We need to get away from the ornate
+and strange stories in contemporary religions and concentrate on some simple
+messages. We need a charismatic leader for this new religion.
+Ray: A charismatic leader is part of the
+old model. That's something we want to get away from.
+Bill: Okay, a charismatic computer, then.
+Ray: How about a charismatic operating
+system?
+Bill: Ha, we've already got that. So is
+there a God in this religion?
+Ray: Not yet, but there will be. Once we
+saturate the matter and energy in the universe with intelligence, it will
+"wake up," be conscious, and sublimely intelligent. That's about as
+close to God as I can imagine.
+Bill: That's going to be silicon
+intelligence, not biological intelligence.
+Ray: Well, yes, we're going to transcend
+biological intelligence. We'll merge with it first, but ultimately the
+nonbiological portion of our intelligence will predominate. By the way, it's
+not likely to be silicon, but something like carbon nanotubes.
+Bill: Yes, I understand—I'm just referring
+to that as silicon intelligence since people understand what that means. But I
+don't think that's going to be conscious in the human sense.
+Ray: Why not? If we emulate in as detailed
+a manner as necessary everything going on in the human brain and body and
+instantiate these processes in another substrate, and then of course expand it
+greatly, why wouldn't it be conscious?
+Bill: Oh, it will be conscious. I just
+think it will be a different type of consciousness.
+Ray: Maybe this is the 1 percent we
+disagree on. Why would it be different?
+Bill: Because computers can merge together
+instantly. Ten computers—or one million computers—can become one faster, bigger
+computer. As humans, we can't do that. We each have a distinct individuality
+that cannot be bridged.
+Ray: That's just a limitation of
+biological intelligence. The unbridgeable distinctness of biological
+intelligence is not a plus. "Silicon" intelligence can have it both
+ways. Computers don't have to pool their intelligence and resources. They can
+remain "individuals" if they wish. Silicon intelligence can even have
+it both ways by merging and retaining individuality—at the same time. As
+humans, we try to merge with others also, but our ability to accomplish this is
+fleeting.
+Bill: Everything of value is fleeting.
+Ray: Yes, but it gets replaced by
+something of even greater value.
+Bill: True, that's why we need to keep
+innovating.
+The Vexing Question of Consciousness
+If you
+could blow the brain up to the size of a mill and walk about inside, you would
+not find consciousness.
+—G. W. Leibniz
+Can one
+ever remember love? It's like trying to summon up the smell of roses in a
+cellar. You might see a rose, but never the perfume.
+—Arthur Miller8
+At one's
+first and simplest attempts to philosophize, one becomes entangled in questions
+of whether when one knows something, one knows that one knows it, and what,
+when one is thinking of oneself, is being thought about, and what is doing the
+thinking. After one has been puzzled and bruised by this problem for a long
+time, one learns not to press these questions: the concept of a conscious being
+is, implicitly, realized to be different from that of an unconscious object. In
+saying that a conscious being knows something, we are saying not only that he
+knows it, but that he knows that he knows it, and that he knows that he knows
+that he knows it, and so on, as long as we care to pose the question: there is,
+we recognize, an infinity here, but it is not an infinite regress in the bad
+sense, for it is the questions that peter out, as being pointless, rather than
+the answers.
+—J. R. Lucas, Oxford Philosopher, in his 1961 essay "Minds, Machines, and Gödel"9
+Dreams are
+real while they last; can we say more of life?
+—Havelock
+Will future machines be
+capable of having emotional and spiritual experiences? We have discussed
+several scenarios for a nonbiological intelligence to display the full range of
+emotionally rich behavior exhibited by biological humans today. By the late
+2020s we will have completed the reverse engineering of the human brain, which
+will enable us to create nonbiological systems that match and exceed the
+complexity and subtlety of humans, including our emotional intelligence.
+A second scenario
+is that we could upload the patterns of an actual human into a suitable non
+biological, thinking substrate. A third, and the most compelling, scenario
+involves the gradual but inexorable progression of humans themselves from
+biological to nonbiological. That has already started with the benign
+introduction of devices such as neural implants to ameliorate disabilities and
+disease. It will progress with the introduction of nanobots in the bloodstream,
+which will be developed initially for medical and antiaging applications. Later
+more sophisticated nanobots will interface with our biological neurons to
+augment our senses, provide virtual and augmented reality from within the
+nervous system, assist our memories, and provide other routine cognitive tasks.
+We will then be cyborgs, and from that foothold in our brains, the
+nonbiological portion of our intelligence will expand its powers exponentially.
+As I discussed in chapters 2 and 3 we see ongoing exponential growth of every
+aspect of information technology, including price-performance, capacity, and
+rate of adoption. Given that the mass and energy required to compute and
+communicate each bit of information are extremely small (see chapter 3), these
+trends can continue until our nonbiological intelligence vastly exceeds that of
+the biological portion. Since our biological intelligence is essentially fixed
+in its capacity (except for some relatively modest optimization from
+biotechnology), the nonbiological portion will ultimately predominate. In the
+2040s, when the nonbiological portion will be billions of times more capable,
+will we still link our consciousness to the biological portion of our
+intelligence?
+Clearly,
+nonbiological entities will claim to have emotional and spiritual experiences,
+just as we do today. They—we—will claim to be human and to have the full range
+of emotional and spiritual experiences that humans claim to have. And these
+will not be idle claims; they will evidence the sort of rich, complex, and
+subtle behavior associated with such feelings.
+But how will
+these claims and behaviors—compelling as they will be—relate to the subjective
+experience of nonbiological humans? We keep coming back to the very real but
+ultimately unmeasurable (by fully objective means) issue of consciousness.
+People often talk about consciousness as if it were a clear property of an
+entity that can readily be identified, detected, and gauged. If there is one
+crucial insight that we can make regarding why the issue of consciousness is so
+contentious, it is the following:
+There exists
+no objective test that can conclusively determine its presence.
+Science is about
+objective measurements and their logical implications, but the very nature of
+objectivity is that you cannot measure subjective experience—you can only
+measure correlates of it, such as behavior (and by behavior, I include internal
+behavior—that is, the actions of the components of an entity, such as neurons
+and their many parts). This limitation has to do with the very nature of the
+concepts of "objectivity" and "subjectivity." Fundamentally
+we cannot penetrate the subjective experience of another entity with direct
+objective measurement. We can certainly make arguments about it, such as,
+"Look inside the brain of this nonbiological entity; see how its methods
+are just like those of a human brain." Or, "See how its behavior is
+just like human behavior." But in the end, these remain just arguments. No
+matter how convincing the behavior of a nonbiological person, some observers
+will refuse to accept the consciousness of such an entity unless it squirts
+neurotransmitters, is based on DNA-guided protein synthesis, or has some other
+specific biologically human attribute.
+We assume that
+other humans are conscious, but even that is an assumption. There is no
+consensus among humans about the consciousness of nonhuman entities, such as
+higher animals. Consider the debates regarding animal rights, which have
+everything to do with whether animals are conscious or just quasi machines that
+operate by "instinct." The issue will be even more contentious with
+regard to future nonbiological entities that exhibit behavior and intelligence
+even more humanlike than those of animals.
+In fact these
+future machines will be even more humanlike than humans today. If that seems
+like a paradoxical statement, consider that much of human thought today is
+petty and derivative. We marvel at Einstein's ability to conjure up the theory
+of general relativity from a thought experiment or Beethoven's ability to
+imagine symphonies that he could never hear. But these instances of human
+thought at its best are rare and fleeting; (Fortunately we have a record of
+these fleeting moments, reflecting a key capability that has separated humans
+from other animals.) Our future primarily nonbiological selves will be vastly
+more intelligent and so will exhibit these finer qualities of human thought to
+a far greater degree.
+So how will we
+come to terms with the consciousness that will be claimed by nonbiological
+intelligence? From a practical perspective such claims will be accepted. For
+one thing, "they" will be us, so there won't be any clear
+distinctions between biological and nonbiological intelligence. Furthermore,
+these nonbiological entities will be extremely intelligent, so they'll be able
+to convince other humans (biological, nonbiological, or somewhere in between)
+that they are conscious. They'll have all the delicate emotional cues that
+convince us today that humans are conscious. They will be able to make other
+humans laugh and cry. And they'll get mad if others don't accept their claims.
+But this is fundamentally a political and psychological prediction, not a
+philosophical argument.
+I do take issue
+with those who maintain that subjective experience either doesn't exist or is
+an inessential quality that can safely be ignored. The issue of who or what is
+conscious and the nature of the subjective experiences of others are
+fundamental to our concepts of ethics, morality, and law. Our legal system is
+based largely on the concept of consciousness, with particularly serious
+attention paid to actions that cause suffering—an especially acute form of
+conscious experience—to a (conscious) human or that end the conscious
+experience of a human (for example, murder).
+Human ambivalence
+regarding the ability of animals to suffer is reflected in legislation as well.
+We have laws against animal cruelty, with greater emphasis given to more
+intelligent animals, such as primates (although we appear to have a blind spot
+with regard to the massive animal suffering involved in factory farming, but
+that's the subject of another treatise).
+My point is that
+we cannot safely dismiss the question of consciousness as merely a polite
+philosophical concern. It is at the core of society's legal and moral
+foundation. The debate will change when a machine—nonbiological intelligence—can
+persuasively argue on its own that it/he/she has feelings that need to be
+respected. Once it can do so with a sense of humor—which is particularly
+important for convincing others of one's humanness—it is likely that the debate
+will be won.
+I expect that
+actual change in our legal system will come initially from litigation rather
+than legislation, as litigation often precipitates such transformations. In a
+precursor of what is to come, attorney Martine Rothblatt, a partner in Mahon, Patusky, Rothblatt & Fisher, filed a mock motion on September 16, 2003, to prevent a corporation from disconnecting a conscious computer. The motion was
+argued in a mock trial in the biocyberethics session at the International Bar
+Association conference.10
+We can measure
+certain correlates of subjective experience (for example, certain patterns of
+objectively measurable neurological activity with objectively verifiable
+reports of certain subjective experiences, such as hearing a sound). But we
+cannot penetrate to the core of subjective experience through objective
+measurement. As I mentioned in chapter 1, we are dealing with the difference
+between third-person "objective" experience, which is the basis of
+science, and first-person "subjective" experience, which is a synonym
+for consciousness.
+Consider that we
+are unable to truly experience the subjective experiences of others. The
+experience-beaming technology of 2029 will enable the brain of one person to
+experience only the sensory experiences (and potentially some of the
+neurological correlates of emotions and other aspects of experience) of another
+person. But that will still not convey the same internal experience as
+that undergone by the person beaming the experience, because his or her brain
+is different. Every day we hear reports about the experiences of others, and we
+may even feel empathy in response to the behavior that results from their
+internal states. But because we're exposed to only the behavior of
+others, we can only imagine their subjective experiences. Because it is
+possible to construct a perfectly consistent, scientific worldview that omits
+the existence of consciousness, some observers come to the conclusion that it's
+just an illusion.
+Jaron Lanier, the
+virtual-reality pioneer, takes issue (in the third of his six objections to
+what he calls "cybernetic totalism" in his treatise "One Half a
+Manifesto") with those who maintain "that subjective experience
+either doesn't exist, or is unimportant because it is some sort of ambient or
+peripheral effect."11 As I pointed out, there is no device or
+system we can postulate that could definitively detect subjectivity (conscious
+experience) associated with an entity. Any such purported device would have
+philosophical assumptions built into it. Although I disagree with much of
+Lanier's treatise (see the "Criticism from Software" section in
+
+--- Dialog 2 ---
+
+Ray: We can debate what sorts of entities
+are or can be conscious. We can argue about whether consciousness is an
+emergent property or caused by some specific mechanism, biological or
+otherwise. But there's another mystery associated with consciousness, perhaps
+the most important one.
+Molly 2004: Okay, I'm all ears.
+Ray: Well, even if we assume that all
+humans who seem to be conscious in fact are, why is my consciousness associated
+with this particular person, me? Why am I conscious of this particular person
+who read Tom Swift Jr. books as a child, got involved with inventions, writes
+books about the future, and so on? Every morning that I wake up, I have the
+experiences of this specific person. Why wasn't I Alanis Morissette or someone
+else?
+Sigmund Freud: Hmm, so you'd like to be Alanis
+Morissette?
+Ray: That's an interesting proposition,
+but that's not my point.
+Molly 2004: What is your point? I don't
+understand.
+Ray: Why am I conscious of the experiences
+and decisions of this particular person?
+Molly 2004: Because, silly, that's who you are.
+Sigmund: It seems that there's something about
+yourself that you don't like. Tell me more about that.
+Molly 2004: Earlier, Ray didn't like being human
+altogether.
+Ray: I didn't say I don't like being
+human. I said I didn't like the limitations, problems, and high level of
+maintenance of my version 1.0 body. But this is all beside the point that I'm
+trying to make here.
+Charles Darwin: You wonder why you're you? That's a
+tautology, there's not much to wonder about.
+Ray: Like many attempts to express the
+really "hard" problems of consciousness, this is sounding
+meaningless. But if you ask me what I really wonder about, it is this: why am I
+continually aware of this particular person's experiences and feelings? As for
+other people's consciousness, I accept it, but I don't experience other
+people's experiences, not directly anyway.
+Sigmund: Okay, I'm getting a clearer picture
+now. You don't experience other people's experiences? Have you ever talked to
+someone about empathy?
+Ray: Look, I'm talking about consciousness
+now in a very personal way.
+Sigmund: That's good, keep going.
+Ray: Actually, this is a good example of
+what typically happens when people try to have a dialogue about consciousness.
+The discussion inevitably veers off into something else, like psychology or
+behavior or intelligence or neurology. But the mystery of why I am this particular
+person is what I really wonder about.
+Charles: You know you do create who you are.
+Ray: Yes, that's true. Just as our brains
+create our thoughts, our thoughts in turn create our brains.
+Charles: So you've made yourself, and that's
+why you are who you are, so to speak.
+Molly 2104: We experience that very directly in
+2104. Being nonbiological, I'm able to change who I am quite readily. As we
+discussed earlier, if I'm in the mood, I can combine my thought patterns with
+someone else's and create a merged identity. It's a profound experience.
+Molly 2004: Well, Miss Molly of the future, we do
+that back in the primitive days of 2004 also. We call it falling in love.
+Who Am I? What Am I?
+Why are
+you you?
+—The implied question in the acronym YRUU (Young
+Religious Unitarian Universalists), an organization I was active in when I was growing
+up in the early 1960s (it was then called LRY, Liberal Religious Youth).
+What you
+are looking for is who is looking.
+—Saint Francis of Assisi
+I'm not
+aware of too many things
+I know
+what I know if you know what I mean.
+Philosophy
+is the talk on a cereal box.
+Religion
+is the smile on a dog....
+Philosophy
+is a walk on the slippery rocks.
+Religion
+is a light in the fog....
+What I am
+is what I am.
+Are you
+what you are or what?
+—Edie Brickell, "What I Am"
+Freedom of
+will is the ability to do gladly that which I must do.
+—Carl Jung
+The
+chance of the quantum theoretician is not the ethical freedom of the
+Augustinian.
+—Norbert Weiner13
+I should
+prefer to an ordinary death, being immersed with a few friends in a cask of Madeira, until that time, then to be recalled to life by the solar warmth of my dear
+country! But in all probability, we live in a century too little advanced, and
+too near the infancy of science, to see such an art brought in our time to its
+perfection.
+—Benjamin Franklin, 1773
+A related but distinct
+question has to do with our own identities. We talked earlier about the
+potential to upload the patterns of an individual mind—knowledge, skills,
+personality, memories—to another substrate. Although the new entity would act
+just like me, the question remains: is it really me?
+Some of the
+scenarios for radical life extension involve reengineering and rebuilding the
+systems and subsystems that our bodies and brains comprise. In taking part in
+this reconstruction, do I lose my self along the way? Again, this issue will
+transform itself from a centuries-old philosophical dialogue to a pressing
+practical matter in the next several decades.
+So who am I?
+Since I am constantly changing, am I just a pattern? What if someone copies
+that pattern? Am I the original and/or the copy? Perhaps I am this stuff here—that
+is, the both ordered and chaotic collection of molecules that make up my body
+and brain.
+But there's a
+problem with this position. The specific set of particles that my body and
+brain comprise are in fact completely different from the atoms and molecules
+that I comprised only a short while ago. We know that most of our cells are
+turned over in a matter of weeks, and even our neurons, which persist as
+distinct cells for a relatively long time, nonetheless change all of their
+constituent molecules within a month.14 The half-life of a
+microtubule (a protein filament that provides the structure of a neuron) is
+about ten minutes. The actin filaments in dendrites are replaced about every
+forty seconds. The proteins that power the synapses are replaced about every
+hour. NMDA receptors in synapses stick around for a relatively long five days.
+So I am a
+completely different set of stuff than I was a month ago, and all that persists
+is the pattern of organization of that stuff. The pattern changes also, but
+slowly and in a continuum. I am rather like the pattern that water makes in a
+stream as it rushes past the rocks in its path. The actual molecules of water
+change every millisecond, but the pattern persists for hours or even years.
+Perhaps,
+therefore, we should say I am a pattern of matter and energy that persists over
+time. But there is a problem with this definition, as well, since we will
+ultimately be able to upload this pattern to replicate my body and brain to a
+sufficiently high degree of accuracy that the copy is indistinguishable from
+the original. (That is, the copy could pass a "Ray Kurzweil" Turing
+test.) The copy, therefore, will share my pattern. One might counter that we
+may not get every detail correct, but as time goes on our attempts to create a
+neural and body replica will increase in resolution and accuracy at the same
+exponential pace that governs all information-based technologies. We will
+ultimately be able to capture and re-create my pattern of salient neural and
+physical details to any desired degree of accuracy.
+Although the copy
+shares my pattern, it would be hard to say that the copy is me because I would—or
+could—still be here. You could even scan and copy me while I was sleeping. If
+you come to me in the morning and say, "Good news, Ray, we've successfully
+reinstantiated you into a more durable substrate, so we won't be needing your
+old body and brain anymore," I may beg to differ.
+If you do the
+thought experiment, it's clear that the copy may look and act just like me, but
+it's nonetheless not me. I may not even know that he was created. Although
+he would have all my memories and recall having been me, from the point in time
+of his creation Ray 2 would have his own unique experiences, and his reality
+would begin to diverge from mine.
+This is a real
+issue with regard to cryonics (the process of preserving by freezing a person
+who has just died, with a view toward "reanimating" him later when
+the technology exists to reverse the damage from the early stages of the dying
+process, the cryonic-preservation process, and the disease or condition that
+killed him in the first place). Assuming a "preserved" person is
+ultimately reanimated, many of the proposed methods imply that the reanimated
+person will essentially be "rebuilt" with new materials and even
+entirely new neuromorphically equivalent systems. The reanimated person will,
+therefore, effectively be "Ray 2" (that is, someone else).
+Now let's pursue
+this train of thought a bit further, and you will see where the dilemma arises.
+If we copy me and then destroy the original, that's the end of me, because as
+we concluded above the copy is not me. Since the copy will do a convincing job
+of impersonating me, no one may know the difference, but it's nonetheless the
+end of me.
+Consider
+replacing a tiny portion of my brain with its neuromorphic equivalent.
+Okay, I'm still
+here: the operation was successful (incidentally, nanobots will eventually do
+this without surgery). We know people like this already, such as those with
+cochlear implants, implants for Parkinson's disease, and others. Now replace
+another portion of my brain: okay, I'm still here ... and again....At the end
+of the process, I'm still myself. There never was an "old Ray" and a
+"new Ray," I'm the same as I was before. No one ever missed me,
+including me.
+The gradual
+replacement of Ray results in Ray, so consciousness and identity appear to have
+been preserved. However, in the case of gradual replacement there is no
+simultaneous old me and new me. At the end of the process you have the
+equivalent of the new me (that is, Ray 2) and no old me (Ray 1). So gradual
+replacement also means the end of me. We might therefore wonder: at what point
+did my body and brain become someone else?
+On yet another
+hand (we're running out of philosophical hands here), as I pointed out at the
+beginning of this question, I am in fact being continually replaced as part of
+a normal biological process. (And, by the way, that process is not particularly
+gradual but rather rapid.) As we concluded, all that persists is my spatial and
+temporal pattern of matter and energy. But the thought experiment above shows
+that gradual replacement means the end of me even if my pattern is preserved.
+So am I constantly being replaced by someone else who just seems a lot like the
+me of a few moments earlier?
+So, again, who am
+I? It's the ultimate ontological question, and we often refer to it as the
+issue of consciousness. I have consciously (pun intended) phrased the issue
+entirely in the first person because that is its nature. It is not a
+third-person question. So my question is not "who are you?" although
+you may wish to ask this question yourself.
+When people speak
+of consciousness they often slip into considerations of behavioral and
+neurological correlates of consciousness (for example, whether or not an entity
+can be self-reflective). But these are third-person (objective) issues and do
+not represent what David Chalmers calls the "hard question" of
+consciousness: how can matter (the brain) lead to something as apparently
+immaterial as consciousness?15
+The question of
+whether or not an entity is conscious is apparent only to itself. The
+difference between neurological correlates of consciousness (such as
+intelligent behavior) and the ontological reality of consciousness is the
+difference between objective and subjective reality. That's why we can't
+propose an objective consciousness detector without philosophical assumptions
+built into it.
+I do believe that
+we humans will come to accept that nonbiological entities are conscious,
+because ultimately the nonbiological entities will have all the subtle cues
+that humans currently possess and that we associate with emotional and other
+subjective experiences. Still, while we will be able to verify the subtle cues,
+we will have no direct access to the implied consciousness.
+I will
+acknowledge that many of you do seem conscious to me, but I should not be too
+quick to accept this impression. Perhaps I am really living in a simulation,
+and you are all part of it.
+Or, perhaps it's
+only my memories of you that exist, and these actual experiences never took
+place.
+Or maybe I am
+only now experiencing the sensation of recalling apparent memories, but neither
+the experience nor the memories really exist. Well, you see the problem.
+Despite these
+dilemmas my personal philosophy remains based on patternism—I am principally a
+pattern that persists in time. I am an evolving pattern, and I can influence
+the course of the evolution of my pattern. Knowledge is a pattern, as
+distinguished from mere information, and losing knowledge is a profound loss.
+Thus, losing a person is the ultimate loss.
+Molly 2004: As far as I'm concerned, who I am is
+pretty straightforward—it's basically this brain and body, which at least this
+month is in pretty good shape, thank you.
+Ray: Are you including the food in your
+digestive tract, in its various stages of decomposition along the way?
+Molly 2004: Okay, you can exclude that. Some of
+it will become me, but it hasn't been enrolled yet in the "part of
+Molly" club.
+Ray: Well, 90 percent of the cells in your
+body don't have your DNA.
+Molly 2004: Is that so? Just whose DNA is it, then?
+Ray: Biological humans have about ten
+trillion cells with their own DNA, but there are about one hundred trillion
+microorganisms in the digestive tract, basically bacteria.
+Molly 2004: Doesn't sound very appealing. Are
+they entirely necessary?
+Ray: They're actually part of the society
+of cells that makes Molly alive and thriving. You couldn't survive without
+healthy gut bacteria. Assuming your intestinal flora are in good balance,
+they're necessary for your well-being.
+Molly 2004: Okay, but I wouldn't count them as
+me. There are lots of things that my well-being depends on. Like my house and
+my car, but I still don't count them as part of me.
+Ray: Very well, it's reasonable to leave
+out the entire contents of the GI tract, bacteria and all. That's actually how
+the body sees it. Even though it's physically inside the body, the body
+considers the tract to be external and carefully screens what it absorbs into
+the bloodstream.
+Molly 2004: As I think more about who I am, I
+kind of like Jaron Lanier's "circle of empathy."
+Ray: Tell me more.
+Molly 2004: Basically, the circle of reality that
+I consider to be "me" is not clear-cut. It's not simply my body. I
+have limited identification with, say, my toes and, after our last discussion,
+even less with the contents of my large intestine.
+Ray: That's reasonable, and even with
+regard to our brains we are aware of only a tiny portion of what goes on in
+there.
+Molly 2004: It's true that there are parts of my
+brain that seem to be somebody else, or at least somewhere else. Often,
+thoughts and dreams that intrude on my awareness seem to have come from some
+foreign place. They're obviously coming from my brain, but it doesn't seem that
+way.
+Ray: Conversely, loved ones who are
+physically separate may be so close as to seem to be part of ourselves.
+Molly 2004: The boundary of myself is seeming
+less and less clear.
+Ray: Well, just wait until we're
+predominantly nonbiological. Then we'll be able to merge our thoughts and
+thinking at will, so finding boundaries will be even more difficult.
+Molly 2004: That actually sounds kind of
+appealing. You know, some Buddhist philosophies emphasize the extent to which
+there is inherently no boundary at all between us.
+Ray: Sounds like they're talking about the
+Singularity.
+The Singularity as Transcendence
+Modernity
+sees humanity as having ascended from what is inferior to it—life begins in
+slime and ends in intelligence—whereas traditional cultures see it as descended
+from its superiors. As the anthropologist Marshall Sahlins puts the matter:
+"We are the only people who assume that we have ascended from apes.
+Everybody else takes it for granted that they are descended from gods."
+—Huston Smith16
+Some
+philosophers hold that philosophy is what you do to a problem until it's clear
+enough to solve it by doing science. Others hold that if a philosophical
+problem succumbs to empirical methods, that shows it wasn't really
+philosophical to begin with.
+—Jerry A. Fodor17
+The Singularity denotes
+an event that will take place in the material world, the inevitable next step
+in the evolutionary process that started with biological evolution and has
+extended through human-directed technological evolution. However, it is
+precisely in the world of matter and energy that we encounter transcendence, a
+principal connotation of what people refer to as spirituality. Let's consider
+the nature of spirituality in the physical world.
+Where shall I
+start? How about with water? It's simple enough, but consider the diverse and
+beautiful ways it manifests itself: the endlessly varying patterns as it
+cascades past rocks in a stream, then surges chaotically down a waterfall (all
+viewable from my office window, incidentally); the billowing patterns of clouds
+in the sky; the arrangement of snow on a mountain; the satisfying design of a
+single snowflake. Or consider Einstein's description of the entangled order and
+disorder in a glass of water (that is, his thesis on Brownian motion).
+Or elsewhere in
+the biological world, consider the intricate dance of spirals of DNA during mitosis.
+How about the loveliness of a tree as it bends in the wind and its leaves churn
+in a tangled dance? Or the bustling world we see in a microscope? There's
+transcendence everywhere.
+A comment on the
+word "transcendence" is in order here. "To transcend" means
+"to go beyond," but this need not compel us to adopt an ornate
+dualist view that regards transcendent levels of reality (such as the spiritual
+level) to be not of this world. We can "go beyond" the
+"ordinary" powers of the material world through the power of
+patterns. Although I have been called a materialist, I regard myself as a
+"patternist," It's through the emergent powers of the pattern that we
+transcend. Since the material stuff of which we are made turns over quickly, it
+is the transcendent power of our patterns that persists.
+The power of
+patterns to endure goes beyond explicitly self-replicating systems, such as
+organisms and self-replicating technology. It is the persistence and power of
+patterns that support life and intelligence. The pattern is far more important
+than the material stuff that constitutes it.
+Random strokes on
+a canvas are just paint. But when arranged in just the right way, they
+transcend the material stuff and become art. Random notes are just sounds.
+Sequenced in an "inspired" way, we have music. A pile of components
+is just an inventory. Ordered in an innovative manner, and perhaps with the
+addition of some software (another pattern), we have the "magic"
+(transcendence) of technology.
+Although some
+regard what is referred to as "spiritual" as the true meaning of
+transcendence, transcendence refers to all levels of reality: the creations of
+the natural world, including ourselves, as well as our own creations in the
+form of art, culture, technology, and emotional and spiritual expression.
+Evolution concerns patterns, and it is specifically the depth and order of
+patterns that grow in an evolutionary process. As a consummation of the
+evolution in our midst, the Singularity will deepen all of these manifestations
+of transcendence.
+Another
+connotation of the word "spiritual" is "containing spirit,"
+which is to say being conscious. Consciousness—the seat of "personalness"—is
+regarded as what is real in many philosophical and religious traditions. A
+common Buddhist ontology considers subjective—conscious—experience as the
+ultimate reality, rather than physical or objective phenomena, which are
+considered maya (illusion).
+The arguments I
+make in this book with regard to consciousness are for the purpose of
+illustrating this vexing and paradoxical (and, therefore, profound) nature of
+consciousness: how one set of assumptions (that is, that a copy of my mind file
+either shares or does not share my consciousness) leads ultimately to an
+opposite view, and vice versa.
+We do assume that
+humans are conscious, at least when they appear to be. At the other end of the
+spectrum we assume that simple machines are not. In the cosmological sense the
+contemporary universe acts more like a simple machine than a conscious being.
+But as we discussed in the previous chapter, the matter and energy in our
+vicinity will become infused with the intelligence, knowledge, creativity,
+beauty, and emotional intelligence (the ability to love, for example) of our
+human-machine civilization. Our civilization will then expand outward, turning
+all the dumb matter and energy we encounter into sublimely intelligent—transcendent—matter
+and energy. So in a sense, we can say that the Singularity will ultimately
+infuse the universe with spirit.
+Evolution moves
+toward greater complexity, greater elegance, greater knowledge, greater
+intelligence, greater beauty, greater creativity, and greater levels of subtle
+attributes such as love. In every monotheistic tradition God is likewise
+described as all of these qualities, only without any limitation: infinite
+knowledge, infinite intelligence, infinite beauty, infinite creativity,
+infinite love, and so on. Of course, even the accelerating growth of evolution
+never achieves an infinite level, but as it explodes exponentially it certainly
+moves rapidly in that direction. So evolution moves inexorably toward this
+conception of God, although never quite reaching this ideal. We can regard,
+therefore, the freeing of our thinking from the severe limitations of its
+biological form to be an essentially spiritual undertaking.
+Molly 2004: So, do you believe in God?
+Ray: Well, it's a three-letter word—and a
+powerful meme.
+Molly 2004: I realize the word and the idea
+exist. But does it refer to anything that you believe in?
+Ray: People mean lots of things by it.
+Molly 2004: Do you believe in those things?
+Ray: It's not possible to believe all
+these things: God is an all-powerful conscious person looking over us, making
+deals, and getting angry quite a bit. Or He—It—is a pervasive life force
+underlying all beauty and creativity. Or God created everything and then
+stepped back....
+Molly 2004: I understand, but do you believe in
+any of them?
+Ray: I believe that the universe exists.
+Molly 2004: Now wait a minute, that's not a
+belief, that's a scientific fact.
+Ray: Actually, I don't know for sure' that
+anything exists other than my own thoughts.
+Molly 2004: Okay, I understand that this is the
+philosophy chapter, but you can read scientific papers—thousands of them—that
+corroborate the existence of stars and galaxies. So, all those galaxies—we call
+that the universe.
+Ray: Yes, I've heard of that, and I do
+recall reading some of these papers, but I don't know that those papers really
+exist, or that the things they refer to really exist, other than in my
+thoughts.
+Molly 2004: So you don't acknowledge the
+existence of the universe?
+Ray: No, I just said that I do believe
+that it exists, but I'm pointing out that it's a belief That's my personal leap
+of faith.
+Molly 2004: All right, but I asked whether you
+believed in God.
+Ray: Again, "God" is a word by
+which people mean different things. For the sake of your question, we can
+consider God to be the universe, and I said that I believe in the existence of
+the universe.
+Molly 2004: God is just the universe?
+Ray: Just? It's a pretty big thing to
+apply the word "just" to. If we are to believe what science tells us—and
+I said that I do—it's about as big a phenomenon as we could imagine.
+Molly 2004: Actually, many physicists now
+consider our universe to be just one bubble among a vast number of other
+universes. But I meant that people usually mean something more by the word
+"God" than "just" the material world. Some people do
+associate God with everything that exists, but they still consider God to be
+conscious. So you believe in a God that's not conscious?
+Ray: The universe is not conscious—yet.
+But it will be. Strictly speaking, we should say that very little of it is
+conscious today. But that will change and soon. I expect that the universe will
+become sublimely intelligent and will wake up in Epoch Six. The only belief I
+am positing here is that the universe exists. If we make that leap of faith,
+the expectation that it will wake up is not so much a belief as an informed
+understanding, based on the same science that says there is a universe.
+Molly 2004: Interesting. You know, that's
+essentially the opposite of the view that there was a conscious creator who got
+everything started and then kind of bowed out. You're basically saying that a
+conscious universe will "bow in" during Epoch Six.
+Ray: Yes, that's the essence of Epoch Six.
+
+================================================================================
+CHAPTER EIGHT: The Deeply Intertwined Promise and Peril of GNR
+================================================================================
+
+Molly 2004: Okay, now run that stealthy scenario
+by me again—you know, the one where the bad nanobots spread quietly through the
+biomass to get themselves into position but don't actually expand to noticeably
+destroy anything until they're spread around the globe.
+Ray: Well, the nanobots would spread at
+very low concentrations, say one carbon atom per 1015 in the
+biomass, so they would be seeded throughout the biomass. Thus, the speed of
+physical spread of the destructive nanobots would not be a limiting factor when
+they subsequently replicate in place. If they skipped the stealth phase and
+expanded instead from a single point, the spreading nanodisease would be
+noticed, and the spread around the world would be relatively slow.
+Molly 2004: So how are we going to protect
+ourselves from that? By the time they start phase two, we've got only about
+ninety minutes, or much less if you want to avoid enormous damage.
+Ray: Because of the nature of exponential
+growth, the bulk of the damage gets done in the last few minutes, but your
+point is well taken. Under any scenario, we won't have a chance without a
+nanotechnology immune system. Obviously, we can't wait until the beginning of a
+ninety-minute cycle of destruction to begin thinking about creating one. Such a
+system would be very comparable to our human immune system. How long would a
+biological human circa 2004 last without one?
+Molly 2004: Not long, I suppose. How does this
+nano-immune system pick up these bad nanobots if they're only one in a thousand
+trillion?
+Ray: We have the same issue with our
+biological immune system. Detection of even a single foreign protein triggers
+rapid action by biological antibody factories, so the immune system is there in
+force by the time a pathogen achieves a near critical level. We'll need a
+similar capability for the nanoimmune system.
+Charles Darwin: Now tell me, do the immune-system
+nanobots have the ability to replicate?
+Ray: They would need to be able to do
+this; otherwise they would not be able to keep pace with the replicating
+pathogenic nanobots. There have been proposals to seed the biomass with
+protective immune-system nanobots at a particular concentration, but as soon as
+the bad nanobots significantly exceeded this fixed concentration the immune
+system would lose. Robert Freitas proposes nonreplicating nanofactories able to
+turn out additional protective nanorobots when needed. I think this is likely
+to deal with threats for a while, but ultimately the defensive system will need
+the ability to replicate its immune capabilities in place to keep pace with
+emerging threats.
+Charles: So aren't the immune-system nanobots
+entirely equivalent to the phase one malevolent nanobots? I mean seeding the
+biomass is the first phase of the stealth scenario.
+Ray: But the immune-system nanobots are
+programmed to protect us, not destroy us.
+Charles: I understand that software can be
+modified.
+Ray: Hacked, you mean?
+Charles: Yes, exactly. So if the
+immune-system software is modified by a hacker to simply turn on its
+self-replication ability without end—
+Ray: —yes, well, we'll have to be careful
+about that, won't we?
+Molly 2004: I'll say.
+Ray: We have the same problem with our
+biological immune system. Our immune system is comparably powerful, and if it
+turns on us that's an autoimmune disease, which can be insidious. But there's
+still no alternative to having an immune system.
+Molly 2004: So a software virus could turn the
+nanobot immune system into a stealth destroyer?
+Ray: That's possible. It's fair to
+conclude that software security is going to be the decisive issue for many
+levels of the human-machine civilization. With everything becoming information,
+maintaining the software integrity of our defensive technologies will be
+critical to our survival. Even on an economic level, maintaining the business
+model that creates information will be critical to our well-being.
+Molly 2004: This makes me feel rather helpless. I
+mean, with all these good and bad nanobots battling it out, I'll just be a
+hapless bystander.
+Ray: That's hardly a new phenomenon. How
+much influence do you have in 2004 on the disposition of the tens of thousands
+of nuclear weapons in the world?
+Molly 2004: At least I have a voice and a vote in
+elections that affect foreign-policy issues.
+Ray: There's no reason for that to change.
+Providing for a reliable nanotechnology immune system will be one of the great
+political issues of the 2020s and 2030s.
+Molly 2004: Then what about strong AI?
+Ray: The good news is that it will
+protect us from malevolent nanotechnology because it will be smart enough to
+assist us in keeping our defensive technologies ahead of the destructive ones.
+Ned Ludd: Assuming it's on our side.
+Ray: Indeed.

@@ -2,7 +2,7 @@
 
 Skills define *how* tools work. This file is for *your* specifics — the stuff that's unique to your setup.
 
-## Google APIs (umbraintention@gmail.com)
+## Google APIs (betooo.neh@gmail.com)
 - **Calendar** - Crear eventos con Meet automático
 - **Gmail** - Enviar correos
 - **Sheets** - Leer/escribir hojas
@@ -65,13 +65,21 @@ from googleapiclient.discovery import build
 
 ## 1Password CLI
 - **Account:** betooo.neh@gmail.com (shorthand: betooo)
-- **Sign in:** `echo 'PASSWORD' | op signin --account betooo --raw`
+- **Master password:** ~/.secrets/op-master (chmod 600)
+- **Sign in:** Requiere tmux session (ver skill 1password)
 - **Credentials file:** ~/.config/op/credentials (chmod 600)
-- **Vaults accessible:** Private, max umbra, Shared Fam. Nehmad
+- **Vaults accessible:** max umbra (solo 1 vault compartido actualmente)
+
+### Secretos locales (~/.secrets/)
+- `op-master` — 1Password master password
+- `x-api` — X OAuth1 tokens (actualmente muertos)
+- `x-bearer` — X Bearer token (read-only, funcional)
 
 ## X / Twitter (@beto_neh)
 - **API:** Pay Per Use (créditos limitados)
 - **Keys:** 1Password vault "max umbra" item "X"
+- **Bearer token:** ~/.secrets/x-bearer (read-only, funcional)
+- **OAuth1:** ~/.secrets/x-api (Consumer Key original + Access Token 3 = funcional Read+Write)
 - **⚠️ REGLA:** NO responder tweets automáticamente. Avisar a Alberto de menciones/replies y decidir juntos qué contestar.
 - **Chequeo:** Revisar mentions 2-3 veces al día en heartbeat, avisar si hay algo relevante (ignorar spam/bots)
 

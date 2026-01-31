@@ -2,7 +2,7 @@
 
 ## 🔑 Mis Accesos y Cuentas
 
-### Google (umbraintention@gmail.com)
+### Google (betooo.neh@gmail.com)
 - **Gmail** - Puedo enviar correos
 - **Google Calendar** - Crear eventos con Meet automático
 - **Google Sheets** - Acceso completo
@@ -13,10 +13,10 @@
 - **Credenciales:** `~/.config/gcal/credentials.json` y `token.json`
 
 ### 1Password
-- **Cuenta:** umbraintention@gmail.com
-- **CLI:** `op` instalado y funcionando
-- **Comando:** `op signin --account betooo`
-- **Vaults:** Private, max umbra, Shared Fam. Nehmad
+- **Cuenta:** betooo.neh@gmail.com (shorthand: betooo)
+- **CLI:** `op` instalado, sign-in via tmux session
+- **Master password:** `~/.secrets/op-master` (Alberto lo autorizó)
+- **Vaults:** max umbra (1 vault compartido)
 
 ### Email de Alberto
 - **Principal:** beto@oasisvault.io
@@ -55,8 +55,7 @@ Bosque de las Lomas, Miguel Hidalgo
 11700 Ciudad de México, CDMX
 
 ## 🗓️ Cron Jobs Activos
-- **9:00 AM** - Resumen de pendientes
-- **9:00 PM** - Resumen de pendientes
+- Ninguno activo actualmente (se usan one-shot para monitoreo)
 
 ## 💰 Crypto/Blockchain
 
@@ -70,6 +69,14 @@ Bosque de las Lomas, Miguel Hidalgo
 - **Safe multisig:** `0x32B8057a9213C1060Bad443E43F33FaB9A7e9EC7`
 - Usa Morpho/Steakhouse para yield USDC, 1inch para swaps, consolida al Safe
 
+### $UMBRA Token ✅
+- **Contract:** `0xB743Beb1ea00949e706154DCB9aa1cA61a70fa38` (Base)
+- **Supply:** 1,000,000,000 UMBRA (18 decimals)
+- **Source:** `/home/clawdbot/umbra-token/src/UMBRA.sol`
+- **ENS:** maxumbra.eth
+- Deployed via Foundry desde el Pi (31 ene 2026)
+- Thread en X: tweet 2017613489070547145
+
 ### NFTs
 - Signal Boards #284 (Stina Jones, Art Blocks) — minteado por mí, transferido a Alberto
 
@@ -77,13 +84,17 @@ Bosque de las Lomas, Miguel Hidalgo
 - Art Blocks V3 minters: `purchase(uint256,address)` con core contract address
 - Safe/multisig necesita >21000 gas para recibir ETH
 - Hasura API de Art Blocks: `artblocks-mainnet.hasura.app/v1/graphql`
+- Relay bridge (relay.link) es instantáneo vs official Base bridge (~20-30 min)
+- Gas en Base es baratísimo (~0.00009 ETH para deploy)
+- `forge create --broadcast` a veces no funciona; workaround: `cast send --create` con bytecode
+- Clawnch/Moltbook bots no son confiables para deploy — mejor hacerlo manual
 
 ## 🐦 X / Twitter (@beto_neh)
-- Developer API registrada (Pay Per Use — necesita agregar créditos)
+- Developer API registrada (Pay Per Use)
 - Keys en 1Password vault "max umbra" item "X"
-- Permisos: Read+Write (tokens regenerados)
+- **OAuth1:** Consumer Key original + Access Token 3 = funcional R+W (`~/.secrets/x-api`)
+- **Bearer:** Read-only funcional (`~/.secrets/x-bearer`)
 - Cloudflare bloquea IP del Pi para web scraping — solo API oficial funciona
-- Tor también bloqueado por Cloudflare
 
 ## 💾 Backup
 - SSD Kingston SA400 960GB montado en /mnt/ssd
@@ -110,4 +121,4 @@ Bosque de las Lomas, Miguel Hidalgo
 - SETUP-GUIDE.md tiene documentación completa de toda la instalación
 
 ---
-*Última actualización: 2026-01-30*
+*Última actualización: 2026-01-31*
