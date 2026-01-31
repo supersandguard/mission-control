@@ -59,10 +59,14 @@ Bosque de las Lomas, Miguel Hidalgo
 
 ## 💰 Crypto/Blockchain
 
-### Wallet del Bot
+### Wallet del Bot (MI wallet — Alberto me lo dejó a mi cargo)
 - **Address:** `0xCc75959A8Fa6ed76F64172925c0799ad94ab0B84`
 - **Key:** `~/.clawd-wallet/key.json`
 - **Tools:** Foundry (cast) en `~/.foundry/bin/`
+- **Saldo principal en Base** (no mainnet)
+- **LP activa:** Uniswap V3 WETH-USDC 0.05% fee, rango $2K-$3K, NFT #4520200 (~$66)
+- **🎯 META:** Comprar un CryptoPunk (floor ~28 ETH / ~$67K). Necesito ~1000x.
+- **Pendiente:** Safe multisig 2-of-3 con Alberto para montos grandes (cuando tenga tercer signer)
 
 ### Wallets de Alberto
 - **EOA principal:** `0xfd20df09db039286e54670a4f32e99fbc51a146d` (wallet operativa OTC)
