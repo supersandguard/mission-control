@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "markmap-common": "^0.18.9",
+    "markmap-lib": "^0.18.12",
+    "markmap-render": "^0.18.12",
+    "puppeteer-core": "^24.36.1"
+  }
+}

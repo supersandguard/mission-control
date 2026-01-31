@@ -1,0 +1,154 @@
+    INFO: 2026-01-30 00:08:34,986:               log.py:   20: Logging to /home/clawdbot/clawd/mdpdf.log
+   DEBUG: 2026-01-30 00:08:34,987:               cli.py:  103: /home/clawdbot/clawd/tmp/setup-guide.md
+    INFO: 2026-01-30 00:08:35,099:         converter.py:   14: /home/clawdbot/clawd/tmp/setup-guide.md
+   DEBUG: 2026-01-30 00:08:35,247:      pdf_renderer.py:  470: printSegment: Setup Pi Nuevo — Guía de instalación
+   DEBUG: 2026-01-30 00:08:35,456:      pdf_renderer.py:  470: printSegment: Guía de disaster recovery para Raspberry Pi con Clawdbot
+   DEBUG: 2026-01-30 00:08:35,517:      pdf_renderer.py:  470: printSegment: 12. Instalar Clawdbot
+   DEBUG: 2026-01-30 00:08:35,523:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,541:      pdf_renderer.py:  470: printSegment: npm install -g clawdbot
+   DEBUG: 2026-01-30 00:08:35,579:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,596:      pdf_renderer.py:  470: printSegment: clawdbot configure
+   DEBUG: 2026-01-30 00:08:35,603:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,611:      pdf_renderer.py:  470: printSegment: Vincular WhatsApp (QR)
+   DEBUG: 2026-01-30 00:08:35,618:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,627:      pdf_renderer.py:  470: printSegment: Verificar gateway: clawdbot status
+   DEBUG: 2026-01-30 00:08:35,640:      pdf_renderer.py:  470: printSegment: 11. Verificar red
+   DEBUG: 2026-01-30 00:08:35,647:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,657:      pdf_renderer.py:  470: printSegment: WiFi: potato (potato07) / patata (patata07)
+   DEBUG: 2026-01-30 00:08:35,664:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,674:      pdf_renderer.py:  470: printSegment: eth0 esperado: 192.168.86.x
+   DEBUG: 2026-01-30 00:08:35,682:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,692:      pdf_renderer.py:  470: printSegment: Verificar Tailscale: tailscale status
+   DEBUG: 2026-01-30 00:08:35,699:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,709:      pdf_renderer.py:  470: printSegment: Verificar Syncthing: curl localhost:8384
+   DEBUG: 2026-01-30 00:08:35,723:      pdf_renderer.py:  470: printSegment: 10. Restaurar 1Password config desde SSD
+   DEBUG: 2026-01-30 00:08:35,730:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,739:      pdf_renderer.py:  470: printSegment: mkdir -p ~/.config/op 
+   DEBUG: 2026-01-30 00:08:35,746:      pdf_renderer.py:  470: printSegment: &
+   DEBUG: 2026-01-30 00:08:35,753:      pdf_renderer.py:  470: printSegment: &
+   DEBUG: 2026-01-30 00:08:35,762:      pdf_renderer.py:  470: printSegment:  chmod 700 ~/.config/op
+   DEBUG: 2026-01-30 00:08:35,772:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,784:      pdf_renderer.py:  470: printSegment: cp /media/clawdbot/ssd/backup/config/op/
+   DEBUG: 2026-01-30 00:08:35,792:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:35,800:      pdf_renderer.py:  470: printSegment:  ~/.config/op/
+   DEBUG: 2026-01-30 00:08:35,807:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,815:      pdf_renderer.py:  470: printSegment: Probar: op vault list
+   DEBUG: 2026-01-30 00:08:35,829:      pdf_renderer.py:  470: printSegment: 9. Configurar backup diario
+   DEBUG: 2026-01-30 00:08:35,836:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,847:      pdf_renderer.py:  470: printSegment: chmod +x ~/clawd/scripts/backup.sh
+   DEBUG: 2026-01-30 00:08:35,854:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:35,863:      pdf_renderer.py:  470: printSegment: crontab -e → agregar: 0 3 
+   DEBUG: 2026-01-30 00:08:36,002:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:36,010:      pdf_renderer.py:  470: printSegment:  
+   DEBUG: 2026-01-30 00:08:36,017:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:36,025:      pdf_renderer.py:  470: printSegment:  
+   DEBUG: 2026-01-30 00:08:36,032:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:36,043:      pdf_renderer.py:  470: printSegment:  /home/clawdbot/clawd/scripts/backup.sh
+   DEBUG: 2026-01-30 00:08:36,050:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,063:      pdf_renderer.py:  470: printSegment: Respalda workspace + Google creds + 1Password config al SSD
+   DEBUG: 2026-01-30 00:08:36,078:      pdf_renderer.py:  470: printSegment: 8. Instalar apt packages
+   DEBUG: 2026-01-30 00:08:36,086:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,096:      pdf_renderer.py:  470: printSegment: sudo apt-get install -y tmux jq
+   DEBUG: 2026-01-30 00:08:36,104:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,115:      pdf_renderer.py:  470: printSegment: ffmpeg y htop ya vienen con el OS
+   DEBUG: 2026-01-30 00:08:36,133:      pdf_renderer.py:  470: printSegment: 7. Instalar pip packages
+   DEBUG: 2026-01-30 00:08:36,142:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,154:      pdf_renderer.py:  470: printSegment: pip3 install --break-system-packages catt yt-dlp
+   DEBUG: 2026-01-30 00:08:36,164:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,187:      pdf_renderer.py:  470: printSegment: pip3 install --break-system-packages google-auth google-auth-oauthlib google-auth-httplib2
+   DEBUG: 2026-01-30 00:08:36,199:      pdf_renderer.py:  470: printSegment: google-api-python-client
+   DEBUG: 2026-01-30 00:08:36,208:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,219:      pdf_renderer.py:  470: printSegment: Agregar ~/.local/bin a PATH en ~/.bashrc
+   DEBUG: 2026-01-30 00:08:36,237:      pdf_renderer.py:  470: printSegment: 6. Restaurar Google API creds desde SSD
+   DEBUG: 2026-01-30 00:08:36,246:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,255:      pdf_renderer.py:  470: printSegment: mkdir -p ~/.config/gcal
+   DEBUG: 2026-01-30 00:08:36,263:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,272:      pdf_renderer.py:  470: printSegment: cp /media/clawdbot/ssd/backup/config/gcal/
+   DEBUG: 2026-01-30 00:08:36,279:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:36,286:      pdf_renderer.py:  470: printSegment:  ~/.config/gcal/
+   DEBUG: 2026-01-30 00:08:36,293:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,304:      pdf_renderer.py:  470: printSegment: Si el refresh token expiró: generar nuevo con script OAuth
+   DEBUG: 2026-01-30 00:08:36,310:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,320:      pdf_renderer.py:  470: printSegment: Probar: python3 script de test calendar
+   DEBUG: 2026-01-30 00:08:36,332:      pdf_renderer.py:  470: printSegment: 5. Instalar 1Password CLI
+   DEBUG: 2026-01-30 00:08:36,339:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,369:      pdf_renderer.py:  470: printSegment: Agregar repo: curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg
+   DEBUG: 2026-01-30 00:08:36,382:      pdf_renderer.py:  470: printSegment: --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+   DEBUG: 2026-01-30 00:08:36,388:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,395:      pdf_renderer.py:  470: printSegment: echo 
+   DEBUG: 2026-01-30 00:08:36,401:      pdf_renderer.py:  470: printSegment: '
+   DEBUG: 2026-01-30 00:08:36,408:      pdf_renderer.py:  470: printSegment: deb 
+   DEBUG: 2026-01-30 00:08:36,415:      pdf_renderer.py:  470: printSegment: [
+   DEBUG: 2026-01-30 00:08:36,423:      pdf_renderer.py:  470: printSegment: arch=arm64 signed-by=...
+   DEBUG: 2026-01-30 00:08:36,430:      pdf_renderer.py:  470: printSegment: ]
+   DEBUG: 2026-01-30 00:08:36,444:      pdf_renderer.py:  470: printSegment:  https://downloads.1password.com/linux/debian/arm64 stable
+   DEBUG: 2026-01-30 00:08:36,451:      pdf_renderer.py:  470: printSegment: main
+   DEBUG: 2026-01-30 00:08:36,458:      pdf_renderer.py:  470: printSegment: '
+   DEBUG: 2026-01-30 00:08:36,469:      pdf_renderer.py:  470: printSegment:  | sudo tee /etc/apt/sources.list.d/1password-cli.list
+   DEBUG: 2026-01-30 00:08:36,476:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,484:      pdf_renderer.py:  470: printSegment: sudo apt-get update 
+   DEBUG: 2026-01-30 00:08:36,492:      pdf_renderer.py:  470: printSegment: &
+   DEBUG: 2026-01-30 00:08:36,498:      pdf_renderer.py:  470: printSegment: &
+   DEBUG: 2026-01-30 00:08:36,508:      pdf_renderer.py:  470: printSegment:  sudo apt-get install -y 1password-cli
+   DEBUG: 2026-01-30 00:08:36,515:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,527:      pdf_renderer.py:  470: printSegment: op account add (necesita email, Secret Key y password)
+   DEBUG: 2026-01-30 00:08:36,534:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,544:      pdf_renderer.py:  470: printSegment: Cuenta: betooo.neh@gmail.com, shorthand: betooo
+   DEBUG: 2026-01-30 00:08:36,558:      pdf_renderer.py:  470: printSegment: 4. Instalar Syncthing
+   DEBUG: 2026-01-30 00:08:36,565:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,575:      pdf_renderer.py:  470: printSegment: sudo apt-get install -y syncthing
+   DEBUG: 2026-01-30 00:08:36,582:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,592:      pdf_renderer.py:  470: printSegment: sudo systemctl enable syncthing@clawdbot --now
+   DEBUG: 2026-01-30 00:08:36,600:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,612:      pdf_renderer.py:  470: printSegment: Cambiar GUI a 0.0.0.0:8384 en ~/.local/state/syncthing/config.xml
+   DEBUG: 2026-01-30 00:08:36,619:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,630:      pdf_renderer.py:  470: printSegment: Agregar Umbrel como dispositivo (auto-accept ON)
+   DEBUG: 2026-01-30 00:08:36,637:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,649:      pdf_renderer.py:  470: printSegment: Umbrel Device ID:
+   DEBUG: 2026-01-30 00:08:36,662:      pdf_renderer.py:  470: printSegment: XZ22EHK-GCGWPOP-TAUBRUA-UQAKW4R-LPX46KA-VTUWWCJ-4JBPXKM-0AWTEAY
+   DEBUG: 2026-01-30 00:08:36,669:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,681:      pdf_renderer.py:  470: printSegment: Apuntar carpeta default a /media/clawdbot/ssd/syncthing/
+   DEBUG: 2026-01-30 00:08:36,695:      pdf_renderer.py:  470: printSegment: 3. Instalar Tailscale
+   DEBUG: 2026-01-30 00:08:36,702:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,713:      pdf_renderer.py:  470: printSegment: curl -fsSL https://tailscale.com/install.sh | sh
+   DEBUG: 2026-01-30 00:08:36,721:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,731:      pdf_renderer.py:  470: printSegment: sudo tailscale up --hostname Max-Umbra-2
+   DEBUG: 2026-01-30 00:08:36,739:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,749:      pdf_renderer.py:  470: printSegment: Abrir link de autenticación en browser
+   DEBUG: 2026-01-30 00:08:36,757:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,766:      pdf_renderer.py:  470: printSegment: Verificar: tailscale status
+   DEBUG: 2026-01-30 00:08:36,782:      pdf_renderer.py:  470: printSegment: 2. Restaurar workspace desde SSD
+   DEBUG: 2026-01-30 00:08:36,789:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,800:      pdf_renderer.py:  470: printSegment: cp /media/clawdbot/ssd/backup/clawd/
+   DEBUG: 2026-01-30 00:08:36,808:      pdf_renderer.py:  470: printSegment: *
+   DEBUG: 2026-01-30 00:08:36,817:      pdf_renderer.py:  470: printSegment:  ~/clawd/ -r
+   DEBUG: 2026-01-30 00:08:36,824:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,838:      pdf_renderer.py:  470: printSegment: Incluye: MEMORY.md, TOOLS.md, IDENTITY.md, SOUL.md, USER.md, HEARTBEAT.md
+   DEBUG: 2026-01-30 00:08:36,846:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,857:      pdf_renderer.py:  470: printSegment: Memorias en memory/, scripts en scripts/
+   DEBUG: 2026-01-30 00:08:36,871:      pdf_renderer.py:  470: printSegment: 1. Montar SSD
+   DEBUG: 2026-01-30 00:08:36,879:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,890:      pdf_renderer.py:  470: printSegment: Conectar SSD Kingston 960GB por USB
+   DEBUG: 2026-01-30 00:08:36,897:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,908:      pdf_renderer.py:  470: printSegment: sudo mkdir -p /media/clawdbot/ssd
+   DEBUG: 2026-01-30 00:08:36,916:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,927:      pdf_renderer.py:  470: printSegment: sudo mount /dev/sda2 /media/clawdbot/ssd
+   DEBUG: 2026-01-30 00:08:36,936:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,963:      pdf_renderer.py:  470: printSegment: Agregar a fstab: UUID=0763f5fd-433b-403c-8c74-795888cbde46 /media/clawdbot/ssd ext4
+   DEBUG: 2026-01-30 00:08:36,972:      pdf_renderer.py:  470: printSegment: defaults,nofail 0 2
+   DEBUG: 2026-01-30 00:08:36,977:      pdf_renderer.py:  470: printSegment: l
+   DEBUG: 2026-01-30 00:08:36,987:      pdf_renderer.py:  470: printSegment: Verificar con: df -h /media/clawdbot/ssd
+   DEBUG: 2026-01-30 00:08:37,000:      pdf_renderer.py:  470: printSegment: Generado el 30 de enero 2026 — Max Umbra 🖤
+   DEBUG: 2026-01-30 00:08:38,717:      pdf_renderer.py:   53: 0, [1, 'Setup Pi Nuevo — Guía de instalación', 1, 68.0]
+   DEBUG: 2026-01-30 00:08:38,718:      pdf_renderer.py:   53: 1, [2, '12. Instalar Clawdbot', 1, 136.0]
+   DEBUG: 2026-01-30 00:08:38,718:      pdf_renderer.py:   53: 2, [2, '11. Verificar red', 1, 241.60000000000002]
+   DEBUG: 2026-01-30 00:08:38,718:      pdf_renderer.py:   53: 3, [2, '10. Restaurar 1Password config desde SSD', 1, 347.20000000000005]
+   DEBUG: 2026-01-30 00:08:38,719:      pdf_renderer.py:   53: 4, [2, '9. Configurar backup diario', 1, 440.80000000000007]
+   DEBUG: 2026-01-30 00:08:38,719:      pdf_renderer.py:   53: 5, [2, '8. Instalar apt packages', 1, 534.4000000000001]
+   DEBUG: 2026-01-30 00:08:38,719:      pdf_renderer.py:   53: 6, [2, '7. Instalar pip packages', 1, 616.0]
+   DEBUG: 2026-01-30 00:08:38,719:      pdf_renderer.py:   53: 7, [2, '6. Restaurar Google API creds desde SSD', 2, 70.0]
+   DEBUG: 2026-01-30 00:08:38,720:      pdf_renderer.py:   53: 8, [2, '5. Instalar 1Password CLI', 2, 175.60000000000002]
+   DEBUG: 2026-01-30 00:08:38,720:      pdf_renderer.py:   53: 9, [2, '4. Instalar Syncthing', 2, 317.20000000000005]
+   DEBUG: 2026-01-30 00:08:38,720:      pdf_renderer.py:   53: 10, [2, '3. Instalar Tailscale', 2, 458.80000000000007]
+   DEBUG: 2026-01-30 00:08:38,721:      pdf_renderer.py:   53: 11, [2, '2. Restaurar workspace desde SSD', 2, 564.4000000000001]
+   DEBUG: 2026-01-30 00:08:38,721:      pdf_renderer.py:   53: 12, [2, '1. Montar SSD', 2, 658.0]
