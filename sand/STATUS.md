@@ -1,4 +1,4 @@
-# Sand - Transaction Firewall PWA
+# SandGuard - Transaction Firewall PWA
 ## Status: MVP v0.1 Running ✅
 
 ### Access

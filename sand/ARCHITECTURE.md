@@ -1,4 +1,4 @@
-# Sand - Transaction Firewall PWA
+# SandGuard - Transaction Firewall PWA
 
 ## Vision
 A PWA that acts as a personal transaction firewall for crypto wallets. 

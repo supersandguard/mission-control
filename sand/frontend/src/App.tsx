@@ -13,7 +13,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="text-xl">🛡️</span>
             <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Sand
+              SandGuard
             </h1>
           </div>
           <span className="text-xs text-slate-500">v0.1</span>

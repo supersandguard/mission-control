@@ -27,9 +27,9 @@ app.use('/api/poll', pollRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'Sand API', version: '0.1.0' });
+  res.json({ status: 'ok', service: 'SandGuard API', version: '0.1.0' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🛡️  Sand API running on http://localhost:${PORT}`);
+  console.log(`🛡️  SandGuard API running on http://localhost:${PORT}`);
 });

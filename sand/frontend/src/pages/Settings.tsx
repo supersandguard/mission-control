@@ -134,7 +134,7 @@ export default function Settings() {
       <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
         <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Acerca de</h3>
         <div className="space-y-1 text-xs text-slate-500">
-          <p>Sand v0.1 — Transaction Firewall PWA</p>
+          <p>SandGuard v0.1 — Transaction Firewall PWA</p>
           <p>Backend: {import.meta.env.VITE_API_URL || 'http://localhost:3001'}</p>
           <p>Modo: {config.address ? 'Live' : 'Demo (mock data)'}</p>
         </div>
