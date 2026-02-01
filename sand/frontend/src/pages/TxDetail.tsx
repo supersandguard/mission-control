@@ -1,0 +1,148 @@
+import { useParams, useNavigate } from 'react-router-dom'
+import { MOCK_TRANSACTIONS } from '../mockData'
+import RiskBadge from '../components/RiskBadge'
+import BalanceChangeCard from '../components/BalanceChangeCard'
+
+export default function TxDetail() {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const tx = MOCK_TRANSACTIONS.find(t => t.id === id)
+
+  if (!tx) {
+    return (
+      <div className="px-4 py-12 text-center">
+        <p className="text-slate-500">Transacción no encontrada</p>
+        <button onClick={() => navigate('/queue')} className="mt-4 text-emerald-400 text-sm">← Volver</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="px-4 py-6 space-y-4">
+      {/* Back */}
+      <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-300">← Volver</button>
+
+      {/* Summary */}
+      <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-lg font-bold">{tx.explanation?.summary || tx.decoded?.functionName}</p>
+            <p className="text-xs text-slate-500 mt-1">Nonce #{tx.nonce} · {tx.confirmations}/{tx.confirmationsRequired} firmas</p>
+          </div>
+          {tx.risk && <RiskBadge level={tx.risk.score} size="lg" />}
+        </div>
+      </div>
+
+      {/* Explanation */}
+      {tx.explanation && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">📝 Explicación</h3>
+          <ul className="space-y-2">
+            {tx.explanation.details.map((d, i) => (
+              <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
+                <span className="text-slate-600 mt-0.5">•</span>
+                <span>{d}</span>
+              </li>
+            ))}
+          </ul>
+          {tx.explanation.warnings.length > 0 && (
+            <div className="mt-4 space-y-2">
+              {tx.explanation.warnings.map((w, i) => (
+                <div key={i} className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-300">
+                  {w}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Balance Changes */}
+      {tx.simulation && tx.simulation.balanceChanges.length > 0 && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">💰 Cambios de Balance</h3>
+          <div className="space-y-2">
+            {tx.simulation.balanceChanges.map((bc, i) => (
+              <BalanceChangeCard key={i} change={bc} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Decoded */}
+      {tx.decoded && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🔍 Datos Decodificados</h3>
+          <div className="space-y-3">
+            <div>
+              <p className="text-xs text-slate-500">Función</p>
+              <p className="font-mono text-sm text-emerald-400">{tx.decoded.functionSignature}</p>
+            </div>
+            {tx.decoded.protocol && (
+              <div>
+                <p className="text-xs text-slate-500">Protocolo</p>
+                <p className="text-sm">{tx.decoded.protocol.name} <span className="text-slate-500">({tx.decoded.protocol.category})</span></p>
+              </div>
+            )}
+            <div>
+              <p className="text-xs text-slate-500 mb-2">Parámetros</p>
+              {tx.decoded.parameters.map((p, i) => (
+                <div key={i} className="flex justify-between items-start py-1.5 border-t border-slate-800/50">
+                  <div>
+                    <p className="text-xs font-mono text-slate-400">{p.name} <span className="text-slate-600">({p.type})</span></p>
+                    {p.label && <p className="text-xs text-slate-500">{p.label}</p>}
+                  </div>
+                  <p className="font-mono text-xs text-slate-300 max-w-[180px] truncate text-right">{p.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Risk Details */}
+      {tx.risk && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🛡️ Análisis de Riesgo</h3>
+          <div className="space-y-2">
+            {tx.risk.reasons.map((r, i) => (
+              <div key={i} className={`flex items-start gap-2 text-sm ${
+                r.level === 'red' ? 'text-red-300' : r.level === 'yellow' ? 'text-amber-300' : 'text-emerald-300'
+              }`}>
+                <span>{r.level === 'red' ? '🔴' : r.level === 'yellow' ? '🟡' : '🟢'}</span>
+                <span>{r.messageEs}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Simulation Meta */}
+      {tx.simulation && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">⛽ Simulación</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-slate-500">Estado</p>
+              <p className="text-sm">{tx.simulation.success ? '✅ Exitosa' : '❌ Fallida'}</p>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500">Gas estimado</p>
+              <p className="font-mono text-sm">{tx.simulation.gasUsed.toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex gap-3 pt-2">
+        <button className="flex-1 py-3.5 rounded-xl bg-red-500/20 text-red-400 font-semibold text-sm border border-red-500/30 hover:bg-red-500/30 transition-colors">
+          ✕ Rechazar
+        </button>
+        <button className="flex-1 py-3.5 rounded-xl bg-emerald-500/20 text-emerald-400 font-semibold text-sm border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
+          ✓ Firmar
+        </button>
+      </div>
+    </div>
+  )
+}
