@@ -7,6 +7,7 @@ import simulateRouter from './routes/simulate';
 import decodeRouter from './routes/decode';
 import explainRouter from './routes/explain';
 import riskRouter from './routes/risk';
+import pollRouter from './routes/poll';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/api/simulate', simulateRouter);
 app.use('/api/decode', decodeRouter);
 app.use('/api/explain', explainRouter);
 app.use('/api/risk', riskRouter);
+app.use('/api/poll', pollRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {

@@ -122,6 +122,64 @@ export const KNOWN_PROTOCOLS: Record<string, ProtocolInfo> = {
     category: 'Token',
     website: 'https://makerdao.com',
   },
+
+  // Morpho Blue
+  '0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb': {
+    name: 'Morpho Blue',
+    category: 'Lending',
+    website: 'https://morpho.org',
+  },
+  '0x38989bba00bdf8181f4082995b3deae96163ac5d': {
+    name: 'Morpho Blue (Base)',
+    category: 'Lending',
+    website: 'https://morpho.org',
+  },
+
+  // Compound V3
+  '0xc3d688b66703497daa19211eedff47f25384cdc3': {
+    name: 'Compound V3 (USDC)',
+    category: 'Lending',
+    website: 'https://compound.finance',
+  },
+
+  // Base tokens
+  '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913': {
+    name: 'USDC (Base)',
+    category: 'Token',
+    website: 'https://circle.com',
+  },
+  '0x4200000000000000000000000000000000000006': {
+    name: 'WETH (Base)',
+    category: 'Token',
+    website: 'https://base.org',
+  },
+  '0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22': {
+    name: 'cbETH (Base)',
+    category: 'Token',
+    website: 'https://coinbase.com',
+  },
+  '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca': {
+    name: 'USDbC (Base)',
+    category: 'Token',
+    website: 'https://base.org',
+  },
+  '0x50c5725949a6f0c72e6c4a641f24049a917db0cb': {
+    name: 'DAI (Base)',
+    category: 'Token',
+    website: 'https://makerdao.com',
+  },
+
+  // Safe MultiSend
+  '0x38869bf66a61cf6bdb996a6ae40d5853fd43b526': {
+    name: 'Safe MultiSend',
+    category: 'Infrastructure',
+    website: 'https://safe.global',
+  },
+  '0xa238cb80c259a72e81d7e4664a9801593f98d1c5': {
+    name: 'Aave V3 Pool (Base)',
+    category: 'Lending',
+    website: 'https://aave.com',
+  },
 };
 
 // ─── ERC20 Function Signatures ───

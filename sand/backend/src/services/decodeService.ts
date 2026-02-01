@@ -40,12 +40,25 @@ const AAVE_V3_ABI = [
   'function repay(address asset, uint256 amount, uint256 interestRateMode, address onBehalfOf) returns (uint256)',
 ];
 
+const MORPHO_BLUE_ABI = [
+  'function supply((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, bytes data) returns (uint256, uint256)',
+  'function withdraw((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, address receiver) returns (uint256, uint256)',
+  'function borrow((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, address receiver) returns (uint256, uint256)',
+  'function repay((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, bytes data) returns (uint256, uint256)',
+  'function supplyCollateral((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, address onBehalf, bytes data)',
+  'function withdrawCollateral((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, address onBehalf, address receiver)',
+  'function liquidate((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, address borrower, uint256 seizedAssets, uint256 repaidShares, bytes data) returns (uint256, uint256)',
+  'function flashLoan(address token, uint256 assets, bytes data)',
+  'function setAuthorization(address authorized, bool newIsAuthorized)',
+];
+
 // Combined known ABIs for local decoding
 const ALL_KNOWN_ABIS = [
   ...ERC20_ABI,
   ...UNISWAP_V2_ROUTER_ABI,
   ...UNISWAP_V3_ROUTER_ABI,
   ...AAVE_V3_ABI,
+  ...MORPHO_BLUE_ABI,
 ];
 
 /**
@@ -235,6 +248,26 @@ function getParamLabel(functionName: string, paramName: string, paramType: strin
       asset: 'Token a pedir prestado',
       amount: 'Cantidad a pedir',
       interestRateMode: 'Tipo de interés (1=estable, 2=variable)',
+    },
+    supplyCollateral: {
+      marketParams: 'Parámetros del mercado Morpho',
+      assets: 'Cantidad de colateral a depositar',
+      onBehalf: 'Beneficiario del depósito',
+    },
+    withdrawCollateral: {
+      marketParams: 'Parámetros del mercado Morpho',
+      assets: 'Cantidad de colateral a retirar',
+      onBehalf: 'Propietario del colateral',
+      receiver: 'Dirección que recibe',
+    },
+    liquidate: {
+      marketParams: 'Parámetros del mercado Morpho',
+      borrower: 'Dirección del deudor a liquidar',
+      seizedAssets: 'Colateral a confiscar',
+    },
+    setAuthorization: {
+      authorized: 'Dirección autorizada',
+      newIsAuthorized: 'Nuevo estado de autorización',
     },
   };
 
