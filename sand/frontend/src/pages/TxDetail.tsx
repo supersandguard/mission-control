@@ -1,12 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { MOCK_TRANSACTIONS } from '../mockData'
+import { useTransactionsContext } from '../context/TransactionsContext'
 import RiskBadge from '../components/RiskBadge'
 import BalanceChangeCard from '../components/BalanceChangeCard'
 
 export default function TxDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const tx = MOCK_TRANSACTIONS.find(t => t.id === id)
+  const { getTransaction } = useTransactionsContext()
+  const tx = getTransaction(id || '')
 
   if (!tx) {
     return (
@@ -19,14 +20,13 @@ export default function TxDetail() {
 
   return (
     <div className="px-4 py-6 space-y-4">
-      {/* Back */}
       <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-300">← Volver</button>
 
       {/* Summary */}
       <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-lg font-bold">{tx.explanation?.summary || tx.decoded?.functionName}</p>
+            <p className="text-lg font-bold">{tx.explanation?.summary || tx.decoded?.functionName || 'Transaction'}</p>
             <p className="text-xs text-slate-500 mt-1">Nonce #{tx.nonce} · {tx.confirmations}/{tx.confirmationsRequired} firmas</p>
           </div>
           {tx.risk && <RiskBadge level={tx.risk.score} size="lg" />}
@@ -117,7 +117,7 @@ export default function TxDetail() {
         </div>
       )}
 
-      {/* Simulation Meta */}
+      {/* Simulation */}
       {tx.simulation && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">⛽ Simulación</h3>
@@ -134,12 +134,33 @@ export default function TxDetail() {
         </div>
       )}
 
+      {/* Raw Data */}
+      <details className="bg-slate-900 rounded-2xl border border-slate-800">
+        <summary className="p-5 text-xs font-semibold text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-300">
+          📦 Datos Raw
+        </summary>
+        <div className="px-5 pb-5 space-y-2">
+          <div>
+            <p className="text-xs text-slate-500">To</p>
+            <p className="font-mono text-xs text-slate-300 break-all">{tx.to}</p>
+          </div>
+          <div>
+            <p className="text-xs text-slate-500">Value</p>
+            <p className="font-mono text-xs text-slate-300">{tx.value} wei</p>
+          </div>
+          <div>
+            <p className="text-xs text-slate-500">Data</p>
+            <p className="font-mono text-xs text-slate-300 break-all max-h-24 overflow-y-auto">{tx.data}</p>
+          </div>
+        </div>
+      </details>
+
       {/* Action Buttons */}
       <div className="flex gap-3 pt-2">
-        <button className="flex-1 py-3.5 rounded-xl bg-red-500/20 text-red-400 font-semibold text-sm border border-red-500/30 hover:bg-red-500/30 transition-colors">
+        <button className="flex-1 py-3.5 rounded-xl bg-red-500/20 text-red-400 font-semibold text-sm border border-red-500/30 hover:bg-red-500/30 transition-colors active:scale-95">
           ✕ Rechazar
         </button>
-        <button className="flex-1 py-3.5 rounded-xl bg-emerald-500/20 text-emerald-400 font-semibold text-sm border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
+        <button className="flex-1 py-3.5 rounded-xl bg-emerald-500/20 text-emerald-400 font-semibold text-sm border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors active:scale-95">
           ✓ Firmar
         </button>
       </div>
