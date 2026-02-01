@@ -1,4 +1,4 @@
-# Oasis Guard — API Research
+# SandGuard — API Research
 
 > Comprehensive research for building a crypto transaction firewall product.
 > Stack: Node.js + React PWA. Target chains: Ethereum, Base.
@@ -199,7 +199,7 @@ console.log('Owners:', safeInfo.owners)
 console.log('Nonce:', safeInfo.nonce)
 ```
 
-### Key Architecture Notes for Oasis Guard
+### Key Architecture Notes for SandGuard
 
 - **Firewall flow**: User submits intent → backend creates Safe tx → simulates with Tenderly → if safe, auto-sign and propose → push notification to other signers → they confirm → execute.
 - **EIP-1193 signers**: Protocol Kit accepts any EIP-1193 provider, not just private keys. In production, use WalletConnect or injected provider.
@@ -911,7 +911,7 @@ import express from 'express'
 // --- VAPID Configuration (generate once, store securely) ---
 const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY!
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY!
-const VAPID_SUBJECT = 'mailto:admin@oasis-guard.com'
+const VAPID_SUBJECT = 'mailto:admin@sandguard.com'
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
 
@@ -1006,7 +1006,7 @@ async function sendPushNotification(
 router.post('/push/test', async (req, res) => {
   const { userId } = req.body
   await sendPushNotification(userId, {
-    title: '🛡️ Oasis Guard',
+    title: '🛡️ SandGuard',
     body: 'Push notifications are working!',
     icon: '/icons/icon-192.png',
     url: '/',
@@ -1058,7 +1058,7 @@ self.addEventListener('activate', (event) => {
 // --- Handle incoming push messages ---
 self.addEventListener('push', (event) => {
   let payload = {
-    title: 'Oasis Guard',
+    title: 'SandGuard',
     body: 'You have a new notification',
     icon: '/icons/icon-192.png',
     badge: '/icons/badge-72.png',
@@ -1291,8 +1291,8 @@ export function PushNotificationToggle({ userId }: { userId: string }) {
 ```json
 // public/manifest.json
 {
-  "name": "Oasis Guard",
-  "short_name": "OasisGuard",
+  "name": "SandGuard",
+  "short_name": "SandGuard",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

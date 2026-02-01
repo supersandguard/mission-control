@@ -30,7 +30,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'red',
       code: 'UNLIMITED_APPROVAL',
       message: 'Unlimited token approval detected. The spender can drain all tokens of this type.',
-      messageEs: 'Aprobación ilimitada de tokens detectada. El destinatario puede gastar todos tus tokens de este tipo.',
+      messageEs: 'Unlimited token approval detected. The spender can drain all tokens of this type.',
     });
   }
 
@@ -40,7 +40,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'red',
       code: 'UNVERIFIED_CONTRACT',
       message: 'Contract is not verified on block explorer. Cannot inspect source code.',
-      messageEs: 'El contrato no está verificado en el explorador de bloques. No se puede inspeccionar el código fuente.',
+      messageEs: 'Contract is not verified on block explorer. Cannot inspect source code.',
     });
   }
 
@@ -50,7 +50,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'red',
       code: 'NEW_CONTRACT',
       message: `Contract deployed ${req.contractAge} day(s) ago. Very new contracts are higher risk.`,
-      messageEs: `El contrato fue desplegado hace ${req.contractAge} día(s). Contratos muy nuevos son de mayor riesgo.`,
+      messageEs: `Contract deployed ${req.contractAge} day(s) ago. Very new contracts are higher risk.`,
     });
   }
 
@@ -60,7 +60,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'red',
       code: 'SIMULATION_FAILED',
       message: 'Transaction simulation failed. The transaction would likely revert on-chain.',
-      messageEs: 'La simulación de la transacción falló. Es probable que la transacción falle en la blockchain.',
+      messageEs: 'Transaction simulation failed. The transaction would likely revert on-chain.',
     });
   }
 
@@ -73,7 +73,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'yellow',
       code: 'LARGE_TRANSFER',
       message: `Large transfer detected: ~$${transferValueUsd.toLocaleString()} USD`,
-      messageEs: `Transferencia grande detectada: ~$${transferValueUsd.toLocaleString()} USD`,
+      messageEs: `Large transfer detected: ~$${transferValueUsd.toLocaleString()} USD`,
     });
   }
 
@@ -85,7 +85,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
         level: 'yellow',
         code: 'UNKNOWN_PROTOCOL',
         message: 'Contract is not a recognized protocol. Proceed with caution.',
-        messageEs: 'El contrato no es un protocolo reconocido. Procede con precaución.',
+        messageEs: 'Contract is not a recognized protocol. Proceed with caution.',
       });
     }
   }
@@ -96,7 +96,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'yellow',
       code: 'APPROVAL_UNKNOWN_SPENDER',
       message: 'Token approval to an unrecognized contract.',
-      messageEs: 'Aprobación de tokens a un contrato no reconocido.',
+      messageEs: 'Token approval to an unrecognized contract.',
     });
   }
 
@@ -106,7 +106,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'yellow',
       code: 'HIGH_GAS',
       message: `High gas usage (${req.simulation.gasUsed.toLocaleString()}). Complex transaction.`,
-      messageEs: `Uso de gas alto (${req.simulation.gasUsed.toLocaleString()}). Transacción compleja.`,
+      messageEs: `High gas usage (${req.simulation.gasUsed.toLocaleString()}). Complex transaction.`,
     });
   }
 
@@ -117,7 +117,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'green',
       code: 'KNOWN_PROTOCOL',
       message: `Recognized protocol: ${protocol!.name} (${protocol!.category})`,
-      messageEs: `Protocolo reconocido: ${protocol!.name} (${protocol!.category})`,
+      messageEs: `Recognized protocol: ${protocol!.name} (${protocol!.category})`,
     });
   }
 
@@ -126,7 +126,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'green',
       code: 'VERIFIED_CONTRACT',
       message: 'Contract source code is verified on block explorer.',
-      messageEs: 'El código fuente del contrato está verificado en el explorador de bloques.',
+      messageEs: 'Contract source code is verified on block explorer.',
     });
   }
 
@@ -135,7 +135,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
       level: 'green',
       code: 'SIMULATION_OK',
       message: 'Transaction simulation succeeded.',
-      messageEs: 'La simulación de la transacción fue exitosa.',
+      messageEs: 'Transaction simulation succeeded.',
     });
   }
 

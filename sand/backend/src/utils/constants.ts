@@ -3,21 +3,28 @@ import { ProtocolInfo } from '../types';
 // ─── Safe Transaction Service URLs ───
 
 export const SAFE_TX_SERVICE_URLS: Record<number, string> = {
-  1: 'https://safe-transaction-mainnet.safe.global',
-  8453: 'https://safe-transaction-base.safe.global',
-  10: 'https://safe-transaction-optimism.safe.global',
-  42161: 'https://safe-transaction-arbitrum.safe.global',
-  137: 'https://safe-transaction-polygon.safe.global',
+  1: 'https://api.safe.global/tx-service/eth',
+  8453: 'https://api.safe.global/tx-service/base',
+  10: 'https://api.safe.global/tx-service/oeth',
+  42161: 'https://api.safe.global/tx-service/arb',
+  137: 'https://api.safe.global/tx-service/matic',
 };
 
 // ─── Etherscan API URLs ───
 
+// Etherscan V2 API - single endpoint for all chains
+export const ETHERSCAN_V2_BASE = 'https://api.etherscan.io/v2/api';
+
+// Chain IDs supported by Etherscan V2
+export const ETHERSCAN_SUPPORTED_CHAINS = [1, 8453, 10, 42161, 137];
+
+// Legacy: kept for reference, no longer used
 export const ETHERSCAN_API_URLS: Record<number, string> = {
-  1: 'https://api.etherscan.io/api',
-  8453: 'https://api.basescan.org/api',
-  10: 'https://api-optimistic.etherscan.io/api',
-  42161: 'https://api.arbiscan.io/api',
-  137: 'https://api.polygonscan.com/api',
+  1: 'https://api.etherscan.io/v2/api',
+  8453: 'https://api.etherscan.io/v2/api',
+  10: 'https://api.etherscan.io/v2/api',
+  42161: 'https://api.etherscan.io/v2/api',
+  137: 'https://api.etherscan.io/v2/api',
 };
 
 // ─── Chain Names ───

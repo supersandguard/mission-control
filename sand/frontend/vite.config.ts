@@ -9,9 +9,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB for Daimo bundle
+      },
       manifest: {
-        name: 'OasisGuard',
-        short_name: 'OasisGuard',
+        name: 'SandGuard',
+        short_name: 'SandGuard',
         description: 'Transaction Firewall for Crypto',
         theme_color: '#0f172a',
         background_color: '#0f172a',

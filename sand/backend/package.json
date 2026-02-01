@@ -1,7 +1,8 @@
 {
-  "name": "oasis-guard-backend",
-  "version": "0.1.0",
-  "description": "Sand - Crypto transaction firewall backend",
+  "name": "sandguard-backend",
+  "version": "0.2.0",
+  "description": "SandGuard - Transaction firewall backend",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -10,12 +11,15 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",

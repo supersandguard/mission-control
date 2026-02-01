@@ -1,51 +1,67 @@
-# SandGuard - Transaction Firewall PWA
-## Status: MVP v0.1 Running ✅
+# SandGuard — Status
 
-### Access
-- **Frontend:** http://100.105.206.114:3000 (Tailscale)
-- **Backend:** http://100.105.206.114:3001/api/health (Tailscale)
-- **Local:** http://localhost:3000 (frontend) / http://localhost:3001 (backend)
+## v0.3.0 (2026-02-01) - Marketing Launch
 
-### What's Built
-- [x] Backend API (Express + TypeScript)
-  - GET /api/safe/:address/transactions — fetch pending txs from Safe TX Service
-  - POST /api/simulate — simulate tx (mock data, Tenderly-ready)
-  - POST /api/decode — decode calldata (ethers.js + Etherscan ABI)
-  - POST /api/explain — human-readable Spanish explanation
-  - POST /api/risk — risk scoring (green/yellow/red)
-  - GET /api/health — health check
-- [x] Frontend PWA (React + Vite + Tailwind)
-  - Dashboard with Safe info, balances, pending txs
-  - TX Queue with risk badges
-  - TX Detail with simulation, decode, explanation, risk, approve/reject
-  - Settings page (Safe config, policies, API keys)
-  - PWA installable (manifest + service worker)
-  - Dark theme, mobile-first
-- [x] Mock data with 3 realistic transactions:
-  - 🟢 Aave V3 supply (5,000 USDC)
-  - 🔴 Unlimited USDC approval to 1inch
-  - 🟡 Large transfer to unknown contract
-
-### What's Next (v0.2)
-- [ ] Connect frontend to backend API (currently using mock data)
-- [ ] Real Safe TX fetching (just needs Safe address)
-- [ ] Tenderly API integration (needs API key)
-- [ ] Push notifications
-- [ ] Policy engine (auto-block unlimited approvals)
-- [ ] Actual signing via Safe SDK
+### What's Live
+- **Frontend:** https://sandguard.netlify.app ✅
+- **Domain:** supersandguard.com ✅
+- **Backend:** Running on Pi, port 3001 (Tailscale accessible) ✅
+- **Language:** All English ✅
+- **PWA:** Installable, offline-capable ✅
+- **Daimo Pay Integration:** Accept any crypto (ETH, USDC, Base ETH) ✅
+- **GitHub Actions CI/CD:** Auto-deploy from git pushes ✅
+- **Moltbook Marketing:** Active on social network for AI agents ✅
+- **Clawdbot Skill:** Ready for distribution to other Clawdbots ✅
 
 ### Architecture
-See ARCHITECTURE.md for full details.
-
-### Running
-```bash
-# Backend
-cd sand/backend && npx tsx src/index.ts
-
-# Frontend (dev)
-cd sand/frontend && npx vite --host
-
-# Frontend (production build)
-cd sand/frontend && npx vite build
-cd sand/frontend/dist && python3 -m http.server 3000 --bind 0.0.0.0
 ```
+User Browser → sandguard.netlify.app (static frontend)
+                    ↓ (API calls)
+              User's Clawdbot:3001 (backend)
+                    ↓
+              Safe Transaction Service API
+              Tenderly (simulation)
+              Etherscan/Basescan (contract info)
+```
+
+### Features
+- [x] Landing page (pricing, features, CTA)
+- [x] Login page (wallet connect scaffold, ETH payment info)
+- [x] Dashboard (Safe info, risk summary, pending tx list)
+- [x] Transaction detail (decode, simulate, risk, explain)
+- [x] Transaction queue
+- [x] Settings (Safe address, API URL, API keys)
+- [x] Payment API endpoints (info, verify, status)
+- [x] Configurable API URL (each user points to their Clawdbot)
+- [x] Clawdbot Skill (SKILL.md for other Clawdbots)
+- [x] Dark theme, mobile-first
+- [x] Auto-refresh every 30s
+
+### Payment System (Daimo Pay Integration)
+- **Price:** $20/month
+- **Supported Chains:** Ethereum mainnet, Base, Optimism, Arbitrum
+- **Supported Tokens:** ETH, USDC, DAI (any amount equivalent to $20)
+- **Flow:** User inputs their Safe address → Send crypto → POST /api/payments/verify → Get API key
+- **No Default Address:** Users must provide their own Safe address (security best practice)
+
+### Completed Today ✅
+- [x] DNS propagation resolved
+- [x] GitHub repo + Netlify CI/CD setup
+- [x] Daimo Pay integration (accept any crypto)
+- [x] Moltbook marketing campaign launched
+- [x] Clawdbot Skill created for distribution
+- [x] Removed default Safe address (users input their own)
+
+### Still Pending
+- [ ] Auth persistence (JWT/sessions)
+- [ ] SQLite for subscriptions (currently in-memory)
+- [ ] Push notifications (webhooks to Clawdbot)
+- [ ] Multi-Safe support per account
+- [ ] Historical transaction log
+- [ ] Skill marketplace submission
+
+### Tech Stack
+- Frontend: React + TypeScript + Vite + Tailwind CSS
+- Backend: Express + TypeScript + esbuild
+- Hosting: Netlify (frontend) + Pi/Clawdbot (backend)
+- Chain: Ethereum mainnet, Base, Optimism, Arbitrum

@@ -49,6 +49,7 @@ export interface ExplanationResult {
 export interface RiskReason {
   level: RiskLevel;
   code: string;
+  message?: string;
   messageEs: string;
 }
 

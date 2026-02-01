@@ -2,17 +2,27 @@ import { useState, useEffect, useCallback } from 'react'
 import { Transaction } from '../types'
 import { MOCK_TRANSACTIONS } from '../mockData'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const getApiBase = () => {
+  const saved = localStorage.getItem('sand-config')
+  if (saved) {
+    try {
+      const config = JSON.parse(saved)
+      if (config.apiUrl) return config.apiUrl
+    } catch {}
+  }
+  return import.meta.env.VITE_API_URL || ''
+}
+const API_BASE = getApiBase()
 
 interface SafeConfig {
   address: string
   chainId: number
 }
 
-// Default config - will be overridable from Settings
+// Default: Alberto's Safe on Ethereum mainnet
 const DEFAULT_CONFIG: SafeConfig = {
-  address: '', // No default Safe - will show mock data
-  chainId: 8453, // Base
+  address: '',
+  chainId: 1,
 }
 
 export function useTransactions() {
@@ -21,7 +31,14 @@ export function useTransactions() {
   const [error, setError] = useState<string | null>(null)
   const [config] = useState<SafeConfig>(() => {
     const saved = localStorage.getItem('sand-config')
-    return saved ? JSON.parse(saved) : DEFAULT_CONFIG
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      return {
+        address: parsed.address || DEFAULT_CONFIG.address,
+        chainId: parsed.chainId || DEFAULT_CONFIG.chainId,
+      }
+    }
+    return DEFAULT_CONFIG
   })
 
   const enrichTransaction = useCallback(async (rawTx: any): Promise<Transaction> => {

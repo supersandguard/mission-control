@@ -1,13 +1,42 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react'
 import { Transaction } from '../types'
 import { MOCK_TRANSACTIONS } from '../mockData'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const getApiBase = () => {
+  const saved = localStorage.getItem('sand-config')
+  if (saved) {
+    try {
+      const config = JSON.parse(saved)
+      if (config.apiUrl) return config.apiUrl
+    } catch {}
+  }
+  return import.meta.env.VITE_API_URL || ''
+}
+const API_BASE = getApiBase()
+
+const DEFAULT_SAFE_ADDRESS = ''
+const DEFAULT_CHAIN_ID = 1
+
+const POLL_INTERVAL = 30_000 // 30 seconds
+
+interface SafeInfo {
+  address: string
+  threshold: number
+  owners: string[]
+  nonce: number
+  version: string
+}
 
 interface TransactionsContextType {
   transactions: Transaction[]
   loading: boolean
+  refreshing: boolean
   error: string | null
+  lastUpdated: Date | null
+  safeInfo: SafeInfo | null
+  safeAddress: string
+  chainId: number
+  isDemo: boolean
   refresh: () => Promise<void>
   getTransaction: (id: string) => Transaction | undefined
 }
@@ -15,26 +44,73 @@ interface TransactionsContextType {
 const TransactionsContext = createContext<TransactionsContextType>({
   transactions: [],
   loading: false,
+  refreshing: false,
   error: null,
+  lastUpdated: null,
+  safeInfo: null,
+  safeAddress: '',
+  chainId: 1,
+  isDemo: true,
   refresh: async () => {},
   getTransaction: () => undefined,
 })
 
-export function TransactionsProvider({ children }: { children: ReactNode }) {
-  const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+function getConfig() {
+  const saved = localStorage.getItem('sand-config')
+  if (saved) {
+    const parsed = JSON.parse(saved)
+    return {
+      address: parsed.address || DEFAULT_SAFE_ADDRESS,
+      chainId: parsed.chainId || DEFAULT_CHAIN_ID,
+    }
+  }
+  return { address: DEFAULT_SAFE_ADDRESS, chainId: DEFAULT_CHAIN_ID }
+}
 
-  const savedConfig = localStorage.getItem('sand-config')
-  const config = savedConfig ? JSON.parse(savedConfig) : { address: '', chainId: 8453 }
+export function TransactionsProvider({ children }: { children: ReactNode }) {
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [safeInfo, setSafeInfo] = useState<SafeInfo | null>(null)
+  const isFirstLoad = useRef(true)
+
+  const config = getConfig()
+  const isDemo = !config.address
+
+  const fetchSafeInfo = useCallback(async () => {
+    if (!config.address) return
+    try {
+      const res = await fetch(`${API_BASE}/api/safe/${config.address}/info?chainId=${config.chainId}`)
+      const data = await res.json()
+      if (data.success) {
+        setSafeInfo({
+          address: data.address,
+          threshold: data.threshold,
+          owners: data.owners || [],
+          nonce: data.nonce,
+          version: data.version,
+        })
+      }
+    } catch {
+      // Non-critical, don't block on this
+    }
+  }, [config.address, config.chainId])
 
   const fetchTransactions = useCallback(async () => {
     if (!config.address) {
       setTransactions(MOCK_TRANSACTIONS)
+      setLoading(false)
       return
     }
 
-    setLoading(true)
+    // Show loading on first load, refreshing on subsequent
+    if (isFirstLoad.current) {
+      setLoading(true)
+    } else {
+      setRefreshing(true)
+    }
     setError(null)
 
     try {
@@ -94,15 +170,55 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
       )
 
       setTransactions(enriched)
+      setLastUpdated(new Date())
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Unknown error')
-      setTransactions(MOCK_TRANSACTIONS)
+      // Only fall back to mock if we have no data yet
+      if (transactions.length === 0) {
+        setTransactions(MOCK_TRANSACTIONS)
+      }
     } finally {
       setLoading(false)
+      setRefreshing(false)
+      isFirstLoad.current = false
     }
   }, [config.address, config.chainId])
 
-  useEffect(() => { fetchTransactions() }, [fetchTransactions])
+  // Initial fetch
+  useEffect(() => {
+    fetchSafeInfo()
+    fetchTransactions()
+  }, [fetchSafeInfo, fetchTransactions])
+
+  // Auto-poll every 30s when visible
+  useEffect(() => {
+    if (!config.address) return
+
+    let intervalId: ReturnType<typeof setInterval>
+
+    const startPolling = () => {
+      intervalId = setInterval(() => {
+        if (!document.hidden) {
+          fetchTransactions()
+        }
+      }, POLL_INTERVAL)
+    }
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        // Refresh immediately when tab becomes visible
+        fetchTransactions()
+      }
+    }
+
+    startPolling()
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      clearInterval(intervalId)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [config.address, fetchTransactions])
 
   const getTransaction = useCallback(
     (id: string) => transactions.find(t => t.id === id),
@@ -110,7 +226,11 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   )
 
   return (
-    <TransactionsContext.Provider value={{ transactions, loading, error, refresh: fetchTransactions, getTransaction }}>
+    <TransactionsContext.Provider value={{
+      transactions, loading, refreshing, error, lastUpdated,
+      safeInfo, safeAddress: config.address, chainId: config.chainId, isDemo,
+      refresh: fetchTransactions, getTransaction,
+    }}>
       {children}
     </TransactionsContext.Provider>
   )

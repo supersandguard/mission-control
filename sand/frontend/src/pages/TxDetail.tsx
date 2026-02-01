@@ -12,22 +12,22 @@ export default function TxDetail() {
   if (!tx) {
     return (
       <div className="px-4 py-12 text-center">
-        <p className="text-slate-500">Transacción no encontrada</p>
-        <button onClick={() => navigate('/queue')} className="mt-4 text-emerald-400 text-sm">← Volver</button>
+        <p className="text-slate-500">Transaction not found</p>
+        <button onClick={() => navigate('/app/queue')} className="mt-4 text-emerald-400 text-sm">← Back</button>
       </div>
     )
   }
 
   return (
     <div className="px-4 py-6 space-y-4">
-      <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-300">← Volver</button>
+      <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-300">← Back</button>
 
       {/* Summary */}
       <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-lg font-bold">{tx.explanation?.summary || tx.decoded?.functionName || 'Transaction'}</p>
-            <p className="text-xs text-slate-500 mt-1">Nonce #{tx.nonce} · {tx.confirmations}/{tx.confirmationsRequired} firmas</p>
+            <p className="text-xs text-slate-500 mt-1">Nonce #{tx.nonce} · {tx.confirmations}/{tx.confirmationsRequired} signatures</p>
           </div>
           {tx.risk && <RiskBadge level={tx.risk.score} size="lg" />}
         </div>
@@ -36,7 +36,7 @@ export default function TxDetail() {
       {/* Explanation */}
       {tx.explanation && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">📝 Explicación</h3>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">📝 Explanation</h3>
           <ul className="space-y-2">
             {tx.explanation.details.map((d, i) => (
               <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
@@ -60,7 +60,7 @@ export default function TxDetail() {
       {/* Balance Changes */}
       {tx.simulation && tx.simulation.balanceChanges.length > 0 && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">💰 Cambios de Balance</h3>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">💰 Balance Changes</h3>
           <div className="space-y-2">
             {tx.simulation.balanceChanges.map((bc, i) => (
               <BalanceChangeCard key={i} change={bc} />
@@ -72,20 +72,20 @@ export default function TxDetail() {
       {/* Decoded */}
       {tx.decoded && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🔍 Datos Decodificados</h3>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🔍 Decoded Data</h3>
           <div className="space-y-3">
             <div>
-              <p className="text-xs text-slate-500">Función</p>
+              <p className="text-xs text-slate-500">Function</p>
               <p className="font-mono text-sm text-emerald-400">{tx.decoded.functionSignature}</p>
             </div>
             {tx.decoded.protocol && (
               <div>
-                <p className="text-xs text-slate-500">Protocolo</p>
+                <p className="text-xs text-slate-500">Protocol</p>
                 <p className="text-sm">{tx.decoded.protocol.name} <span className="text-slate-500">({tx.decoded.protocol.category})</span></p>
               </div>
             )}
             <div>
-              <p className="text-xs text-slate-500 mb-2">Parámetros</p>
+              <p className="text-xs text-slate-500 mb-2">Parameters</p>
               {tx.decoded.parameters.map((p, i) => (
                 <div key={i} className="flex justify-between items-start py-1.5 border-t border-slate-800/50">
                   <div>
@@ -103,14 +103,14 @@ export default function TxDetail() {
       {/* Risk Details */}
       {tx.risk && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🛡️ Análisis de Riesgo</h3>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🛡️ Risk Analysis</h3>
           <div className="space-y-2">
             {tx.risk.reasons.map((r, i) => (
               <div key={i} className={`flex items-start gap-2 text-sm ${
                 r.level === 'red' ? 'text-red-300' : r.level === 'yellow' ? 'text-amber-300' : 'text-emerald-300'
               }`}>
                 <span>{r.level === 'red' ? '🔴' : r.level === 'yellow' ? '🟡' : '🟢'}</span>
-                <span>{r.messageEs}</span>
+                <span>{r.message || r.messageEs}</span>
               </div>
             ))}
           </div>
@@ -120,14 +120,14 @@ export default function TxDetail() {
       {/* Simulation */}
       {tx.simulation && (
         <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">⛽ Simulación</h3>
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">⛽ Simulation</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-slate-500">Estado</p>
-              <p className="text-sm">{tx.simulation.success ? '✅ Exitosa' : '❌ Fallida'}</p>
+              <p className="text-xs text-slate-500">Status</p>
+              <p className="text-sm">{tx.simulation.success ? '✅ Succeeded' : '❌ Failed'}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-500">Gas estimado</p>
+              <p className="text-xs text-slate-500">Estimated Gas</p>
               <p className="font-mono text-sm">{tx.simulation.gasUsed.toLocaleString()}</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function TxDetail() {
       {/* Raw Data */}
       <details className="bg-slate-900 rounded-2xl border border-slate-800">
         <summary className="p-5 text-xs font-semibold text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-300">
-          📦 Datos Raw
+          📦 Raw Data
         </summary>
         <div className="px-5 pb-5 space-y-2">
           <div>
@@ -158,10 +158,10 @@ export default function TxDetail() {
       {/* Action Buttons */}
       <div className="flex gap-3 pt-2">
         <button className="flex-1 py-3.5 rounded-xl bg-red-500/20 text-red-400 font-semibold text-sm border border-red-500/30 hover:bg-red-500/30 transition-colors active:scale-95">
-          ✕ Rechazar
+          ✕ Reject
         </button>
         <button className="flex-1 py-3.5 rounded-xl bg-emerald-500/20 text-emerald-400 font-semibold text-sm border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors active:scale-95">
-          ✓ Firmar
+          ✓ Sign
         </button>
       </div>
     </div>

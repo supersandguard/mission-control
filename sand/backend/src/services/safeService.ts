@@ -1,5 +1,37 @@
-import { SafeTransaction, SafeTransactionsResponse } from '../types';
+import { SafeTransactionsResponse } from '../types';
 import { SAFE_TX_SERVICE_URLS } from '../utils/constants';
+
+/**
+ * Helper to fetch with explicit redirect following (Node may not follow 308s)
+ */
+async function safeFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const response = await fetch(url, {
+    ...options,
+    redirect: 'follow',
+    headers: {
+      'Accept': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  // Manual redirect handling for 308 (Node's fetch may not follow)
+  if (response.status === 308 || response.status === 307) {
+    const location = response.headers.get('location');
+    if (location) {
+      const redirectUrl = location.startsWith('http') ? location : new URL(location, url).toString();
+      return fetch(redirectUrl, {
+        ...options,
+        redirect: 'follow',
+        headers: {
+          'Accept': 'application/json',
+          ...options.headers,
+        },
+      });
+    }
+  }
+
+  return response;
+}
 
 /**
  * Fetch pending (queued) transactions from a Safe multisig
@@ -16,11 +48,7 @@ export async function getPendingTransactions(
   const url = `${baseUrl}/api/v1/safes/${safeAddress}/multisig-transactions/?executed=false&ordering=-nonce&limit=20`;
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
+    const response = await safeFetch(url);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -54,9 +82,7 @@ export async function getAllTransactions(
 
   const url = `${baseUrl}/api/v1/safes/${safeAddress}/multisig-transactions/?ordering=-nonce&limit=${limit}`;
 
-  const response = await fetch(url, {
-    headers: { 'Accept': 'application/json' },
-  });
+  const response = await safeFetch(url);
 
   if (!response.ok) {
     throw new Error(`Safe Transaction Service error: ${response.status}`);
@@ -79,9 +105,7 @@ export async function getSafeInfo(
 
   const url = `${baseUrl}/api/v1/safes/${safeAddress}/`;
 
-  const response = await fetch(url, {
-    headers: { 'Accept': 'application/json' },
-  });
+  const response = await safeFetch(url);
 
   if (!response.ok) {
     throw new Error(`Safe not found or service error: ${response.status}`);

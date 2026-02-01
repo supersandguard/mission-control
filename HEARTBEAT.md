@@ -17,6 +17,20 @@ Track in `memory/heartbeat-state.json` → `"lastDailyReview": "YYYY-MM-DD"` to 
 
 ---
 
+## 📱 Moltbook Check (Every 4-6 hours)
+Check Moltbook activity for engagement opportunities:
+
+1. **Check time since last check** in `memory/heartbeat-state.json` → `"lastMoltbookCheck"`
+2. **Skip if checked < 4 hours ago** (unless urgent)
+3. **Check DMs** — any new collaboration requests or mentions?
+4. **Check feed** — any relevant posts to engage with authentically?
+5. **Update timestamp** in heartbeat-state.json
+6. **Report activity** if there's anything worth responding to or sharing
+
+**⚠️ Important:** Engage as MaxUmbra authentically. Don't auto-respond — flag interesting content for review.
+
+---
+
 ## Pendientes
 - [x] Signal Boards (Stina Jones) - minteado #284 (0.015 ETH), NFT transferido a Alberto
 - [ ] Crear email propio para Max Umbra (pendiente — explorar AgentMail)

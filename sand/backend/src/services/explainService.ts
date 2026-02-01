@@ -2,7 +2,7 @@ import { ExplainRequest, ExplanationResult, DecodedTransaction, SimulationResult
 import { MAX_UINT256_DECIMAL } from '../utils/constants';
 
 /**
- * Generate a human-readable Spanish explanation of a transaction.
+ * Generate a human-readable English explanation of a transaction.
  * Uses template strings for now; LLM integration later.
  */
 export function explainTransaction(req: ExplainRequest): ExplanationResult {
@@ -47,26 +47,26 @@ function detectActionType(decoded: DecodedTransaction): string {
 }
 
 function explainApprove(decoded: DecodedTransaction, sim: SimulationResult): ExplanationResult {
-  const spender = decoded.parameters.find(p => p.name === 'spender')?.value || 'dirección desconocida';
+  const spender = decoded.parameters.find(p => p.name === 'spender')?.value || 'unknown address';
   const amount = decoded.parameters.find(p => p.name === 'amount' || p.name === 'value')?.value || '0';
-  const protocol = decoded.protocol?.name || 'protocolo desconocido';
+  const protocol = decoded.protocol?.name || 'unknown protocol';
   const isUnlimited = amount === MAX_UINT256_DECIMAL || amount.includes('ffffffff');
 
-  const amountDesc = isUnlimited ? 'ILIMITADA' : amount;
+  const amountDesc = isUnlimited ? 'UNLIMITED' : amount;
   const tokenName = decoded.protocol?.category === 'Token' ? decoded.protocol.name : 'token';
 
   const warnings: string[] = [];
   if (isUnlimited) {
-    warnings.push('⚠️ APROBACIÓN ILIMITADA: Se autoriza gastar una cantidad ilimitada de tokens. Considera aprobar solo la cantidad necesaria.');
+    warnings.push('⚠️ UNLIMITED APPROVAL: Authorizes spending an unlimited amount of tokens. Consider approving only the needed amount.');
   }
 
   return {
-    summary: `Autorizar a ${protocol} para gastar ${isUnlimited ? 'una cantidad ilimitada de' : amountDesc} ${tokenName}`,
+    summary: `Authorize ${protocol} to spend ${isUnlimited ? 'an unlimited amount of' : amountDesc} ${tokenName}`,
     details: [
-      `Se autoriza a la dirección ${shortenAddress(spender)} para gastar tokens en tu nombre`,
-      `Cantidad autorizada: ${isUnlimited ? '∞ (ilimitada)' : amountDesc}`,
-      decoded.protocol ? `Protocolo detectado: ${decoded.protocol.name} (${decoded.protocol.category})` : 'Protocolo no identificado',
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Authorizes address ${shortenAddress(spender)} to spend tokens on your behalf`,
+      `Authorized amount: ${isUnlimited ? '∞ (unlimited)' : amountDesc}`,
+      decoded.protocol ? `Detected protocol: ${decoded.protocol.name} (${decoded.protocol.category})` : 'Protocol not identified',
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
     warnings,
     actionType: 'approve',
@@ -74,7 +74,7 @@ function explainApprove(decoded: DecodedTransaction, sim: SimulationResult): Exp
 }
 
 function explainTransfer(decoded: DecodedTransaction, sim: SimulationResult): ExplanationResult {
-  const to = decoded.parameters.find(p => p.name === 'to')?.value || 'dirección desconocida';
+  const to = decoded.parameters.find(p => p.name === 'to')?.value || 'unknown address';
   const amount = decoded.parameters.find(p => p.name === 'amount' || p.name === 'value')?.value || '0';
 
   const balanceChange = sim.balanceChanges[0];
@@ -82,13 +82,13 @@ function explainTransfer(decoded: DecodedTransaction, sim: SimulationResult): Ex
   const usdValue = balanceChange?.deltaUsd || '0';
 
   return {
-    summary: `Transferir ${amount} ${tokenSymbol} a ${shortenAddress(to)}`,
+    summary: `Transfer ${amount} ${tokenSymbol} to ${shortenAddress(to)}`,
     details: [
-      `Destino: ${to}`,
-      `Cantidad: ${amount} ${tokenSymbol}`,
-      usdValue !== '0' ? `Valor estimado: $${Math.abs(parseFloat(usdValue)).toFixed(2)} USD` : '',
-      `Gas estimado: ${sim.gasUsed.toLocaleString()} unidades`,
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Destination: ${to}`,
+      `Amount: ${amount} ${tokenSymbol}`,
+      usdValue !== '0' ? `Estimated value: $${Math.abs(parseFloat(usdValue)).toFixed(2)} USD` : '',
+      `Estimated gas: ${sim.gasUsed.toLocaleString()} units`,
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ].filter(Boolean),
     warnings: [],
     actionType: 'transfer',
@@ -104,16 +104,16 @@ function explainSwap(decoded: DecodedTransaction, sim: SimulationResult): Explan
   const fromAmount = outgoing ? Math.abs(parseFloat(outgoing.delta)).toString() : '?';
   const toAmount = incoming ? incoming.delta.replace('+', '') : '?';
 
-  const protocol = decoded.protocol?.name || 'DEX desconocido';
+  const protocol = decoded.protocol?.name || 'unknown DEX';
 
   return {
-    summary: `Intercambiar ${fromAmount} ${fromToken} por ~${toAmount} ${toToken} en ${protocol}`,
+    summary: `Swap ${fromAmount} ${fromToken} for ~${toAmount} ${toToken} on ${protocol}`,
     details: [
-      `Envías: ${fromAmount} ${fromToken}${outgoing?.deltaUsd ? ` (~$${Math.abs(parseFloat(outgoing.deltaUsd)).toFixed(2)} USD)` : ''}`,
-      `Recibes: ~${toAmount} ${toToken}${incoming?.deltaUsd ? ` (~$${parseFloat(incoming.deltaUsd).toFixed(2)} USD)` : ''}`,
-      `Protocolo: ${protocol}`,
-      `Gas estimado: ${sim.gasUsed.toLocaleString()} unidades`,
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `You send: ${fromAmount} ${fromToken}${outgoing?.deltaUsd ? ` (~$${Math.abs(parseFloat(outgoing.deltaUsd)).toFixed(2)} USD)` : ''}`,
+      `You receive: ~${toAmount} ${toToken}${incoming?.deltaUsd ? ` (~$${parseFloat(incoming.deltaUsd).toFixed(2)} USD)` : ''}`,
+      `Protocol: ${protocol}`,
+      `Estimated gas: ${sim.gasUsed.toLocaleString()} units`,
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
     warnings: [],
     actionType: 'swap',
@@ -123,16 +123,16 @@ function explainSwap(decoded: DecodedTransaction, sim: SimulationResult): Explan
 function explainSupply(decoded: DecodedTransaction, sim: SimulationResult): ExplanationResult {
   const asset = decoded.parameters.find(p => p.name === 'asset')?.value || '';
   const amount = decoded.parameters.find(p => p.name === 'amount')?.value || '0';
-  const protocol = decoded.protocol?.name || 'protocolo de préstamos';
+  const protocol = decoded.protocol?.name || 'lending protocol';
 
   return {
-    summary: `Depositar ${amount} tokens en ${protocol}`,
+    summary: `Deposit ${amount} tokens into ${protocol}`,
     details: [
       `Token: ${shortenAddress(asset)}`,
-      `Cantidad: ${amount}`,
-      `Protocolo: ${protocol}`,
-      'Los tokens depositados generarán rendimiento',
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Amount: ${amount}`,
+      `Protocol: ${protocol}`,
+      'Deposited tokens will earn yield',
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
     warnings: [],
     actionType: 'supply',
@@ -142,15 +142,15 @@ function explainSupply(decoded: DecodedTransaction, sim: SimulationResult): Expl
 function explainWithdraw(decoded: DecodedTransaction, sim: SimulationResult): ExplanationResult {
   const asset = decoded.parameters.find(p => p.name === 'asset')?.value || '';
   const amount = decoded.parameters.find(p => p.name === 'amount')?.value || '0';
-  const protocol = decoded.protocol?.name || 'protocolo de préstamos';
+  const protocol = decoded.protocol?.name || 'lending protocol';
 
   return {
-    summary: `Retirar ${amount} tokens de ${protocol}`,
+    summary: `Withdraw ${amount} tokens from ${protocol}`,
     details: [
       `Token: ${shortenAddress(asset)}`,
-      `Cantidad: ${amount}`,
-      `Protocolo: ${protocol}`,
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Amount: ${amount}`,
+      `Protocol: ${protocol}`,
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
     warnings: [],
     actionType: 'withdraw',
@@ -160,21 +160,21 @@ function explainWithdraw(decoded: DecodedTransaction, sim: SimulationResult): Ex
 function explainBorrow(decoded: DecodedTransaction, sim: SimulationResult): ExplanationResult {
   const asset = decoded.parameters.find(p => p.name === 'asset')?.value || '';
   const amount = decoded.parameters.find(p => p.name === 'amount')?.value || '0';
-  const protocol = decoded.protocol?.name || 'protocolo de préstamos';
+  const protocol = decoded.protocol?.name || 'lending protocol';
   const rateMode = decoded.parameters.find(p => p.name === 'interestRateMode')?.value;
-  const rateType = rateMode === '1' ? 'tasa estable' : rateMode === '2' ? 'tasa variable' : 'tasa desconocida';
+  const rateType = rateMode === '1' ? 'stable rate' : rateMode === '2' ? 'variable rate' : 'unknown rate';
 
   return {
-    summary: `Pedir prestado ${amount} tokens en ${protocol} (${rateType})`,
+    summary: `Borrow ${amount} tokens on ${protocol} (${rateType})`,
     details: [
       `Token: ${shortenAddress(asset)}`,
-      `Cantidad: ${amount}`,
-      `Tipo de interés: ${rateType}`,
-      `Protocolo: ${protocol}`,
-      '⚠️ Esto crea una deuda que debe ser pagada con intereses',
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Amount: ${amount}`,
+      `Interest type: ${rateType}`,
+      `Protocol: ${protocol}`,
+      '⚠️ This creates a debt that must be repaid with interest',
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
-    warnings: ['Se creará una posición de deuda. Asegúrate de tener suficiente colateral.'],
+    warnings: ['A debt position will be created. Make sure you have sufficient collateral.'],
     actionType: 'borrow',
   };
 }
@@ -183,15 +183,15 @@ function explainNativeTransfer(decoded: DecodedTransaction, sim: SimulationResul
   const outgoing = sim.balanceChanges.find(c => c.delta.startsWith('-'));
   const incoming = sim.balanceChanges.find(c => c.delta.startsWith('+'));
   const amount = outgoing ? Math.abs(parseFloat(outgoing.delta)).toString() : '0';
-  const to = incoming?.address || 'dirección desconocida';
+  const to = incoming?.address || 'unknown address';
 
   return {
-    summary: `Enviar ${amount} ETH a ${shortenAddress(to)}`,
+    summary: `Send ${amount} ETH to ${shortenAddress(to)}`,
     details: [
-      `Destino: ${to}`,
-      `Cantidad: ${amount} ETH`,
-      outgoing?.deltaUsd ? `Valor: ~$${Math.abs(parseFloat(outgoing.deltaUsd)).toFixed(2)} USD` : '',
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+      `Destination: ${to}`,
+      `Amount: ${amount} ETH`,
+      outgoing?.deltaUsd ? `Value: ~$${Math.abs(parseFloat(outgoing.deltaUsd)).toFixed(2)} USD` : '',
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ].filter(Boolean),
     warnings: [],
     actionType: 'native_transfer',
@@ -205,18 +205,18 @@ function explainGeneric(decoded: DecodedTransaction, sim: SimulationResult): Exp
   ).join('\n');
 
   return {
-    summary: `Ejecutar función "${decoded.functionName}"${protocol ? ` en ${protocol}` : ''}`,
+    summary: `Execute function "${decoded.functionName}"${protocol ? ` on ${protocol}` : ''}`,
     details: [
-      `Función: ${decoded.functionSignature || decoded.functionName}`,
-      protocol ? `Protocolo: ${protocol}` : 'Protocolo no identificado',
-      decoded.parameters.length > 0 ? `Parámetros:\n${params}` : 'Sin parámetros',
-      `Gas estimado: ${sim.gasUsed.toLocaleString()} unidades`,
+      `Function: ${decoded.functionSignature || decoded.functionName}`,
+      protocol ? `Protocol: ${protocol}` : 'Protocol not identified',
+      decoded.parameters.length > 0 ? `Parameters:\n${params}` : 'No parameters',
+      `Estimated gas: ${sim.gasUsed.toLocaleString()} units`,
       sim.balanceChanges.length > 0
-        ? `Cambios de balance: ${sim.balanceChanges.map(c => `${c.delta} ${c.token.symbol}`).join(', ')}`
-        : 'Sin cambios de balance detectados',
-      sim.success ? '✅ La simulación fue exitosa' : '❌ La simulación falló',
+        ? `Balance changes: ${sim.balanceChanges.map(c => `${c.delta} ${c.token.symbol}`).join(', ')}`
+        : 'No balance changes detected',
+      sim.success ? '✅ Simulation succeeded' : '❌ Simulation failed',
     ],
-    warnings: decoded.contractVerified ? [] : ['⚠️ Este contrato no está verificado en Etherscan'],
+    warnings: decoded.contractVerified ? [] : ['⚠️ This contract is not verified on Etherscan'],
     actionType: 'unknown',
   };
 }

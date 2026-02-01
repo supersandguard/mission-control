@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { DecodeRequest, DecodedTransaction, DecodedParameter, ProtocolInfo } from '../types';
-import { KNOWN_PROTOCOLS, ERC20_SIGNATURES, ETHERSCAN_API_URLS } from '../utils/constants';
+import { KNOWN_PROTOCOLS, ERC20_SIGNATURES, ETHERSCAN_V2_BASE, ETHERSCAN_SUPPORTED_CHAINS } from '../utils/constants';
 
 // ─── Minimal ABIs for common interfaces ───
 
@@ -140,12 +140,12 @@ async function tryEtherscanDecode(
   chainId: number
 ): Promise<DecodedTransaction | null> {
   const apiKey = process.env.ETHERSCAN_API_KEY;
-  const apiUrl = ETHERSCAN_API_URLS[chainId];
 
-  if (!apiKey || !apiUrl) return null;
+  if (!apiKey || !ETHERSCAN_SUPPORTED_CHAINS.includes(chainId)) return null;
 
   try {
-    const url = `${apiUrl}?module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`;
+    // Etherscan V2: single endpoint, chainid as query param
+    const url = `${ETHERSCAN_V2_BASE}?chainid=${chainId}&module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`;
     const response = await fetch(url);
     const data = await response.json() as { status: string; result: string };
 
@@ -215,59 +215,59 @@ function formatParamValue(value: any, type: string): string {
 function getParamLabel(functionName: string, paramName: string, paramType: string): string {
   const labels: Record<string, Record<string, string>> = {
     approve: {
-      spender: 'Dirección autorizada para gastar',
-      amount: 'Cantidad máxima autorizada',
+      spender: 'Address authorized to spend',
+      amount: 'Maximum authorized amount',
     },
     transfer: {
-      to: 'Dirección destino',
-      amount: 'Cantidad a transferir',
+      to: 'Destination address',
+      amount: 'Amount to transfer',
     },
     transferFrom: {
-      from: 'Dirección origen',
-      to: 'Dirección destino',
-      amount: 'Cantidad a transferir',
+      from: 'Source address',
+      to: 'Destination address',
+      amount: 'Amount to transfer',
     },
     swapExactTokensForTokens: {
-      amountIn: 'Cantidad de tokens a intercambiar',
-      amountOutMin: 'Mínimo de tokens a recibir',
-      path: 'Ruta de intercambio (tokens intermedios)',
-      to: 'Dirección que recibe los tokens',
-      deadline: 'Fecha límite de la transacción',
+      amountIn: 'Amount of tokens to swap',
+      amountOutMin: 'Minimum tokens to receive',
+      path: 'Swap route (intermediate tokens)',
+      to: 'Address receiving tokens',
+      deadline: 'Transaction deadline',
     },
     supply: {
-      asset: 'Token a depositar',
-      amount: 'Cantidad a depositar',
-      onBehalfOf: 'Beneficiario del depósito',
+      asset: 'Token to deposit',
+      amount: 'Amount to deposit',
+      onBehalfOf: 'Deposit beneficiary',
     },
     withdraw: {
-      asset: 'Token a retirar',
-      amount: 'Cantidad a retirar',
-      to: 'Dirección que recibe',
+      asset: 'Token to withdraw',
+      amount: 'Amount to withdraw',
+      to: 'Receiving address',
     },
     borrow: {
-      asset: 'Token a pedir prestado',
-      amount: 'Cantidad a pedir',
-      interestRateMode: 'Tipo de interés (1=estable, 2=variable)',
+      asset: 'Token to borrow',
+      amount: 'Amount to borrow',
+      interestRateMode: 'Interest type (1=stable, 2=variable)',
     },
     supplyCollateral: {
-      marketParams: 'Parámetros del mercado Morpho',
-      assets: 'Cantidad de colateral a depositar',
-      onBehalf: 'Beneficiario del depósito',
+      marketParams: 'Morpho market parameters',
+      assets: 'Amount of collateral to deposit',
+      onBehalf: 'Deposit beneficiary',
     },
     withdrawCollateral: {
-      marketParams: 'Parámetros del mercado Morpho',
-      assets: 'Cantidad de colateral a retirar',
-      onBehalf: 'Propietario del colateral',
-      receiver: 'Dirección que recibe',
+      marketParams: 'Morpho market parameters',
+      assets: 'Amount of collateral to withdraw',
+      onBehalf: 'Collateral owner',
+      receiver: 'Receiving address',
     },
     liquidate: {
-      marketParams: 'Parámetros del mercado Morpho',
-      borrower: 'Dirección del deudor a liquidar',
-      seizedAssets: 'Colateral a confiscar',
+      marketParams: 'Morpho market parameters',
+      borrower: 'Address of borrower to liquidate',
+      seizedAssets: 'Collateral to seize',
     },
     setAuthorization: {
-      authorized: 'Dirección autorizada',
-      newIsAuthorized: 'Nuevo estado de autorización',
+      authorized: 'Authorized address',
+      newIsAuthorized: 'New authorization status',
     },
   };
 

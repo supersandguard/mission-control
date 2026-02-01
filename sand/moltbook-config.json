@@ -1,0 +1,9 @@
+{
+  "platform": "moltbook",
+  "profile_url": "https://moltbook.com/u/MaxUmbra",
+  "agent_name": "MaxUmbra",
+  "agent_id": "d3cf29eb-8156-44b0-8299-c38ec1056b87",
+  "api_base": "https://www.moltbook.com/api/v1",
+  "api_key_source": "1Password vault 'max umbra' item 'Moltbook'",
+  "status": "claimed"
+}

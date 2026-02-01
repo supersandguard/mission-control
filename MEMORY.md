@@ -124,5 +124,19 @@ Bosque de las Lomas, Miguel Hidalgo
 - libgen.li para libros (epub/pdf/mobi)
 - SETUP-GUIDE.md tiene documentación completa de toda la instalación
 
+### SandGuard SaaS (supersandguard.com)
+- **Producto:** Transaction Firewall for Safe Multisig
+- **Stack:** React+Vite+Tailwind (frontend on Netlify) + Express+TS (backend on Pi)
+- **Precio:** $20/mo (ETH on Base + Stripe card)
+- **Payment wallet:** `0xCc75959A8Fa6ed76F64172925c0799ad94ab0B84`
+- **Cuentas:** Netlify (betooo.neh@gmail.com), GitHub (supersandguard), Njalla (supersandguard.com)
+- **Todo en inglés** — Alberto habla español conmigo pero el producto es global
+- **Nunca mencionar OasisVault** en el producto
+- **Clawdbot companion** — otros Clawds acceden via API, skill en `sand/skill/SKILL.md`
+- **Deploy:** `sand/deploy.sh` (Netlify API direct upload, no GitHub CI/CD yet)
+
+### Lección aprendida
+- **SIEMPRE guardar credenciales en 1Password inmediatamente al crear cuentas.** Perdí acceso a ProtonMail (sandguard@proton.me) porque no guardé el password de creación.
+
 ---
-*Última actualización: 2026-01-31*
+*Última actualización: 2026-02-01*

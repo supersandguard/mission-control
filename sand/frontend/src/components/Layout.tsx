@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom';
 
 const navItems = [
-  { to: '/', icon: '◉', label: 'Dashboard' },
-  { to: '/queue', icon: '☰', label: 'TX Queue' },
-  { to: '/settings', icon: '⚙', label: 'Ajustes' },
+  { to: '/app', icon: '◉', label: 'Dashboard', end: true },
+  { to: '/app/queue', icon: '☰', label: 'TX Queue', end: false },
+  { to: '/app/settings', icon: '⚙', label: 'Settings', end: false },
 ];
 
 export default function Layout() {
@@ -17,7 +17,7 @@ export default function Layout() {
               🛡
             </div>
             <span className="text-base font-semibold text-slate-100 tracking-tight">
-              OasisGuard
+              SandGuard
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -39,6 +39,7 @@ export default function Layout() {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.end}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-all duration-200 ${
                   isActive
