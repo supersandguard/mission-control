@@ -149,6 +149,46 @@ export interface ExplanationResult {
   actionType: string;     // "swap", "approve", "transfer", "mint", etc.
 }
 
+// ─── Founder Types ───
+
+export interface FounderProfile {
+  number: number
+  displayName: string
+  address: string               // truncated: 0x1234...abcd
+  twitterHandle: string | null
+  moltbookUsername: string | null
+  isGenesis10: boolean
+  nftMinted: boolean
+  umbraAllocated: number
+  joinedAt: string              // ISO date
+}
+
+export interface FounderProgressResponse {
+  status: 'not_started' | 'in_progress' | 'qualified' | 'founder'
+  founderNumber?: number
+  isGenesis10?: boolean
+  requirements?: {
+    accountCreated: boolean
+    safeConfigured: boolean
+    txsAnalyzed: { current: number; required: number }
+    daysActive: { current: number; required: number }
+    fastTracked?: boolean
+  }
+  qualified: boolean
+  qualifiedAt?: string
+  spotsRemaining: number
+}
+
+export interface FounderClaimResponse {
+  status: 'claimed'
+  founderNumber: number
+  isGenesis10: boolean
+  umbraAllocated: number
+  apiKey: string
+  plan: 'founder'
+  message: string
+}
+
 // ─── Risk Types ───
 
 export interface RiskRequest {

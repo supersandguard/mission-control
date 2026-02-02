@@ -4,6 +4,10 @@ import { SimulationRequest } from '../types';
 
 const router = Router();
 
+function sanitize(input: string): string {
+  return input.replace(/[<>"'&]/g, '');
+}
+
 /**
  * POST /api/simulate
  * Simulate a transaction and return balance changes + events
@@ -22,6 +26,12 @@ router.post('/', async (req: Request, res: Response) => {
       return;
     }
 
+    // Validate from address format
+    if (from && !/^0x[a-fA-F0-9]{40}$/.test(from)) {
+      res.status(400).json({ error: 'Invalid from address' });
+      return;
+    }
+
     if (!data && (!value || value === '0')) {
       res.status(400).json({
         error: 'Transaction must have calldata or value',
@@ -29,12 +39,16 @@ router.post('/', async (req: Request, res: Response) => {
       return;
     }
 
+    const sanitizedTo = sanitize(to);
+    const sanitizedData = data ? sanitize(data) : '0x';
+    const sanitizedFrom = from ? sanitize(from) : undefined;
+
     const result = await simulateTransaction({
-      to,
+      to: sanitizedTo,
       value: value || '0',
-      data: data || '0x',
+      data: sanitizedData,
       chainId: chainId || 1,
-      from,
+      from: sanitizedFrom,
     });
 
     res.json({

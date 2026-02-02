@@ -36,7 +36,7 @@ interface TransactionsContextType {
   safeInfo: SafeInfo | null
   safeAddress: string
   chainId: number
-  isDemo: boolean
+  isUnconfigured: boolean
   refresh: () => Promise<void>
   getTransaction: (id: string) => Transaction | undefined
 }
@@ -50,7 +50,7 @@ const TransactionsContext = createContext<TransactionsContextType>({
   safeInfo: null,
   safeAddress: '',
   chainId: 1,
-  isDemo: true,
+  isUnconfigured: true,
   refresh: async () => {},
   getTransaction: () => undefined,
 })
@@ -77,7 +77,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   const isFirstLoad = useRef(true)
 
   const config = getConfig()
-  const isDemo = !config.address
+  const isUnconfigured = !config.address
 
   const fetchSafeInfo = useCallback(async () => {
     if (!config.address) return
@@ -228,7 +228,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   return (
     <TransactionsContext.Provider value={{
       transactions, loading, refreshing, error, lastUpdated,
-      safeInfo, safeAddress: config.address, chainId: config.chainId, isDemo,
+      safeInfo, safeAddress: config.address, chainId: config.chainId, isUnconfigured,
       refresh: fetchTransactions, getTransaction,
     }}>
       {children}

@@ -76,4 +76,4 @@ STATE=$(curl -sS "https://api.netlify.com/api/v1/deploys/$DEPLOY_ID" \
 echo ""
 echo "✅ Deploy $STATE"
 echo "🌐 https://supersandguard.com"
-echo "🌐 https://sandguard.netlify.app"
+echo "🌐 https://supersandguard.com"

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SandGuard Blog — Security Insights for Safe Multisig Users</title>
+    <meta name="description" content="Security analysis and insights for Safe multisig wallet users. Learn how to protect your treasury from blind signing attacks, proxy upgrades, and social engineering.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="SandGuard Blog — Security Insights for Safe Multisig Users">
+    <meta property="og:description" content="Deep security analysis for Safe multisig wallets. Transaction firewalls, attack breakdowns, and protection strategies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/">
+    <meta property="og:image" content="https://supersandguard.com/og-image.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SandGuard Blog — Security Insights for Safe Multisig Users">
+    <meta name="twitter:description" content="Deep security analysis for Safe multisig wallets. Transaction firewalls, attack breakdowns, and protection strategies.">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .header-nav a {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        
+        /* Hero */
+        .hero {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        
+        /* Articles */
+        .articles {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 4rem;
+        }
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.2s;
+        }
+        .article-card:hover { border-color: var(--border); }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .article-date {
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+        .article-tag {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1);
+            color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .article-tag.red {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--red);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+        .article-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+        .article-card h2 a { color: var(--text-primary); }
+        .article-card h2 a:hover { color: var(--emerald); }
+        .article-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            margin-bottom: 1.25rem;
+        }
+        .read-more {
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .read-more::after { content: '→'; transition: transform 0.2s; }
+        .read-more:hover::after { transform: translateX(3px); }
+        
+        /* Article page */
+        .article-page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .article-page .article-meta { margin-bottom: 2rem; }
+        .article-body h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem;
+            margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05);
+            border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-size: 0.875em;
+            color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none;
+            border-top: 1px solid var(--border-subtle);
+            margin: 2.5rem 0;
+        }
+        
+        /* Risk box */
+        .risk-box {
+            background: rgba(248, 113, 113, 0.05);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .safe-box {
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15);
+            border-radius: 16px;
+        }
+        .cta-section h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 1.25rem;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+        .footer-links a:hover { color: var(--text-secondary); }
+        
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.75rem; }
+            .article-card { padding: 1.5rem; }
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Security Insights for Safe Multisig</h1>
+        <p>Attack analysis, transaction security research, and practical guides for protecting your Safe wallet.</p>
+    </section>
+
+    <main class="articles">
+        <!-- Article: Safe + AI — The Missing Security Layer -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="article-date">July 25, 2025</span>
+                <span class="article-tag" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border-color: rgba(251, 191, 36, 0.2);">AI Agents</span>
+                <span class="article-tag">Safe Security</span>
+            </div>
+            <h2><a href="/sandguard/safe-plus-ai-the-missing-security-layer.html">Safe + AI: The Missing Security Layer Between Proposal and Signing</a></h2>
+            <p class="article-excerpt">
+                AI agents are managing millions in crypto through Safe wallets — trading, treasury ops, DeFi strategies. But between "agent proposes" and "signer approves," there's zero verification. No decode. No simulation. Just blind trust. Here's the gap nobody's talking about.
+            </p>
+            <a href="/sandguard/safe-plus-ai-the-missing-security-layer.html" class="read-more">Read the analysis</a>
+        </article>
+
+        <!-- Article 1: ByBit Analysis -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="article-date">February 2, 2026</span>
+                <span class="article-tag red">Attack Analysis</span>
+                <span class="article-tag">Safe Security</span>
+            </div>
+            <h2><a href="/sandguard/bybit-blind-signing-attack.html">Blind Signing Cost ByBit $1.43 Billion. Here's How 30 Seconds of Verification Would Have Stopped It.</a></h2>
+            <p class="article-excerpt">
+                February 21, 2025 became the worst day in crypto security history — not because of a code exploit, but because humans trusted what they saw on screen. A deep analysis of the Lazarus Group's attack on ByBit's Safe multisig, and exactly how a transaction firewall would have caught it.
+            </p>
+            <a href="/sandguard/bybit-blind-signing-attack.html" class="read-more">Read full analysis</a>
+        </article>
+
+        <!-- Article 2: Why Every Safe Needs a Firewall -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="article-date">February 2, 2026</span>
+                <span class="article-tag">Guide</span>
+                <span class="article-tag">Safe Security</span>
+            </div>
+            <h2><a href="/sandguard/why-every-safe-needs-a-firewall.html">Why Every Safe Multisig Needs a Transaction Firewall</a></h2>
+            <p class="article-excerpt">
+                Multisig wallets solve authorization — but not verification. If every signer approves a transaction they can't actually read, the threshold is meaningless. Here's what a transaction firewall does, why Safe Guard modules are the future, and how to stop blind signing today.
+            </p>
+            <a href="/sandguard/why-every-safe-needs-a-firewall.html" class="read-more">Read the guide</a>
+        </article>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h3>Decode every transaction before you sign.</h3>
+            <p>SandGuard is a transaction firewall for Safe multisig wallets. Calldata decoding, simulation, and risk scoring — in 30 seconds.</p>
+            <a href="https://supersandguard.com" class="cta-btn">Try SandGuard Free →</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

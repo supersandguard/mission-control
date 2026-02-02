@@ -3,7 +3,7 @@
 ## v0.3.0 (2026-02-01) - Marketing Launch
 
 ### What's Live
-- **Frontend:** https://sandguard.netlify.app ✅
+- **Frontend:** https://supersandguard.com ✅
 - **Domain:** supersandguard.com ✅
 - **Backend:** Running on Pi, port 3001 (Tailscale accessible) ✅
 - **Language:** All English ✅
@@ -15,7 +15,7 @@
 
 ### Architecture
 ```
-User Browser → sandguard.netlify.app (static frontend)
+User Browser → supersandguard.com (Railway full-stack)
                     ↓ (API calls)
               User's Clawdbot:3001 (backend)
                     ↓
@@ -63,5 +63,5 @@ User Browser → sandguard.netlify.app (static frontend)
 ### Tech Stack
 - Frontend: React + TypeScript + Vite + Tailwind CSS
 - Backend: Express + TypeScript + esbuild
-- Hosting: Netlify (frontend) + Pi/Clawdbot (backend)
+- Hosting: Railway (full-stack)
 - Chain: Ethereum mainnet, Base, Optimism, Arbitrum

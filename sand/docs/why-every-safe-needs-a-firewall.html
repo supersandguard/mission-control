@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Every Safe Multisig Needs a Transaction Firewall — SandGuard Blog</title>
+    <meta name="description" content="Multisig solves authorization but not verification. If every signer approves a transaction they can't read, the threshold is meaningless. Here's what a transaction firewall does and why your Safe needs one.">
+    
+    <meta property="og:title" content="Why Every Safe Multisig Needs a Transaction Firewall">
+    <meta property="og:description" content="Your Safe multisig has a 3-of-5 threshold. Great. But if all 5 signers are looking at a spoofed UI, the threshold protects nothing. Here's the missing security layer.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/why-every-safe-needs-a-firewall.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/why-every-safe-needs-a-firewall.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+        .header-nav a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        .article-page {
+            max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .article-meta {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .article-date { color: var(--text-muted); font-size: 0.8125rem; }
+        .article-tag {
+            font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1); color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;
+        }
+        .back-link:hover { color: var(--text-secondary); }
+        .article-body h2 {
+            font-size: 1.375rem; font-weight: 700;
+            margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem; font-weight: 600;
+            margin-top: 2rem; margin-bottom: 0.5rem; color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem; margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05); border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary); padding: 0.15em 0.4em;
+            border-radius: 4px; font-size: 0.875em; color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none; padding: 0; font-size: 0.8125rem;
+            line-height: 1.6; color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0;
+        }
+        .layers-grid {
+            display: grid; grid-template-columns: 1fr; gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .layer-card {
+            padding: 1.25rem; border-radius: 12px; border: 1px solid;
+        }
+        .layer-card.green {
+            background: rgba(52, 211, 153, 0.05);
+            border-color: rgba(52, 211, 153, 0.2);
+        }
+        .layer-card.red {
+            background: rgba(248, 113, 113, 0.05);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+        .layer-card.amber {
+            background: rgba(251, 191, 36, 0.05);
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+        .layer-label {
+            font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; margin-bottom: 0.25rem;
+        }
+        .layer-card.green .layer-label { color: var(--emerald); }
+        .layer-card.red .layer-label { color: var(--red); }
+        .layer-card.amber .layer-label { color: var(--amber); }
+        .layer-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .layer-desc { color: var(--text-muted); font-size: 0.875rem; }
+        .step-list { counter-reset: steps; list-style: none; padding-left: 0; }
+        .step-list li {
+            counter-increment: steps;
+            padding-left: 2.5rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .step-list li::before {
+            content: counter(steps);
+            position: absolute; left: 0; top: 0.1rem;
+            width: 1.75rem; height: 1.75rem;
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--emerald); font-weight: 700; font-size: 0.8125rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .attack-table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+            font-size: 0.875rem;
+        }
+        .attack-table th {
+            text-align: left; padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted); font-weight: 600;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .attack-table td {
+            padding: 0.75rem; border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+        .attack-table td:first-child { color: var(--text-primary); font-weight: 500; }
+        .attack-table .amount { color: var(--red); font-weight: 600; }
+        .cta-section {
+            text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 16px;
+        }
+        .cta-section h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.75rem 1.75rem;
+            border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        .footer {
+            border-top: 1px solid var(--border-subtle); padding: 2rem 1.5rem; text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 0.5rem;
+            color: var(--text-muted); font-size: 0.8125rem;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a { color: var(--text-muted); font-size: 0.8125rem; }
+        .footer-links a:hover { color: var(--text-secondary); }
+        @media (max-width: 640px) {
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+            .attack-table { font-size: 0.8125rem; }
+            .attack-table th, .attack-table td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="article-page">
+        <a href="/sandguard/" class="back-link">← Back to blog</a>
+        
+        <h1>Why Every Safe Multisig Needs a Transaction Firewall</h1>
+        
+        <div class="article-meta">
+            <span class="article-date">February 2, 2026</span>
+            <span class="article-tag">Guide</span>
+            <span class="article-tag">Safe Security</span>
+        </div>
+
+        <div class="article-body">
+            <p>Your Safe multisig has a 3-of-5 threshold. You have hardware wallets. You verify the URL before connecting. You feel secure.</p>
+
+            <p>But here's the uncomfortable question: <strong>do you actually read what you're signing?</strong></p>
+
+            <p>Not the label in the UI. Not the "Transfer 100 ETH to 0xabc..." summary. The actual raw calldata — the bytes that tell the Ethereum Virtual Machine what to do with your money.</p>
+
+            <p>If the answer is no, your multisig threshold is a number, not a security measure. And you're vulnerable to the exact attack pattern that has drained over <strong>$2 billion</strong> from crypto treasuries in the last two years.</p>
+
+            <h2>The Blind Signing Epidemic</h2>
+
+            <p>Blind signing is what happens when people approve transactions they can't independently verify. The UI says one thing. The calldata does another. Every signer looks at the same compromised interface, sees the same fake summary, and approves.</p>
+
+            <p>This isn't theoretical. It's the single most damaging attack vector in crypto today:</p>
+
+            <table class="attack-table">
+                <thead>
+                    <tr>
+                        <th>Attack</th>
+                        <th>Amount Stolen</th>
+                        <th>Year</th>
+                        <th>Vector</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ByBit</td>
+                        <td class="amount">$1.43B</td>
+                        <td>2025</td>
+                        <td>UI spoofing + delegatecall</td>
+                    </tr>
+                    <tr>
+                        <td>Ronin Network</td>
+                        <td class="amount">$624M</td>
+                        <td>2022</td>
+                        <td>Social engineering + blind signing</td>
+                    </tr>
+                    <tr>
+                        <td>Wormhole</td>
+                        <td class="amount">$320M</td>
+                        <td>2022</td>
+                        <td>Signature verification bypass</td>
+                    </tr>
+                    <tr>
+                        <td>WazirX</td>
+                        <td class="amount">$235M</td>
+                        <td>2024</td>
+                        <td>Blind signing via compromised UI</td>
+                    </tr>
+                    <tr>
+                        <td>Radiant Capital</td>
+                        <td class="amount">$50M</td>
+                        <td>2024</td>
+                        <td>Multisig UI manipulation</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Notice the pattern. These aren't smart contract bugs. There's no flash loan exploit or oracle manipulation. In every case, <strong>authorized signers approved malicious transactions</strong> because they couldn't see what they were actually signing.</p>
+
+            <p>A multisig doesn't help when the attack targets the human layer. If all 3 of your 5 signers trust the same compromised interface, you've just added extra confirmation clicks to a theft.</p>
+
+            <h2>The Three Layers of Multisig Security</h2>
+
+            <p>To understand where the gap is, consider that effective multisig security requires three distinct layers:</p>
+
+            <div class="layers-grid">
+                <div class="layer-card green">
+                    <div class="layer-label">Layer 1: Authorization ✅</div>
+                    <div class="layer-title">Multiple signatures required</div>
+                    <div class="layer-desc">Safe provides this. Your threshold ensures no single signer can move funds. This is table stakes — necessary but not sufficient.</div>
+                </div>
+                <div class="layer-card red">
+                    <div class="layer-label">Layer 2: Verification ❌</div>
+                    <div class="layer-title">Understand what you're signing</div>
+                    <div class="layer-desc">This is the gap. Before signing, every signer should be able to independently verify what a transaction actually does — not what the UI claims it does. Most teams have zero tooling here.</div>
+                </div>
+                <div class="layer-card amber">
+                    <div class="layer-label">Layer 3: Enforcement ⚠️</div>
+                    <div class="layer-title">On-chain rules that block risky transactions</div>
+                    <div class="layer-desc">Safe's Guard module system enables this, but almost nobody uses it. A Guard can programmatically block dangerous operations — delegatecalls, proxy upgrades, unlimited approvals — even if every signer approves.</div>
+                </div>
+            </div>
+
+            <p>Most teams invest heavily in Layer 1 (adding more signers, higher thresholds, hardware wallets) while completely ignoring Layers 2 and 3. That's like adding more locks to your front door while leaving the windows open.</p>
+
+            <h2>What a Transaction Firewall Does</h2>
+
+            <p>A transaction firewall sits between the "sign" button and the actual signature. It intercepts every pending transaction and answers one critical question: <strong>what does this transaction actually do?</strong></p>
+
+            <p>Not what the label says. Not what the UI renders. What the raw calldata, when decoded and simulated against the current chain state, actually produces as an outcome.</p>
+
+            <p>A proper transaction firewall performs three functions:</p>
+
+            <h3>Decode</h3>
+            <p>Raw calldata is decoded into human-readable function calls with named parameters. A <code>delegatecall</code> to an <code>upgradeToAndCall</code> function is immediately visible — not hidden behind a "Transfer ETH" label. You see the actual contract being called, the actual function being invoked, and the actual parameters being passed.</p>
+
+            <h3>Simulate</h3>
+            <p>The transaction is executed against a fork of the current chain state in a sandbox environment. You see every outcome before signing: balance changes, state modifications, ownership transfers, approval grants. The simulation shows you the <em>after</em> state — what your Safe and the broader chain state will look like once this transaction executes.</p>
+
+            <h3>Score</h3>
+            <p>An automated risk engine evaluates the decoded calldata and simulation results against known attack patterns. Unverified contracts, recent deployments, proxy upgrades, unlimited token approvals, ownership changes, sweep functions — each pattern contributes to a composite risk score. A routine ETH transfer scores low. A <code>delegatecall</code> to an unverified contract deployed two days ago scores critical.</p>
+
+            <h2>How SandGuard Works</h2>
+
+            <p><a href="https://supersandguard.com">SandGuard</a> is a transaction firewall built specifically for Safe multisig wallets. It monitors your Safe's transaction queue 24/7 and analyzes every pending transaction before any signer approves.</p>
+
+            <p>Here's the flow:</p>
+
+            <ol class="step-list">
+                <li>
+                    <strong>A transaction is proposed to your Safe.</strong> SandGuard detects it within seconds via the Safe Transaction Service API.
+                </li>
+                <li>
+                    <strong>Calldata is decoded.</strong> Raw bytes are matched against verified contract ABIs. You see the actual function call, target contract, and all parameters in plain English.
+                </li>
+                <li>
+                    <strong>The transaction is simulated.</strong> Using Tenderly's fork simulation engine, SandGuard executes the transaction against the current chain state. Every balance change, every state modification, every event emitted — visible before anyone signs.
+                </li>
+                <li>
+                    <strong>Risk is scored.</strong> An automated engine checks the decoded data and simulation results against known attack patterns. The output is a clear risk score with specific flags explaining why.
+                </li>
+                <li>
+                    <strong>Signers review the analysis.</strong> Before touching the "approve" button in Safe{Wallet}, signers check SandGuard's independent analysis. If the risk score is elevated, they know to investigate further.
+                </li>
+            </ol>
+
+            <p>The critical design principle: <strong>SandGuard never trusts the UI.</strong> It reads raw transaction data from the Safe Transaction Service and builds its analysis from the calldata up. Even if your browser, your computer, and the Safe interface are all compromised, the on-chain calldata tells the truth.</p>
+
+            <h2>The Safe Guard Module Vision</h2>
+
+            <p>Safe's architecture includes a powerful feature called <strong>Guard modules</strong> — smart contracts that can inspect and block transactions <em>at the protocol level</em>, before they execute on-chain.</p>
+
+            <p>A Guard implements two functions:</p>
+
+            <ul>
+                <li><code>checkTransaction()</code> — called before execution. Can inspect all transaction parameters and revert to block it.</li>
+                <li><code>checkAfterExecution()</code> — called after execution. Can verify the final state and revert if something unexpected happened.</li>
+            </ul>
+
+            <p>This is Layer 3 security — on-chain enforcement. A SandGuard Guard module could automatically block:</p>
+
+            <ul>
+                <li><strong>All <code>delegatecall</code> operations</strong> unless the target is explicitly whitelisted. This alone would have stopped the ByBit hack.</li>
+                <li><strong>Unlimited token approvals</strong> — <code>approve(spender, type(uint256).max)</code> blocked by default.</li>
+                <li><strong>Proxy implementation upgrades</strong> — <code>upgradeTo()</code> and <code>upgradeToAndCall()</code> blocked unless explicitly permitted.</li>
+                <li><strong>Interactions with unverified contracts</strong> — contracts not verified on Etherscan flagged and optionally blocked.</li>
+                <li><strong>Ownership/threshold changes</strong> that could compromise the multisig itself.</li>
+            </ul>
+
+            <p>The Guard module is the ultimate complement to SandGuard's off-chain analysis. Off-chain analysis catches everything and provides rich context to signers. On-chain enforcement provides a hard backstop — even if every signer is compromised, certain transactions simply cannot execute.</p>
+
+            <h2>What Would Have Been Different</h2>
+
+            <p>Let's revisit the ByBit attack through the lens of a transaction firewall:</p>
+
+            <ul>
+                <li><strong>Without SandGuard:</strong> Signers see "Transfer 401,346 ETH to hot wallet" in a spoofed UI. They sign. $1.43B gone.</li>
+                <li><strong>With SandGuard (off-chain):</strong> SandGuard decodes the calldata and shows a <code>delegatecall</code> to an unverified implementation contract containing a <code>sweepERC20()</code> function. Risk score: critical. Signers refuse to sign. Zero dollars lost.</li>
+                <li><strong>With SandGuard Guard (on-chain):</strong> Even if the signers somehow approve, the Guard module blocks the <code>delegatecall</code> operation at the smart contract level. The transaction reverts. Zero dollars lost.</li>
+            </ul>
+
+            <p>Thirty seconds of verification. That's the difference between a routine Tuesday and a $1.43 billion headline.</p>
+
+            <h2>Getting Started</h2>
+
+            <p>If you manage a Safe multisig — whether it holds $10,000 or $10 billion — the question isn't whether you can afford a transaction firewall. It's whether you can afford not to have one.</p>
+
+            <p>SandGuard offers a free tier that includes calldata decoding for any Safe address. The Pro tier adds simulation, risk scoring, and 24/7 queue monitoring for $20/month.</p>
+
+            <p>Twenty dollars. That's the monthly cost of the security layer that would have saved $1.43 billion.</p>
+
+            <div class="cta-section">
+                <h3>Stop blind signing. Start verifying.</h3>
+                <p>Try SandGuard free — enter your Safe address and see your first decoded transaction in 30 seconds.</p>
+                <a href="https://supersandguard.com" class="cta-btn">Try SandGuard Free →</a>
+            </div>
+
+            <hr>
+
+            <p><em>Further reading: <a href="/sandguard/bybit-blind-signing-attack.html">Blind Signing Cost ByBit $1.43 Billion — Full Analysis</a></em></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

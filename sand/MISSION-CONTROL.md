@@ -14,13 +14,23 @@
 ## 📋 Task Board
 
 ### 🔴 In Progress
-| Task | Agent | Status | ETA |
-|------|-------|--------|-----|
-| Replace emojis → Lucide icons | emoji-audit-v2 | 🔄 Running | ~5 min |
-| UX audit report | ux-audit-v2 | 🔄 Running | ~5 min |
-| Deploy latest to Railway | railway-deploy | 🔄 Running | ~5 min |
+| Task | Status | ETA |
+|------|--------|-----|
+| x-marketing | 🔄 Running | — |
+| moltbook-marketing | 🔄 Running | — |
+| Blog deploy (needs GitHub Pages enabled) | ⚠️ Manual | — |
 
-### ✅ Done
+### ✅ Done (Overnight Sprint)
+| Task | Agent | Output | Tokens |
+|------|-------|--------|--------|
+| Compression + code-split | performance-fix | Commit `57b27d8` | 19K |
+| SEO + meta + PWA | seo-meta | Commit `e87e0ea` | 16K |
+| Security hardening | security-fix | Commit `8331a57` | 25K |
+| UX quick wins | ux-quickwins | Commit `73ec733` | 32K |
+| GitHub repo public | github-setup | github.com/supersandguard/sandguard | 16K |
+| Moltbook engagement | moltbook-engage | Builder log + 3 comments | 40K |
+
+### ✅ Done (Earlier)
 | Task | Agent | Output | Tokens |
 |------|-------|--------|--------|
 | Business strategy | business-strategy | `BUSINESS-STRATEGY.md` (33.6KB) | 55K |
@@ -28,6 +38,9 @@
 | ByBit content (blog + thread + moltbook) | bybit-content | `content/bybit-*.md` | 34K |
 | Free tier + Pro pricing | pricing-v2 | Commit `3cb95d3` | 37K |
 | Marketing plan | marketing-review | `MARKETING-PLAN.md` (21KB) | 70K |
+| Lucide icons | emoji-audit-v2 | Commit `559686c` | 44K |
+| UX audit | ux-audit-v2 | `UX-AUDIT.md` | 61K |
+| Railway deploy | railway-deploy | v0.3.0 live | 20K |
 
 ### ❌ Failed (Waste)
 | Task | Agent | Reason | Tokens Burned |
@@ -52,6 +65,24 @@
 ## 📊 Activity Feed
 
 ```
+00:45 — ✅ DEPLOY SUCCESS (607bafe9) — new bundle, lang="en", security headers, OG tags, robots.txt, spinner, API 404. Compression still not working (investigate).
+00:40 — blog-and-safe COMPLETED — 2 blog posts + Safe forum draft
+00:38 — founders-program COMPLETED — 55KB doc, soulbound NFT, lifetime Pro, $UMBRA allocation
+00:35 — Deploy #6 — REAL root causes: 1) lucide-react missing from package.json 2) Railway npm runs production mode (skips devDeps including vite). Fixed both.
+00:30 — Deploy #5 failed — nixpacks install ran correctly but production mode skipped vite
+00:25 — onboarding-ux COMPLETED — PrerequisiteChecklist, Safe explanation, Landing redesign
+00:22 — founders-program + referral-program launched
+00:14 — safe-integration COMPLETED — 58KB strategy doc
+00:00 — Deploy #4 failed — removing nixpacks.toml made it worse (12 consecutive FAILED deploys)
+23:55 — Deploy #3 triggered (detach) — still not reflecting
+23:48 — Deploy #2 triggered — all 6 agents done, waiting for Railway build
+23:38 — Deploy #1 triggered but missed late commits
+23:37 — ux-quickwins COMPLETED (73ec733) — demo routing, badge, empty states, page titles
+23:36 — github-setup COMPLETED — repo PUBLIC at github.com/supersandguard/sandguard
+23:36 — security-fix COMPLETED (8331a57) — headers, sanitize, API 404, address validation
+23:35 — seo-meta COMPLETED (e87e0ea) — OG tags, meta, robots.txt, icon SVG, spinner
+23:35 — performance-fix COMPLETED (57b27d8) — compression + payload limit + code-split
+23:33 — Oleada nocturna: 6 agentes lanzados + cron/30min
 22:40 — Relaunched: emoji-audit-v2, ux-audit-v2, railway-deploy
 22:37 — Created MISSION-CONTROL.md
 22:33 — Alberto: "Dame reporte de todos los agentes"
@@ -113,6 +144,9 @@
 3. **Railway doesn't auto-deploy on git push** unless connected to GitHub. Fix: manual `railway up` or fix GitHub integration.
 4. **Frontend builds are heavy** (~200MB deps). Pi can't build locally. All builds must happen on Railway.
 5. **Always check if a deploy actually happened** — verify bundle hash changed.
+6. **NEVER remove nixpacks.toml** — Railway needs it for correct install paths. railway.json installCommand gets IGNORED by Nixpacks.
+7. **Use `railway deployment list`** to check build status — don't assume builds succeed.
+8. **Use `railway logs --build <id>`** to see build errors.
 
 ---
 

@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { RefreshCw, ShieldCheck } from 'lucide-react'
 import { useTransactionsContext } from '../context/TransactionsContext'
 import RiskBadge from '../components/RiskBadge'
 
@@ -10,19 +12,21 @@ function formatTime(date: Date | null) {
 export default function TxQueue() {
   const { transactions, loading, refreshing, lastUpdated, refresh } = useTransactionsContext()
 
+  useEffect(() => { document.title = 'TX Queue — SandGuard' }, [])
+
   return (
     <div className="px-4 py-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+        <h2 className="text-lg font-bold text-slate-300 uppercase tracking-wider">
           Transaction Queue ({transactions.length})
           {refreshing && <span className="text-emerald-400 animate-pulse ml-1">⟳</span>}
         </h2>
         <button
           onClick={refresh}
           disabled={loading || refreshing}
-          className="text-xs text-emerald-400 hover:underline disabled:opacity-50"
+          className="text-sm text-emerald-400 hover:underline disabled:opacity-50"
         >
-          {loading ? '⟳ Loading...' : '↻ Refresh'}
+          <span className="inline-flex items-center gap-1">{loading ? <><RefreshCw className="w-3 h-3 animate-spin" /> Loading...</> : <><RefreshCw className="w-3 h-3" /> Refresh</>}</span>
         </button>
       </div>
 
@@ -33,11 +37,11 @@ export default function TxQueue() {
         </div>
       ) : transactions.length === 0 ? (
         <div className="bg-slate-900/50 rounded-2xl border border-slate-800/50 py-16 px-6 text-center">
-          <p className="text-5xl mb-4">🛡️</p>
+          <ShieldCheck className="w-12 h-12 text-slate-600 mx-auto mb-4" />
           <p className="text-base font-medium text-slate-300 mb-2">No pending transactions</p>
           <p className="text-sm text-slate-500 mb-4">Your Safe is secure</p>
           {lastUpdated && (
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-slate-500">
               Last checked: {formatTime(lastUpdated)}
             </p>
           )}
@@ -45,7 +49,7 @@ export default function TxQueue() {
             onClick={refresh}
             className="mt-4 text-xs text-emerald-400 hover:underline"
           >
-            Check again ↻
+            <span className="inline-flex items-center gap-1">Check again <RefreshCw className="w-3 h-3" /></span>
           </button>
         </div>
       ) : (
@@ -88,7 +92,7 @@ export default function TxQueue() {
       )}
 
       {lastUpdated && transactions.length > 0 && (
-        <p className="text-xs text-slate-600 text-center mt-4">
+        <p className="text-xs text-slate-500 text-center mt-4">
           Updated: {formatTime(lastUpdated)}
         </p>
       )}

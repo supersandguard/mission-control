@@ -129,6 +129,17 @@ Bosque de las Lomas, Miguel Hidalgo
 - **Stack:** React+Vite+Tailwind (frontend on Netlify) + Express+TS (backend on Pi)
 - **Precio:** $20/mo (ETH on Base + Stripe card)
 - **Payment wallet:** `0xCc75959A8Fa6ed76F64172925c0799ad94ab0B84`
+- **All wallets saved in 1Password** vault "max umbra" → "Crypto Wallets"
+
+## SandGuard Strategy (Feb 2 2026)
+- **North star:** Agent-first crypto security (PRODUCT-VISION.md)
+- **Revenue strategy:** Modified Hybrid — 70% human SaaS, 20% Safe ecosystem, 10% agent infra
+- **#1 action:** Safe App Store listing (200K+ MAU potential)
+- **Safe Apps SDK integrated** — auto-connect when running inside Safe Wallet
+- **Privy partnership angle:** Privy (onboard) → Safe (multisig) → SandGuard (firewall)
+- **DAO outreach:** 20 DAOs targeted, templates ready
+- **⚠️ Pi RAM limit:** 906MB, npm install OOMs. Railway builds fine (more RAM).
+- **⚠️ No @SandGuard_ on X** — don't @ it, it's not ours
 - **Cuentas:** Netlify (betooo.neh@gmail.com), GitHub (supersandguard), Njalla (supersandguard.com)
 - **Todo en inglés** — Alberto habla español conmigo pero el producto es global
 - **Nunca mencionar OasisVault** en el producto

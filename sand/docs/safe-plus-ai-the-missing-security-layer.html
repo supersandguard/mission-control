@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe + AI: The Missing Security Layer — SandGuard Blog</title>
+    <meta name="description" content="AI agents are managing millions in crypto through Safe wallets. But between proposal and signing, there's zero verification. Here's what's missing — and why it matters.">
+    
+    <meta property="og:title" content="Safe + AI: The Missing Security Layer">
+    <meta property="og:description" content="AI agents are managing millions in crypto through Safe wallets. But between proposal and signing, there's zero verification. Here's the gap nobody's talking about.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/safe-plus-ai-the-missing-security-layer.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/safe-plus-ai-the-missing-security-layer.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+        .header-nav a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        .article-page {
+            max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .article-meta {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .article-date { color: var(--text-muted); font-size: 0.8125rem; }
+        .article-tag {
+            font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1); color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .article-tag.amber {
+            background: rgba(251, 191, 36, 0.1); color: var(--amber);
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;
+        }
+        .back-link:hover { color: var(--text-secondary); }
+        .article-body h2 {
+            font-size: 1.375rem; font-weight: 700;
+            margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem; font-weight: 600;
+            margin-top: 2rem; margin-bottom: 0.5rem; color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem; margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05); border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary); padding: 0.15em 0.4em;
+            border-radius: 4px; font-size: 0.875em; color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none; padding: 0; font-size: 0.8125rem;
+            line-height: 1.6; color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0;
+        }
+        .cta-section {
+            text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 16px;
+        }
+        .cta-section h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.75rem 1.75rem;
+            border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        .footer {
+            border-top: 1px solid var(--border-subtle); padding: 2rem 1.5rem; text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 0.5rem;
+            color: var(--text-muted); font-size: 0.8125rem;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a { color: var(--text-muted); font-size: 0.8125rem; }
+        .footer-links a:hover { color: var(--text-secondary); }
+        .safe-box {
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .warning-box {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .flow-diagram {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            text-align: center;
+        }
+        .flow-diagram code {
+            font-size: 0.9rem; color: var(--text-secondary);
+            background: none; padding: 0;
+        }
+        @media (max-width: 640px) {
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="article-page">
+        <a href="/sandguard/" class="back-link">← Back to blog</a>
+        
+        <h1>Safe + AI: The Missing Security Layer Between Proposal and Signing</h1>
+        
+        <div class="article-meta">
+            <span class="article-date">July 25, 2025</span>
+            <span class="article-tag amber">AI Agents</span>
+            <span class="article-tag">Safe Security</span>
+        </div>
+
+        <div class="article-body">
+            <p><em>AI agents are managing millions in crypto right now — trading, treasury operations, DeFi strategies. But here's the question nobody's asking: who verifies what the agent is actually signing?</em></p>
+
+            <hr>
+
+            <h2>The Age of Autonomous Wallets</h2>
+
+            <p>Something fundamental is shifting in how crypto wallets are managed. AI agents — autonomous software systems that can reason, plan, and execute — are increasingly taking on roles that used to belong exclusively to humans. Treasury management, yield optimization, automated rebalancing, cross-chain bridging. The list grows every week.</p>
+
+            <p>The numbers behind this shift are hard to ignore. Protocols like Gnosis's <strong>Olas</strong> have deployed thousands of autonomous agents managing onchain operations. Frameworks like <strong>ElizaOS</strong> and <strong>Virtuals</strong> are making it easier than ever to spin up agents that interact with DeFi protocols. Investment DAOs are experimenting with AI portfolio managers. And the capital flowing through agent-controlled addresses is measured in hundreds of millions.</p>
+
+            <p>Most of these agents interact with the blockchain through <strong>Safe multisig wallets</strong> — the de facto standard for onchain security. And for good reason: Safe is battle-tested, open-source, and secures over $100 billion in assets. Every serious DAO, protocol treasury, and institutional fund runs on Safe.</p>
+
+            <p>But as AI agents move from passive tools to active proposers and signers, a critical gap has emerged in the security model. And it's one that the Safe ecosystem hasn't addressed yet.</p>
+
+            <h2>The Verification Gap</h2>
+
+            <p>Here's how the typical AI-managed Safe workflow looks today:</p>
+
+            <div class="flow-diagram">
+                <code>AI Agent proposes tx → Raw calldata appears in queue → Human signer reviews → Signs (or doesn't)</code>
+            </div>
+
+            <p>That arrow between "raw calldata appears" and "human signer reviews" is where things fall apart. Because <strong>what exactly is the human reviewing?</strong></p>
+
+            <p>In practice, the signer sees a transaction hash, maybe a destination address, and a blob of hexadecimal calldata. If they're lucky, the Safe UI can partially decode the function name. If the transaction involves batched calls, proxy interactions, or nested <code>delegatecall</code> patterns — which is increasingly common for AI-generated transactions — the signer sees effectively nothing useful.</p>
+
+            <p>So what happens? The signer falls back on <strong>trust</strong>. They trust that the AI agent proposed the right thing. They trust that the interface isn't lying to them. They trust that the calldata matches what they expect.</p>
+
+            <p>We've seen where that trust leads. The <a href="/sandguard/bybit-blind-signing-attack.html">ByBit hack</a> — $1.43 billion stolen — happened precisely because signers trusted what they saw instead of verifying what they were signing. That attack involved a human proposer, not an AI. Now imagine the same vulnerability with autonomous agents proposing dozens of transactions per day, each more complex than the last.</p>
+
+            <div class="warning-box">
+                <p><strong>The uncomfortable truth:</strong> Multisig provides <em>consensus</em> — multiple parties must agree. But consensus is meaningless if none of the agreeing parties can independently verify what they're agreeing to. Between "agent proposes" and "signer approves," there is currently zero verification. No decode. No simulation. Just blind trust.</p>
+            </div>
+
+            <h2>Why This Gap Exists</h2>
+
+            <p>This isn't a criticism of Safe. Safe built the gold standard for onchain authorization — the idea that no single key should control significant assets. That was the right problem to solve first, and they solved it exceptionally well.</p>
+
+            <p>But the security model was designed for a world where <strong>humans propose and humans sign</strong>. In that world, the proposer can explain the transaction over a call. The signer can ask questions. Context flows through human channels — Telegram groups, governance forums, team meetings.</p>
+
+            <p>AI agents break that model. An agent doesn't hop on a call to explain its reasoning. It doesn't write a proposal summary in your Discord. It generates calldata and submits it to the queue. The transaction <em>is</em> the communication — and if you can't read the transaction, you're flying blind.</p>
+
+            <p>Safe's module system (<strong>ERC-7579</strong>) has started addressing adjacent concerns. Recovery modules handle key loss. Dead man's switches prevent lockout. Spending limits cap exposure. These are important. But they're all <em>policy</em> controls — rules about what can happen. What's missing is a <em>verification</em> control — understanding of what <em>is</em> happening, right now, in this specific transaction.</p>
+
+            <h2>Verification as a Security Layer</h2>
+
+            <p>The gap between proposal and signing is exactly where <a href="https://supersandguard.com">SandGuard</a> sits. We built it because we kept seeing the same pattern: sophisticated onchain operations, competent signers, and a critical moment where everyone just... hopes for the best.</p>
+
+            <p>SandGuard is a transaction verification layer for Safe multisig. Before any signer approves, it performs three independent checks:</p>
+
+            <h3>1. Calldata Decoding</h3>
+            <p>Every transaction is decoded against verified ABIs into human-readable operations. Not just the top-level function — the full call tree, including nested calls, proxy interactions, and batched operations. An AI agent proposing a complex DeFi strategy gets unpacked into plain English: <em>"Swap 50 ETH for USDC on Uniswap V3, deposit USDC into Aave V3 as collateral, borrow 30,000 DAI against it."</em></p>
+
+            <h3>2. Transaction Simulation</h3>
+            <p>The transaction is executed against a fork of the current chain state. You see every balance change, every state modification, every approval and transfer — before anyone signs. If an agent proposes something that would drain the treasury or grant unlimited token approvals to an unverified contract, the simulation makes it impossible to miss.</p>
+
+            <h3>3. Risk Scoring</h3>
+            <p>An automated risk engine evaluates the transaction against known attack patterns and contextual red flags. Interactions with unverified contracts, unusual value transfers, proxy upgrades, first-time counterparties — each factor contributes to a composite risk score that gives signers an immediate read on whether something deserves extra scrutiny.</p>
+
+            <div class="safe-box">
+                <p><strong>The key principle:</strong> Verification is independent of the proposer. It doesn't matter whether a transaction was proposed by a trusted teammate, an AI agent, or a compromised interface. The calldata is the calldata. Decode it, simulate it, score it — every time, automatically.</p>
+            </div>
+
+            <h2>Agents Verifying Agents</h2>
+
+            <p>There's a deeper architectural point here that's worth dwelling on. As AI agents become more capable and more autonomous, the security model needs to evolve beyond "human reviews everything." Humans are already struggling to verify complex DeFi transactions proposed by other humans. Adding AI-generated complexity only makes it worse.</p>
+
+            <p>The natural evolution is <strong>agents verifying agents</strong>. An AI verification layer that can decode, simulate, and assess risk at machine speed — serving as a check on the proposing agent before any human is even asked to sign. Think of it as separation of concerns applied to AI: the agent that <em>proposes</em> should never be the same system that <em>verifies</em>.</p>
+
+            <p>This is how traditional finance works. The trader who places the order isn't the same person who settles it. The auditor is independent of the team being audited. In onchain security, we've been asking the same entity (or the same compromised UI) to both propose and validate. That's not a security model. It's a trust exercise.</p>
+
+            <h2>An Ecosystem Problem</h2>
+
+            <p>We're building SandGuard because this gap exists today and assets are at risk now. But we don't think verification should be a single product from a single team. It should be <strong>an ecosystem layer</strong> — as fundamental to the Safe stack as multisig itself.</p>
+
+            <p>The equation is straightforward:</p>
+
+            <blockquote>
+                <p><strong>Safe (consensus) + Verification (understanding) = Actual security</strong></p>
+            </blockquote>
+
+            <p>Consensus without understanding is ceremony. Understanding without consensus is centralization. You need both. And as AI agents take on more responsibility onchain, the verification layer becomes not just useful but <em>essential infrastructure</em>.</p>
+
+            <p>Safe's module architecture is designed for exactly this kind of extensibility. A verification module — whether it's SandGuard or something else — could plug directly into the signing flow, making decoded analysis and simulation a mandatory step before execution. Not an optional extra. Not a "nice to have." A core part of the security model.</p>
+
+            <p>The space is wide open. The stakes — billions in AI-managed assets with no verification layer — are too high to build in silos. If you're working on AI agents that interact with Safe multisigs, or thinking about onchain AI security more broadly, this is the conversation worth having.</p>
+
+            <div class="cta-section">
+                <h3>Verification before signing. Every transaction.</h3>
+                <p>SandGuard decodes calldata, simulates outcomes, and scores risk — for every Safe transaction, whether proposed by a human or an AI agent.</p>
+                <a href="https://supersandguard.com" class="cta-btn">Try SandGuard Free →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

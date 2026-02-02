@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { RefreshCw, ShieldCheck, Settings } from 'lucide-react'
 import { useTransactionsContext } from '../context/TransactionsContext'
 
 const CHAIN_NAMES: Record<number, string> = {
@@ -22,9 +24,11 @@ function formatTime(date: Date | null) {
 export default function Dashboard() {
   const {
     transactions, loading, refreshing, error,
-    lastUpdated, safeInfo, safeAddress, chainId, isDemo, refresh,
+    lastUpdated, safeInfo, safeAddress, chainId, isUnconfigured, refresh,
   } = useTransactionsContext()
   const pending = transactions.filter(t => !t.isExecuted)
+
+  useEffect(() => { document.title = 'Dashboard — SandGuard' }, [])
 
   return (
     <div className="px-4 py-6 space-y-6">
@@ -32,9 +36,9 @@ export default function Dashboard() {
       <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Safe Multisig</p>
-            {isDemo ? (
-              <p className="font-mono text-sm text-slate-300">Demo Mode (mock data)</p>
+            <p className="text-sm text-slate-400 uppercase tracking-wider mb-1">Safe Multisig</p>
+            {isUnconfigured ? (
+              <p className="font-mono text-sm text-slate-300">No Safe configured — add one in Settings</p>
             ) : (
               <p className="font-mono text-sm text-slate-300">{shortenAddress(safeAddress)}</p>
             )}
@@ -51,7 +55,7 @@ export default function Dashboard() {
                     v{safeInfo.version}
                   </span>
                 </>
-              ) : !isDemo ? (
+              ) : !isUnconfigured ? (
                 <>
                   <span className="text-xs bg-slate-700 text-slate-400 px-2 py-0.5 rounded-full animate-pulse">
                     Loading...
@@ -60,7 +64,7 @@ export default function Dashboard() {
               ) : (
                 <>
                   <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">2-of-3</span>
-                  <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Demo</span>
+                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full">Setup needed</span>
                 </>
               )}
             </div>
@@ -71,11 +75,11 @@ export default function Dashboard() {
             className="text-slate-500 hover:text-emerald-400 transition-colors disabled:opacity-40 p-1"
             title="Refresh"
           >
-            <span className={`text-lg ${refreshing ? 'animate-spin inline-block' : ''}`}>↻</span>
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
         {lastUpdated && (
-          <p className="text-xs text-slate-600 mt-3">
+          <p className="text-xs text-slate-500 mt-3">
             Updated: {formatTime(lastUpdated)}
             {refreshing && <span className="text-emerald-400 ml-2 animate-pulse">refreshing...</span>}
           </p>
@@ -86,15 +90,15 @@ export default function Dashboard() {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-slate-900 rounded-xl p-4 border border-slate-800 text-center">
           <p className="text-2xl font-bold text-emerald-400">{pending.filter(t => t.risk?.score === 'green').length}</p>
-          <p className="text-xs text-slate-500 mt-1">🟢 Safe</p>
+          <p className="text-sm text-slate-400 mt-1">🟢 Safe</p>
         </div>
         <div className="bg-slate-900 rounded-xl p-4 border border-slate-800 text-center">
           <p className="text-2xl font-bold text-amber-400">{pending.filter(t => t.risk?.score === 'yellow').length}</p>
-          <p className="text-xs text-slate-500 mt-1">🟡 Caution</p>
+          <p className="text-sm text-slate-400 mt-1">🟡 Caution</p>
         </div>
         <div className="bg-slate-900 rounded-xl p-4 border border-slate-800 text-center">
           <p className="text-2xl font-bold text-red-400">{pending.filter(t => t.risk?.score === 'red').length}</p>
-          <p className="text-xs text-slate-500 mt-1">🔴 Danger</p>
+          <p className="text-sm text-slate-400 mt-1">🔴 Danger</p>
         </div>
       </div>
 
@@ -108,10 +112,10 @@ export default function Dashboard() {
       {/* Pending */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+          <h2 className="text-lg font-bold text-slate-300 uppercase tracking-wider">
             Pending {loading && <span className="text-emerald-400 animate-pulse">⟳</span>}
           </h2>
-          <Link to="/app/queue" className="text-xs text-emerald-400 hover:underline">View all →</Link>
+          <Link to="/app/queue" className="text-sm text-emerald-400 hover:underline">View all →</Link>
         </div>
         {loading && pending.length === 0 ? (
           <div className="text-center py-12">
@@ -120,13 +124,32 @@ export default function Dashboard() {
           </div>
         ) : pending.length === 0 ? (
           <div className="bg-slate-900/50 rounded-2xl border border-slate-800/50 py-12 px-6 text-center">
-            <p className="text-4xl mb-3">🛡️</p>
-            <p className="text-sm font-medium text-slate-300 mb-1">No pending transactions</p>
-            <p className="text-xs text-slate-500">Your Safe is secure</p>
-            {lastUpdated && (
-              <p className="text-xs text-slate-600 mt-3">
-                Last checked: {formatTime(lastUpdated)}
-              </p>
+            {isUnconfigured || safeAddress ? (
+              <>
+                <ShieldCheck className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+                <p className="text-sm font-medium text-slate-300 mb-1">No pending transactions</p>
+                <p className="text-sm text-slate-500">Your Safe is secure</p>
+                {lastUpdated && (
+                  <p className="text-xs text-slate-500 mt-3">
+                    Last checked: {formatTime(lastUpdated)}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <Settings className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+                <p className="text-sm font-medium text-slate-300 mb-1">No Safe configured yet</p>
+                <p className="text-sm text-slate-500 max-w-xs mx-auto mb-4">
+                  Add your Safe multisig address in Settings to start monitoring transactions, decoding calldata, and getting risk scores.
+                </p>
+                <Link
+                  to="/app/settings"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors text-sm font-medium"
+                >
+                  <Settings className="w-4 h-4" />
+                  Configure Safe
+                </Link>
+              </>
             )}
           </div>
         ) : (

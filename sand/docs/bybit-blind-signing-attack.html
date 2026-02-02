@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blind Signing Cost ByBit $1.43 Billion — SandGuard Blog</title>
+    <meta name="description" content="A deep analysis of the ByBit hack: how the Lazarus Group stole $1.43B through blind signing, and how 30 seconds of transaction verification would have stopped it.">
+    
+    <meta property="og:title" content="Blind Signing Cost ByBit $1.43 Billion">
+    <meta property="og:description" content="How the Lazarus Group exploited blind signing to steal $1.43B from ByBit's Safe multisig — and how a transaction firewall would have caught it in 30 seconds.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/bybit-blind-signing-attack.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/bybit-blind-signing-attack.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+        .header-nav a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        .article-page {
+            max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .article-meta {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .article-date { color: var(--text-muted); font-size: 0.8125rem; }
+        .article-tag {
+            font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1); color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .article-tag.red {
+            background: rgba(248, 113, 113, 0.1); color: var(--red);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;
+        }
+        .back-link:hover { color: var(--text-secondary); }
+        .article-body h2 {
+            font-size: 1.375rem; font-weight: 700;
+            margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem; font-weight: 600;
+            margin-top: 2rem; margin-bottom: 0.5rem; color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem; margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05); border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary); padding: 0.15em 0.4em;
+            border-radius: 4px; font-size: 0.875em; color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none; padding: 0; font-size: 0.8125rem;
+            line-height: 1.6; color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0;
+        }
+        .cta-section {
+            text-align: center; padding: 2.5rem 2rem; margin: 2.5rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 16px;
+        }
+        .cta-section h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.75rem 1.75rem;
+            border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        .footer {
+            border-top: 1px solid var(--border-subtle); padding: 2rem 1.5rem; text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 0.5rem;
+            color: var(--text-muted); font-size: 0.8125rem;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a { color: var(--text-muted); font-size: 0.8125rem; }
+        .footer-links a:hover { color: var(--text-secondary); }
+        .risk-box {
+            background: rgba(248, 113, 113, 0.05);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .safe-box {
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        @media (max-width: 640px) {
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="article-page">
+        <a href="/sandguard/" class="back-link">← Back to blog</a>
+        
+        <h1>Blind Signing Cost ByBit $1.43 Billion. Here's How 30 Seconds of Verification Would Have Stopped It.</h1>
+        
+        <div class="article-meta">
+            <span class="article-date">February 2, 2026</span>
+            <span class="article-tag red">Attack Analysis</span>
+            <span class="article-tag">Safe Security</span>
+        </div>
+
+        <div class="article-body">
+            <p><em>February 21, 2025 became the worst day in crypto security history — not because of a code exploit, but because humans trusted what they saw on screen.</em></p>
+
+            <hr>
+
+            <h2>The Heist</h2>
+
+            <p>On a Friday evening in February 2025, ByBit's multisig signers sat down to approve what looked like a routine transaction: a transfer from their Ethereum cold wallet to a hot wallet. The Safe interface showed the correct destination address. The URL was legitimate. Everything looked normal.</p>
+
+            <p>They signed.</p>
+
+            <p>Within minutes, 401,346 ETH, 90,375 stETH, 15,000 cmETH, and 8,000 mETH — <strong>$1.43 billion in total</strong> — vanished into a web of 40+ attacker-controlled wallets. It was the largest single theft in cryptocurrency history, more than doubling the previous record (the $624 million Ronin Network hack of 2022).</p>
+
+            <p>ByBit CEO Ben Zhou confirmed the devastating truth: <em>"This specific transaction was masked. All the signers saw the masked UI which showed the correct address and the URL was from Safe."</em></p>
+
+            <p>The signers didn't make a mistake. They were deceived.</p>
+
+            <h2>What Actually Happened</h2>
+
+            <p>The Lazarus Group — North Korea's state-sponsored hacking unit — had been planning this for weeks. Security researchers later found they'd conducted dry runs two days before the attack, testing their approach on-chain like professional bank robbers casing the vault.</p>
+
+            <p>Here's the anatomy of the attack:</p>
+
+            <ol>
+                <li><strong>Social engineering compromise.</strong> Attackers gained access to signers' devices, likely through targeted phishing or malware delivered via LinkedIn/Telegram outreach — Lazarus Group's signature playbook.</li>
+                <li><strong>UI manipulation.</strong> When signers opened their Safe multisig to approve the transaction, the interface was spoofed. It displayed a normal cold-to-hot wallet transfer.</li>
+                <li><strong>Hidden payload.</strong> The actual calldata contained something completely different: a <code>delegatecall</code> to upgrade the wallet's implementation contract to a malicious version containing a hidden <code>sweepERC20()</code> function.</li>
+                <li><strong>Immediate execution.</strong> The moment the last signature landed, attackers called <code>sweepERC20()</code> and drained everything — 401,346 ETH in a single transaction.</li>
+            </ol>
+
+            <p>The private keys were never stolen. The multisig worked exactly as designed. The problem was simpler and more terrifying: <strong>the signers couldn't see what they were actually signing.</strong></p>
+
+            <h2>The Blind Signing Problem</h2>
+
+            <p>This is called <em>blind signing</em> — approving a transaction without being able to independently verify what it actually does. And it's not a new problem.</p>
+
+            <p>The ByBit attack followed an identical pattern to:</p>
+
+            <ul>
+                <li><strong>WazirX</strong> — $235 million stolen via the same blind signing technique (July 2024)</li>
+                <li><strong>Radiant Capital</strong> — multisig compromise through UI manipulation (2024)</li>
+                <li><strong>DMM Bitcoin</strong> — similar social engineering + blind signing attack (2024)</li>
+            </ul>
+
+            <p>As security researcher Tayvano warned after tracking all of these incidents: <em>"They've done this 5 times now. Please start taking it seriously."</em></p>
+
+            <p>The uncomfortable truth is that multisig wallets provide <strong>authorization security</strong> (multiple parties must approve) but offer almost zero <strong>verification security</strong> (understanding what you're approving). Hardware wallets and multi-signature requirements are meaningless if every signer trusts the same compromised interface.</p>
+
+            <p>As Nanak Nihal put it bluntly: <em>"There is a name for this and it's BLIND SIGNING. Please please please stop using hardware wallets and multisigs and thinking you are safe."</em></p>
+
+            <h2>What the Signers Saw vs. What Was Actually Happening</h2>
+
+            <p>This is the core of the problem. Let's make it concrete.</p>
+
+            <p><strong>What ByBit's signers saw in the spoofed Safe UI:</strong></p>
+
+            <pre><code>Transfer 401,346 ETH
+From: ByBit Cold Wallet (0x1Db9...FCF4)
+To:   ByBit Hot Wallet (0x[correct address...])
+Status: Ready to sign ✅</code></pre>
+
+            <p>Looks fine. A routine treasury operation.</p>
+
+            <p><strong>What SandGuard would have shown:</strong></p>
+
+            <div class="risk-box">
+<pre><code>🔴 CRITICAL RISK — Score: 95/100
+
+Decoded calldata:
+  Function: delegatecall → UPGRADE implementation
+  New implementation: 0x[UNVERIFIED CONTRACT]
+  Contains function: sweepERC20(address,address,uint256)
+
+Simulation result:
+  ❌ Wallet ownership TRANSFERS to 0x4766...86E2
+  ❌ All ETH, stETH, cmETH, mETH become withdrawable by new owner
+  ❌ This is NOT a transfer — this is a proxy upgrade
+
+Risk flags:
+  🔴 Implementation contract is UNVERIFIED on Etherscan
+  🔴 Contract deployed 2 days ago (test pattern detected)
+  🔴 delegatecall changes wallet logic — extremely dangerous
+  🔴 New contract contains sweep function (drain pattern)
+
+⚠️ DO NOT SIGN — This transaction upgrades your wallet's
+   contract to an unverified implementation that grants
+   full withdrawal access to an external address.</code></pre>
+            </div>
+
+            <p>Night and day. No amount of UI spoofing can hide what the calldata actually contains when you decode it and simulate the outcome.</p>
+
+            <h2>How SandGuard Prevents This</h2>
+
+            <p><a href="https://supersandguard.com">SandGuard</a> is a transaction firewall for Safe multisig wallets. Before any signer approves a transaction, SandGuard runs three independent verification layers:</p>
+
+            <h3>1. Calldata Decoding</h3>
+            <p>Every transaction's raw calldata is decoded against verified ABIs. You don't see hex — you see the actual function being called with human-readable parameters. A <code>delegatecall</code> to upgrade an implementation contract is immediately visible, not hidden behind a spoofed "transfer" UI.</p>
+
+            <h3>2. Transaction Simulation</h3>
+            <p>Using Tenderly's simulation engine, SandGuard forks the current chain state and executes the transaction in a sandbox. You see the <em>actual outcome</em> before signing: every balance change, every state modification, every ownership transfer. In the ByBit case, the simulation would have shown wallet ownership moving to an external address — impossible to miss.</p>
+
+            <h3>3. Risk Scoring</h3>
+            <p>An automated risk engine evaluates every transaction against known attack patterns. Unverified contracts, recent deployments, proxy upgrades, unlimited approvals, drain patterns — each flag contributes to a composite risk score. The ByBit transaction would have scored <strong>critical</strong> on at least four independent risk factors.</p>
+
+            <div class="safe-box">
+                <p>The key insight: SandGuard doesn't rely on the same interface the attacker compromised. It reads the raw transaction data from the blockchain and builds its own independent analysis. Even if your browser, your computer, and your Safe UI are all compromised, the calldata on-chain doesn't lie.</p>
+            </div>
+
+            <h2>The $1.43 Billion Lesson</h2>
+
+            <p>The crypto industry has now lost over <strong>$2 billion</strong> to blind signing attacks in the past two years alone. Not smart contract exploits. Not flash loan attacks. Not oracle manipulation. Just humans signing transactions they couldn't read.</p>
+
+            <p>The fix isn't more signers on your multisig. It's not a better hardware wallet. It's not even a dedicated signing device (though that helps too).</p>
+
+            <p>The fix is <strong>making every transaction readable before it's signed.</strong></p>
+
+            <p>Decode the calldata. Simulate the outcome. Score the risk. Do it automatically, every time, before anyone touches a "confirm" button.</p>
+
+            <p>That's what SandGuard does. For $20/month.</p>
+
+            <p>A $900 refurbished laptop per signer would have prevented this hack. A $20/month transaction firewall would have caught it in 30 seconds.</p>
+
+            <div class="cta-section">
+                <h3>Don't be the next headline.</h3>
+                <p>Decode every transaction before you sign. Try SandGuard free — no credit card needed.</p>
+                <a href="https://supersandguard.com" class="cta-btn">Try SandGuard Free →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

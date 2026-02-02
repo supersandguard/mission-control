@@ -20,7 +20,10 @@
     "tailwindcss": "^4.1.18",
     "viem": "^2.40.1",
     "vite-plugin-pwa": "^1.2.0",
-    "wagmi": "^2.0.0"
+    "wagmi": "^2.0.0",
+    "lucide-react": "^0.469.0",
+    "@safe-global/safe-apps-sdk": "^9.1.0",
+    "@safe-global/safe-apps-react-sdk": "^4.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

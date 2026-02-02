@@ -3,8 +3,8 @@
 Complete documentation for the SandGuard API endpoints.
 
 ## Base URL
-- Production: `https://api.sandguard.io`
-- Staging: `https://staging-api.sandguard.io`
+- Production: `https://supersandguard.com`
+- Staging: `https://supersandguard.com`
 
 ## Authentication
 Most endpoints are public. Premium features require API key in header:
@@ -43,7 +43,7 @@ Fetch pending transactions for a Safe multisig wallet.
 
 **Example Request:**
 ```bash
-curl -s "https://api.sandguard.io/api/transactions?address=0x1234...&network=mainnet"
+curl -s "https://supersandguard.com/api/transactions?address=0x1234...&network=mainnet"
 ```
 
 **Example Response:**
@@ -343,7 +343,7 @@ Register webhook URLs to receive real-time notifications:
 ### JavaScript
 ```javascript
 const SandGuard = require('@sandguard/sdk');
-const client = new SandGuard('https://api.sandguard.io');
+const client = new SandGuard('https://supersandguard.com');
 
 const transactions = await client.getTransactions('0x1234...', 'mainnet');
 console.log(`Found ${transactions.length} pending transactions`);
@@ -354,7 +354,7 @@ console.log(`Found ${transactions.length} pending transactions`);
 import requests
 
 def get_pending_transactions(safe_address, network='mainnet'):
-    url = f"https://api.sandguard.io/api/transactions"
+    url = f"https://supersandguard.com/api/transactions"
     params = {'address': safe_address, 'network': network}
     response = requests.get(url, params=params)
     return response.json()['transactions']
@@ -363,10 +363,10 @@ def get_pending_transactions(safe_address, network='mainnet'):
 ### cURL
 ```bash
 # Check pending transactions
-curl -s "https://api.sandguard.io/api/transactions?address=0x1234...&network=mainnet" | jq .
+curl -s "https://supersandguard.com/api/transactions?address=0x1234...&network=mainnet" | jq .
 
 # Simulate transaction
-curl -X POST "https://api.sandguard.io/api/simulate" \
+curl -X POST "https://supersandguard.com/api/simulate" \
   -H "Content-Type: application/json" \
   -d '{"safe_address": "0x1234...", "to": "0xabc...", "value": "1000000000000000000"}'
 ```

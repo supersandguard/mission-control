@@ -502,27 +502,53 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="border-t border-slate-800/60 py-8">
-        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Shield size={16} className="text-slate-500" />
-            <span>SandGuard</span>
-            <span>·</span>
-            <span>supersandguard.com</span>
+        <div className="max-w-5xl mx-auto px-6 space-y-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-slate-500">
+              <Shield size={16} className="text-slate-500" />
+              <span>SandGuard</span>
+              <span>·</span>
+              <span>supersandguard.com</span>
+            </div>
+            <div className="flex items-center gap-4 flex-wrap justify-center">
+              <a
+                href="https://supersandguard.github.io/sandguard/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+              >
+                Blog
+              </a>
+              <a
+                href="https://github.com/supersandguard/sandguard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://x.com/beto_neh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+              >
+                𝕏 @beto_neh
+              </a>
+              <a
+                href="https://safe.global"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-400 transition-colors"
+              >
+                <svg width="14" height="14" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M374.7 201.2H355.4V158.5C355.4 104 311.4 60 256.9 60H256C201.5 60 157.5 104 157.5 158.5V201.2H137.3C121.2 201.2 108.2 214.2 108.2 230.3V393.9C108.2 410 121.2 423 137.3 423H374.7C390.8 423 403.8 410 403.8 393.9V230.3C403.8 214.2 390.8 201.2 374.7 201.2ZM273.9 343.6V370.3C273.9 380.2 265.8 388.3 255.9 388.3C246 388.3 237.9 380.2 237.9 370.3V343.6C228.4 337 222.3 326.1 222.3 313.7C222.3 293.2 238.9 276.6 259.4 276.6C279.9 276.6 296.5 293.2 296.5 313.7C296.5 326.1 290.4 337 280.9 343.6H273.9ZM315.4 201.2H196.6V158.5C196.6 125.7 223.2 99.1 256 99.1C288.8 99.1 315.4 125.7 315.4 158.5V201.2Z" fill="currentColor" />
+                </svg>
+                Powered by Safe
+              </a>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <a
-              href="https://safe.global"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-400 transition-colors"
-            >
-              <svg width="14" height="14" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M374.7 201.2H355.4V158.5C355.4 104 311.4 60 256.9 60H256C201.5 60 157.5 104 157.5 158.5V201.2H137.3C121.2 201.2 108.2 214.2 108.2 230.3V393.9C108.2 410 121.2 423 137.3 423H374.7C390.8 423 403.8 410 403.8 393.9V230.3C403.8 214.2 390.8 201.2 374.7 201.2ZM273.9 343.6V370.3C273.9 380.2 265.8 388.3 255.9 388.3C246 388.3 237.9 380.2 237.9 370.3V343.6C228.4 337 222.3 326.1 222.3 313.7C222.3 293.2 238.9 276.6 259.4 276.6C279.9 276.6 296.5 293.2 296.5 313.7C296.5 326.1 290.4 337 280.9 343.6H273.9ZM315.4 201.2H196.6V158.5C196.6 125.7 223.2 99.1 256 99.1C288.8 99.1 315.4 125.7 315.4 158.5V201.2Z" fill="currentColor" />
-              </svg>
-              Powered by Safe
-            </a>
-            <p className="text-sm text-slate-500">{new Date().getFullYear()} SandGuard</p>
-          </div>
+          <p className="text-sm text-slate-500 text-center sm:text-right">{new Date().getFullYear()} SandGuard</p>
         </div>
       </footer>
     </div>

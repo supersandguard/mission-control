@@ -11,7 +11,9 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@types/compression": "^1.8.1",
     "better-sqlite3": "^12.6.2",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.5",

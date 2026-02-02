@@ -4,10 +4,10 @@ interface AuthContextType {
   isAuthenticated: boolean
   apiKey: string | null
   safeAddress: string | null
-  isDemoMode: boolean
+  isGuestMode: boolean
   login: (apiKey: string, safeAddress: string) => void
   logout: () => void
-  setDemoMode: () => void
+  setGuestMode: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -20,7 +20,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [apiKey, setApiKey] = useState<string | null>(null)
   const [safeAddress, setSafeAddress] = useState<string | null>(null)
-  const [isDemoMode, setIsDemoMode] = useState(false)
+  const [isGuestMode, setIsGuestMode] = useState(false)
 
   // Load auth state from localStorage on mount
   useEffect(() => {
@@ -28,10 +28,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (savedAuth) {
       try {
         const auth = JSON.parse(savedAuth)
-        if (auth.apiKey || auth.isDemoMode) {
+        // Support both old 'isDemoMode' and new 'isGuestMode' keys for backwards compat
+        const guest = auth.isGuestMode || auth.isDemoMode || false
+        if (auth.apiKey || guest) {
           setApiKey(auth.apiKey || null)
           setSafeAddress(auth.safeAddress || null)
-          setIsDemoMode(auth.isDemoMode || false)
+          setIsGuestMode(guest)
           setIsAuthenticated(true)
         }
       } catch (error) {
@@ -45,29 +47,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const auth = {
       apiKey,
       safeAddress,
-      isDemoMode: false,
+      isGuestMode: false,
       timestamp: Date.now()
     }
     
     localStorage.setItem('sand-auth', JSON.stringify(auth))
     setApiKey(apiKey)
     setSafeAddress(safeAddress)
-    setIsDemoMode(false)
+    setIsGuestMode(false)
     setIsAuthenticated(true)
   }
 
-  const setDemoMode = () => {
+  const setGuestMode = () => {
     const auth = {
       apiKey: null,
       safeAddress: null,
-      isDemoMode: true,
+      isGuestMode: true,
       timestamp: Date.now()
     }
     
     localStorage.setItem('sand-auth', JSON.stringify(auth))
     setApiKey(null)
     setSafeAddress(null)
-    setIsDemoMode(true)
+    setIsGuestMode(true)
     setIsAuthenticated(true)
   }
 
@@ -75,7 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem('sand-auth')
     setApiKey(null)
     setSafeAddress(null)
-    setIsDemoMode(false)
+    setIsGuestMode(false)
     setIsAuthenticated(false)
   }
 
@@ -83,10 +85,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated,
     apiKey,
     safeAddress,
-    isDemoMode,
+    isGuestMode,
     login,
     logout,
-    setDemoMode
+    setGuestMode
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

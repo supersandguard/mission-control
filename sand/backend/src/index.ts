@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
@@ -16,11 +17,36 @@ import paymentsRouter from './routes/payments';
 import stripeRouter from './routes/stripe';
 import promoRouter from './routes/promo';
 import daimoWebhookRouter from './routes/daimo-webhook';
+import foundersRouter from './routes/founders';
 
 dotenv.config();
 
 const app = express();
 app.disable('x-powered-by');
+app.use(compression());
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  // Allow iframe embedding (needed for Safe App Store) — no X-Frame-Options: DENY
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Content Security Policy — allow self, inline styles (Tailwind), Google Fonts, Safe App iframe embedding
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https://supersandguard.com https://*.safe.global https://*.tenderly.co https://*.etherscan.io",
+    "frame-ancestors 'self' https://app.safe.global https://*.safe.global",
+  ].join('; '));
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
 
 // Rate limiting (apply only to API routes)
 const apiLimiter = rateLimit({
@@ -33,14 +59,17 @@ const apiLimiter = rateLimit({
 
 app.use(cors({
   origin: [
-    'https://sandguard.netlify.app',
+    'https://supersandguard.com',
+    'https://www.supersandguard.com',
+    // 'https://sandguard.netlify.app', // deprecated
     'https://web-production-9722f.up.railway.app',
+    'https://app.safe.global',       // Safe App Store iframe
     'http://localhost:5173',
     'http://localhost:3000',
   ],
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
 // Apply rate limiting only to API routes
 app.use('/api', apiLimiter);
@@ -56,10 +85,16 @@ app.use('/api/payments', paymentsRouter);
 app.use('/api/stripe', stripeRouter);
 app.use('/api/promo', promoRouter);
 app.use('/api/webhooks', daimoWebhookRouter);
+app.use('/api/founders', foundersRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'SandGuard API', version: '0.3.0' });
+  res.json({ status: 'ok', service: 'SandGuard API' });
+});
+
+// API 404 handler
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Endpoint not found' });
 });
 
 // --- Serve Frontend Static Files ---
@@ -72,8 +107,16 @@ const frontendDistPath = path.resolve(__dirname, '..', 'frontend-dist');
 
 if (fs.existsSync(frontendDistPath)) {
   console.log(`📦 Serving frontend from: ${frontendDistPath}`);
-  // Serve static assets
-  app.use(express.static(frontendDistPath, { maxAge: '1d' }));
+  // Serve static assets with smart caching
+  app.use(express.static(frontendDistPath, {
+    maxAge: '1d',
+    setHeaders: (res, filePath) => {
+      // Hashed assets (in /assets/) are immutable — cache for 1 year
+      if (filePath.includes('/assets/')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+    },
+  }));
 
   // SPA fallback: serve index.html for any non-API route
   app.get('*', (_req, res) => {

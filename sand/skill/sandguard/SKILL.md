@@ -26,7 +26,7 @@ mkdir -p config/sandguard
 
 Ask for:
 - **Safe address** (0x... format)
-- **SandGuard API URL** (default: https://api.sandguard.io)
+- **SandGuard API URL** (default: https://supersandguard.com)
 - **Network** (mainnet, polygon, arbitrum, etc.)
 
 ### Test Connection
@@ -38,7 +38,7 @@ Store config in `config/sandguard/config.json`:
 ```json
 {
   "safe_address": "0x...",
-  "api_url": "https://api.sandguard.io",
+  "api_url": "https://supersandguard.com",
   "network": "mainnet",
   "last_check": null
 }
@@ -144,7 +144,7 @@ After deployment:
 - **Promo codes**: SG-XXXXXXXX format (20 Friends & Family codes available)
 
 ### Subscription Flow
-1. Visit https://sandguard.netlify.app/subscribe
+1. Visit https://supersandguard.com/login
 2. Enter Safe address
 3. Choose payment method (crypto via Daimo)
 4. Or enter promo code if available

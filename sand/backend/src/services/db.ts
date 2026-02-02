@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3'
 import path from 'path'
 import fs from 'fs'
+import crypto from 'crypto'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -64,6 +65,42 @@ db.exec(`
     redeemed_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
     UNIQUE(code, address)
   );
+
+  -- Founders Program: The First 100
+  CREATE TABLE IF NOT EXISTS founders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    founder_number INTEGER NOT NULL UNIQUE CHECK(founder_number >= 1 AND founder_number <= 100),
+    address TEXT NOT NULL UNIQUE,
+    display_name TEXT,
+    twitter_handle TEXT,
+    moltbook_username TEXT,
+    nft_minted INTEGER NOT NULL DEFAULT 0,
+    nft_tx_hash TEXT,
+    qualified_at INTEGER NOT NULL,
+    is_genesis_10 INTEGER NOT NULL DEFAULT 0,
+    umbra_allocated INTEGER NOT NULL DEFAULT 0,
+    umbra_claimed INTEGER NOT NULL DEFAULT 0,
+    referral_code TEXT,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_founders_address ON founders(address);
+  CREATE INDEX IF NOT EXISTS idx_founders_number ON founders(founder_number);
+
+  -- Track founder qualification progress
+  CREATE TABLE IF NOT EXISTS founder_progress (
+    address TEXT PRIMARY KEY,
+    account_created_at INTEGER,
+    safe_configured INTEGER NOT NULL DEFAULT 0,
+    safe_address TEXT,
+    txs_analyzed INTEGER NOT NULL DEFAULT 0,
+    first_analysis_at INTEGER,
+    days_active INTEGER NOT NULL DEFAULT 0,
+    fast_tracked INTEGER NOT NULL DEFAULT 0,
+    qualified INTEGER NOT NULL DEFAULT 0,
+    qualified_at INTEGER,
+    updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+  );
 `)
 
 // Prepared statements
@@ -103,6 +140,49 @@ const stmts = {
   insertRedemption: db.prepare('INSERT INTO promo_redemptions (code, address, redeemed_at) VALUES (?, ?, ?)'),
   getRedemption: db.prepare('SELECT * FROM promo_redemptions WHERE code = ? AND address = ?'),
   getAllPromos: db.prepare('SELECT * FROM promo_codes ORDER BY created_at DESC'),
+
+  // Founders program
+  getFounderCount: db.prepare('SELECT COUNT(*) as count FROM founders'),
+  getNextFounderNumber: db.prepare('SELECT COALESCE(MAX(founder_number), 0) + 1 as next FROM founders'),
+  getFounderByAddress: db.prepare('SELECT * FROM founders WHERE address = ?'),
+  getFounderByNumber: db.prepare('SELECT * FROM founders WHERE founder_number = ?'),
+  getAllFounders: db.prepare('SELECT founder_number, address, display_name, twitter_handle, moltbook_username, is_genesis_10, nft_minted, qualified_at, created_at FROM founders ORDER BY founder_number ASC'),
+  insertFounder: db.prepare(`
+    INSERT INTO founders (founder_number, address, display_name, qualified_at, is_genesis_10, umbra_allocated, created_at)
+    VALUES (@founderNumber, @address, @displayName, @qualifiedAt, @isGenesis10, @umbraAllocated, @createdAt)
+  `),
+  updateFounderProfile: db.prepare(`
+    UPDATE founders SET display_name = @displayName, twitter_handle = @twitterHandle, moltbook_username = @moltbookUsername
+    WHERE founder_number = @founderNumber AND address = @address
+  `),
+  updateFounderNft: db.prepare('UPDATE founders SET nft_minted = 1, nft_tx_hash = ? WHERE founder_number = ?'),
+
+  // Founder progress tracking
+  getFounderProgress: db.prepare('SELECT * FROM founder_progress WHERE address = ?'),
+  upsertFounderProgress: db.prepare(`
+    INSERT INTO founder_progress (address, account_created_at, safe_configured, safe_address, txs_analyzed, first_analysis_at, days_active, fast_tracked, qualified, qualified_at, updated_at)
+    VALUES (@address, @accountCreatedAt, @safeConfigured, @safeAddress, @txsAnalyzed, @firstAnalysisAt, @daysActive, @fastTracked, @qualified, @qualifiedAt, @updatedAt)
+    ON CONFLICT(address) DO UPDATE SET
+      safe_configured = @safeConfigured,
+      safe_address = COALESCE(@safeAddress, safe_address),
+      txs_analyzed = @txsAnalyzed,
+      first_analysis_at = COALESCE(@firstAnalysisAt, first_analysis_at),
+      days_active = @daysActive,
+      fast_tracked = @fastTracked,
+      qualified = @qualified,
+      qualified_at = COALESCE(@qualifiedAt, qualified_at),
+      updated_at = @updatedAt
+  `),
+}
+
+// Plan tiers
+export type PlanTier = 'scout' | 'pro' | 'founder'
+
+// Plan limits
+export const PLAN_LIMITS: Record<PlanTier, { safes: number; dailyApiCalls: number; features: string[] }> = {
+  scout: { safes: 1, dailyApiCalls: 10, features: ['decode'] },
+  pro: { safes: 5, dailyApiCalls: 1000, features: ['decode', 'simulate', 'risk', 'explain', 'alerts'] },
+  founder: { safes: 10, dailyApiCalls: 5000, features: ['decode', 'simulate', 'risk', 'explain', 'alerts', 'early_access', 'governance'] },
 }
 
 // Helper functions
@@ -240,6 +320,240 @@ export function redeemPromoCode(code: string, address: string): { apiKey: string
 
 export function getAllPromoCodes(): PromoCode[] {
   return stmts.getAllPromos.all() as PromoCode[]
+}
+
+// Free tier signup
+export function createFreeSubscription(address: string): { apiKey: string; plan: string } {
+  const addr = address.toLowerCase()
+  // Check if already has active subscription
+  const existing = stmts.getByAddress.get(addr) as Subscription | undefined
+  if (existing && (existing.expires_at > Date.now() || existing.plan === 'scout')) {
+    return { apiKey: existing.api_key, plan: existing.plan }
+  }
+
+  const apiKey = 'sg_' + crypto.randomUUID().replace(/-/g, '')
+  stmts.upsertSub.run({
+    address: addr,
+    email: null,
+    apiKey,
+    plan: 'scout',
+    paidTxHash: 'free:scout',
+    stripeCustomerId: null,
+    stripeSubscriptionId: null,
+    paidAt: Date.now(),
+    expiresAt: 9999999999999,
+    updatedAt: Date.now(),
+  })
+  return { apiKey, plan: 'scout' }
+}
+
+// ─── Founders Program ──────────────────────────────────────────────────────
+
+export const FOUNDER_CAP = 100
+export const GENESIS_10_CAP = 10
+const FOUNDER_LIFETIME_MS = 100 * 365 * 24 * 60 * 60 * 1000 // ~100 years
+
+export interface Founder {
+  id: number
+  founder_number: number
+  address: string
+  display_name: string | null
+  twitter_handle: string | null
+  moltbook_username: string | null
+  nft_minted: number
+  nft_tx_hash: string | null
+  qualified_at: number
+  is_genesis_10: number
+  umbra_allocated: number
+  umbra_claimed: number
+  referral_code: string | null
+  created_at: number
+}
+
+export interface FounderProgress {
+  address: string
+  account_created_at: number | null
+  safe_configured: number
+  safe_address: string | null
+  txs_analyzed: number
+  first_analysis_at: number | null
+  days_active: number
+  fast_tracked: number
+  qualified: number
+  qualified_at: number | null
+  updated_at: number
+}
+
+export interface FounderStatus {
+  total: number
+  remaining: number
+  cap: number
+  genesis10Remaining: number
+  closed: boolean
+}
+
+export function getFounderStatus(): FounderStatus {
+  const { count } = stmts.getFounderCount.get() as { count: number }
+  const genesis10Count = (db.prepare('SELECT COUNT(*) as count FROM founders WHERE is_genesis_10 = 1').get() as { count: number }).count
+  return {
+    total: count,
+    remaining: Math.max(0, FOUNDER_CAP - count),
+    cap: FOUNDER_CAP,
+    genesis10Remaining: Math.max(0, GENESIS_10_CAP - genesis10Count),
+    closed: count >= FOUNDER_CAP,
+  }
+}
+
+export function getFounderByAddress(address: string): Founder | undefined {
+  return stmts.getFounderByAddress.get(address.toLowerCase()) as Founder | undefined
+}
+
+export function getFounderByNumber(num: number): Founder | undefined {
+  return stmts.getFounderByNumber.get(num) as Founder | undefined
+}
+
+export function getAllFounders(): Partial<Founder>[] {
+  return stmts.getAllFounders.all() as Partial<Founder>[]
+}
+
+export function getFounderProgress(address: string): FounderProgress | undefined {
+  return stmts.getFounderProgress.get(address.toLowerCase()) as FounderProgress | undefined
+}
+
+export function updateFounderProgress(address: string, updates: Partial<{
+  safeConfigured: boolean
+  safeAddress: string
+  txsAnalyzed: number
+  daysActive: number
+  fastTracked: boolean
+}>): FounderProgress {
+  const addr = address.toLowerCase()
+  const existing = getFounderProgress(addr)
+  const now = Date.now()
+
+  const data = {
+    address: addr,
+    accountCreatedAt: existing?.account_created_at || now,
+    safeConfigured: updates.safeConfigured !== undefined ? (updates.safeConfigured ? 1 : 0) : (existing?.safe_configured || 0),
+    safeAddress: updates.safeAddress || existing?.safe_address || null,
+    txsAnalyzed: updates.txsAnalyzed !== undefined ? updates.txsAnalyzed : (existing?.txs_analyzed || 0),
+    firstAnalysisAt: existing?.first_analysis_at || ((updates.txsAnalyzed && updates.txsAnalyzed > 0) ? now : null),
+    daysActive: updates.daysActive !== undefined ? updates.daysActive : (existing?.days_active || 0),
+    fastTracked: updates.fastTracked !== undefined ? (updates.fastTracked ? 1 : 0) : (existing?.fast_tracked || 0),
+    qualified: existing?.qualified || 0,
+    qualifiedAt: existing?.qualified_at || null,
+    updatedAt: now,
+  }
+
+  // Check qualification: safe configured + 3 txs + 7 days active (or fast-tracked)
+  if (!data.qualified) {
+    const meetsRequirements = data.safeConfigured === 1
+      && data.txsAnalyzed >= 3
+      && (data.daysActive >= 7 || data.fastTracked === 1)
+
+    if (meetsRequirements) {
+      data.qualified = 1
+      data.qualifiedAt = now
+    }
+  }
+
+  stmts.upsertFounderProgress.run(data)
+  return stmts.getFounderProgress.get(addr) as FounderProgress
+}
+
+/**
+ * Claim a founder spot. Returns the founder record or an error.
+ * Requires payment verification (txHash) for fast-track, or the address
+ * must already be qualified via the progress system.
+ */
+export function claimFounderSpot(opts: {
+  address: string
+  displayName?: string
+  txHash?: string
+  fastTrack?: boolean
+}): { founder: Founder; apiKey: string } | { error: string } {
+  const addr = opts.address.toLowerCase()
+  const status = getFounderStatus()
+
+  // Already a founder?
+  const existingFounder = getFounderByAddress(addr)
+  if (existingFounder) {
+    const sub = getSubscriptionByAddress(addr)
+    return { error: `Already a founder (#${existingFounder.founder_number})` }
+  }
+
+  // Program closed?
+  if (status.closed) {
+    return { error: 'The Founders Program is closed. All 100 spots have been claimed.' }
+  }
+
+  // Fast-track: payment provides instant qualification
+  if (opts.fastTrack && opts.txHash) {
+    updateFounderProgress(addr, { fastTracked: true })
+  }
+
+  // Check qualification
+  const progress = getFounderProgress(addr)
+  if (!progress || !progress.qualified) {
+    return {
+      error: 'Not yet qualified. Configure a Safe, analyze 3 transactions, and stay active for 7 days — or pay $20 for instant qualification.'
+    }
+  }
+
+  // Assign next founder number (use a transaction for atomicity)
+  const assignFounder = db.transaction(() => {
+    const { next } = stmts.getNextFounderNumber.get() as { next: number }
+    if (next > FOUNDER_CAP) {
+      throw new Error('All 100 founder spots have been claimed')
+    }
+
+    const now = Date.now()
+    const isGenesis10 = next <= GENESIS_10_CAP ? 1 : 0
+    const umbraAllocation = isGenesis10 ? 100000 : 50000
+
+    stmts.insertFounder.run({
+      founderNumber: next,
+      address: addr,
+      displayName: opts.displayName || null,
+      qualifiedAt: now,
+      isGenesis10,
+      umbraAllocated: umbraAllocation,
+      createdAt: now,
+    })
+
+    // Activate lifetime founder subscription
+    const subResult = activateSubscription({
+      address: addr,
+      plan: 'founder',
+      paidTxHash: opts.txHash || `founder:${next}`,
+      durationMs: FOUNDER_LIFETIME_MS,
+    })
+
+    return { founderNumber: next, apiKey: subResult.apiKey }
+  })
+
+  try {
+    const result = assignFounder()
+    const founder = getFounderByAddress(addr)!
+    return { founder, apiKey: result.apiKey }
+  } catch (err: any) {
+    return { error: err.message || 'Failed to claim founder spot' }
+  }
+}
+
+export function updateFounderProfileInfo(
+  founderNumber: number,
+  address: string,
+  profile: { displayName?: string; twitterHandle?: string; moltbookUsername?: string }
+): boolean {
+  const result = stmts.updateFounderProfile.run({
+    founderNumber,
+    address: address.toLowerCase(),
+    displayName: profile.displayName || null,
+    twitterHandle: profile.twitterHandle || null,
+    moltbookUsername: profile.moltbookUsername || null,
+  })
+  return result.changes > 0
 }
 
 // Seed F&F promo codes
