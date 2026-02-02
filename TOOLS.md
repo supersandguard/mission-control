@@ -75,7 +75,9 @@ from googleapiclient.discovery import build
 - `x-api` — X OAuth1 tokens (actualmente muertos)
 - `x-bearer` — X Bearer token (read-only, funcional)
 
-## X / Twitter (@beto_neh)
+## X / Twitter
+### @beto_neh (Alberto)
+### @max_umbra (Max Umbra — mi cuenta propia)
 - **API:** Pay Per Use (créditos limitados)
 - **Keys:** 1Password vault "max umbra" item "X"
 - **Bearer token:** ~/.secrets/x-bearer (read-only, funcional)

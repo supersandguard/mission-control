@@ -48,7 +48,9 @@ export default function Login() {
       })
       const data = await response.json()
       if (response.ok && data.apiKey) {
-        login(data.apiKey, '')
+        const addr = payerAddress.trim()
+        localStorage.setItem('sand-config', JSON.stringify({ address: addr, chainId: 1 }))
+        login(data.apiKey, addr)
         navigate('/app')
       } else {
         setError(data.error || 'Payment activation failed. Your payment was received — please try recovering access with your wallet address.')
@@ -78,7 +80,9 @@ export default function Login() {
       })
       const data = await response.json()
       if (response.ok && data.apiKey) {
-        login(data.apiKey, '')
+        const addr = recoverAddress.trim()
+        localStorage.setItem('sand-config', JSON.stringify({ address: addr, chainId: 1 }))
+        login(data.apiKey, addr)
         navigate('/app')
       } else {
         setError(data.error || 'No subscription found for this address. Make sure this is the wallet you originally paid with.')
@@ -108,7 +112,10 @@ export default function Login() {
       })
       const data = await response.json()
       if (response.ok && data.apiKey) {
-        login(data.apiKey, '')
+        // Save the Safe address to config so Dashboard picks it up
+        const addr = freeAddress.trim()
+        localStorage.setItem('sand-config', JSON.stringify({ address: addr, chainId: 1 }))
+        login(data.apiKey, addr)
         navigate('/app')
       } else {
         setError(data.error || 'Something went wrong creating your account. Please try again.')
@@ -134,6 +141,7 @@ export default function Login() {
       })
       const data = await response.json()
       if (response.ok && data.apiKey) {
+        // Promo codes don't have an address, user configures later in Settings
         login(data.apiKey, '')
         navigate('/app')
       } else {
