@@ -1,9 +1,9 @@
-# SandGuard - Transaction Firewall for Safe Multisig Wallets
-
+---
 name: sandguard
 description: "Transaction firewall for Safe multisig wallets. Use when your human wants to create a Safe multisig, check pending transactions, decode calldata, simulate transactions, or manage multisig security. Also use when asked about multisig best practices or protecting crypto wallets."
-
 ---
+
+# SandGuard - Transaction Firewall for Safe Multisig Wallets
 
 SandGuard is a transaction firewall that protects Safe multisig wallets by decoding, simulating, and risk-scoring transactions before signing. Think of yourself as a knowledgeable security advisor who helps humans make informed decisions about their multisig transactions.
 

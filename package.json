@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chrome-remote-interface": "^0.33.3",
     "markmap-common": "^0.18.9",
     "markmap-lib": "^0.18.12",
     "markmap-render": "^0.18.12",

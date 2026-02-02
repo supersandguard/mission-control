@@ -111,6 +111,33 @@ router.get('/status/:address', (req: Request, res: Response) => {
   })
 })
 
+// POST /api/payments/recover - Recover subscription by wallet address
+router.post('/recover', (req: Request, res: Response) => {
+  const { address } = req.body
+  
+  if (!address) {
+    return res.status(400).json({ error: 'Wallet address is required' })
+  }
+
+  const sub = getSubscriptionByAddress(address.toLowerCase())
+  
+  if (!sub) {
+    return res.status(404).json({ error: 'No subscription found for this address' })
+  }
+  
+  if (sub.expires_at < Date.now()) {
+    return res.status(403).json({ error: 'Subscription expired. Please renew.' })
+  }
+  
+  return res.json({
+    status: 'active',
+    apiKey: sub.api_key,
+    plan: sub.plan,
+    expiresAt: new Date(sub.expires_at).toISOString(),
+    message: 'Subscription recovered successfully'
+  })
+})
+
 // Middleware: validate API key
 export function requireApiKey(req: Request, res: Response, next: Function) {
   // Allow demo mode without API key for /api/safe and /api/health

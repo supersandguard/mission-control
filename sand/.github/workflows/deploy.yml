@@ -1,32 +1,14 @@
-name: Build & Deploy to Netlify
+# DEPRECATED: Frontend is now served from Railway alongside the backend.
+# Netlify deployment has been removed. Railway auto-deploys from main branch.
+#
+# To re-enable, uncomment the workflow below and set NETLIFY_AUTH_TOKEN + NETLIFY_SITE_ID secrets.
+
+name: "[DISABLED] Build & Deploy to Netlify"
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only, no longer auto-deploys
 
 jobs:
-  build-deploy:
+  placeholder:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install dependencies
-        working-directory: frontend
-        run: npm install --legacy-peer-deps
-
-      - name: Build
-        working-directory: frontend
-        run: npm run build
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3
-        with:
-          publish-dir: './frontend/dist'
-          production-deploy: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - run: echo "This workflow is disabled. Frontend is deployed on Railway."
