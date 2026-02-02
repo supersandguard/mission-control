@@ -1,5 +1,6 @@
 import { SafeTransactionsResponse } from '../types';
 import { SAFE_TX_SERVICE_URLS } from '../utils/constants';
+import { ethers } from 'ethers';
 
 /**
  * Helper to fetch with explicit redirect following (Node may not follow 308s)
@@ -45,7 +46,9 @@ export async function getPendingTransactions(
     throw new Error(`Unsupported chain ID: ${chainId}. Supported: ${Object.keys(SAFE_TX_SERVICE_URLS).join(', ')}`);
   }
 
-  const url = `${baseUrl}/api/v1/safes/${safeAddress}/multisig-transactions/?executed=false&ordering=-nonce&limit=20`;
+  // EIP-55 checksum required by Safe Transaction Service
+  const checksumAddress = ethers.getAddress(safeAddress);
+  const url = `${baseUrl}/api/v1/safes/${checksumAddress}/multisig-transactions/?executed=false&ordering=-nonce&limit=20`;
 
   try {
     const response = await safeFetch(url);
@@ -80,7 +83,8 @@ export async function getAllTransactions(
     throw new Error(`Unsupported chain ID: ${chainId}`);
   }
 
-  const url = `${baseUrl}/api/v1/safes/${safeAddress}/multisig-transactions/?ordering=-nonce&limit=${limit}`;
+  const checksumAddress = ethers.getAddress(safeAddress);
+  const url = `${baseUrl}/api/v1/safes/${checksumAddress}/multisig-transactions/?ordering=-nonce&limit=${limit}`;
 
   const response = await safeFetch(url);
 
@@ -103,7 +107,8 @@ export async function getSafeInfo(
     throw new Error(`Unsupported chain ID: ${chainId}`);
   }
 
-  const url = `${baseUrl}/api/v1/safes/${safeAddress}/`;
+  const checksumAddress = ethers.getAddress(safeAddress);
+  const url = `${baseUrl}/api/v1/safes/${checksumAddress}/`;
 
   const response = await safeFetch(url);
 

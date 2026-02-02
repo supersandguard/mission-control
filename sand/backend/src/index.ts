@@ -118,8 +118,11 @@ if (fs.existsSync(frontendDistPath)) {
     },
   }));
 
-  // SPA fallback: serve index.html for any non-API route
+  // SPA fallback: serve index.html for any non-API route (no-cache so deploys are instant)
   app.get('*', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.join(frontendDistPath, 'index.html'));
   });
 } else {

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react'
 import { Transaction } from '../types'
-import { MOCK_TRANSACTIONS } from '../mockData'
+// Mock data removed — real data only
 
 const getApiBase = () => {
   const saved = localStorage.getItem('sand-config')
@@ -100,7 +100,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
 
   const fetchTransactions = useCallback(async () => {
     if (!config.address) {
-      setTransactions(MOCK_TRANSACTIONS)
+      setTransactions([])
       setLoading(false)
       return
     }
@@ -173,10 +173,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
       setLastUpdated(new Date())
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Unknown error')
-      // Only fall back to mock if we have no data yet
-      if (transactions.length === 0) {
-        setTransactions(MOCK_TRANSACTIONS)
-      }
+      // Don't fall back to mock data — show empty state instead
     } finally {
       setLoading(false)
       setRefreshing(false)
