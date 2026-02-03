@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clawdbot Mission Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e2e2e2;
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #111111;
+            border-radius: 12px;
+            border: 1px solid #1a1a2e;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #1a1a2e;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 15px 10px;
+            background: #111111;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #1a1a2e;
+            color: #ccc;
+        }
+
+        .tab.active {
+            color: #7c3aed;
+            border-bottom-color: #7c3aed;
+            background: #161616;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: #161616;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            color: #7c3aed;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .metric {
+            background: #0f0f0f;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #1a1a2e;
+            text-align: center;
+        }
+
+        .metric-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #7c3aed;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0f0f0f;
+            border: 1px solid #1a1a2e;
+            border-radius: 6px;
+            color: #e2e2e2;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+        }
+
+        .button:hover {
+            background: linear-gradient(135deg, #6d28d9, #9333ea);
+            transform: translateY(-1px);
+        }
+
+        .button.secondary {
+            background: #1a1a2e;
+            border: 1px solid #333;
+        }
+
+        .button.secondary:hover {
+            background: #2a2a3e;
+        }
+
+        .success-message {
+            background: #059669;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #7c3aed;
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            background: #333;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+
+        .toggle.active {
+            background: #7c3aed;
+        }
+
+        .toggle.active::after {
+            transform: translateX(26px);
+        }
+
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+
+        .error {
+            background: #dc2626;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .login-screen {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .login-screen h2 {
+            margin-bottom: 20px;
+            color: #7c3aed;
+        }
+
+        .login-screen input {
+            margin-bottom: 20px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            background: #059669;
+        }
+
+        .toast.error {
+            background: #dc2626;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="container" style="display: none;">
+        <div class="login-screen">
+            <h2>Mission Control Login</h2>
+            <div class="input-group">
+                <input type="password" id="token-input" placeholder="Enter access token" />
+            </div>
+            <button class="button" onclick="attemptLogin()">Login</button>
+            <div id="login-error" class="error" style="display: none; margin-top: 16px;"></div>
+        </div>
+    </div>
+
+    <!-- Main Interface -->
+    <div id="main-interface" class="container" style="display: none;">
+        <div class="header">
+            <h1>🖤 Clawdbot Mission Control</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="status">Status</button>
+            <button class="tab" data-tab="heartbeat">Heartbeat</button>
+            <button class="tab" data-tab="soul">Soul</button>
+            <button class="tab" data-tab="settings">Settings</button>
+        </div>
+
+        <!-- Status Tab -->
+        <div id="status" class="tab-content active">
+            <div class="card">
+                <h3>System Status</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value" id="uptime">-</span>
+                        <span class="metric-label">Uptime</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="memory-usage">-</span>
+                        <span class="metric-label">Memory</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="current-model">-</span>
+                        <span class="metric-label">Model</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="hostname">-</span>
+                        <span class="metric-label">Hostname</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Heartbeat Config</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value" id="heartbeat-every">-</span>
+                        <span class="metric-label">Frequency</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="heartbeat-hours">-</span>
+                        <span class="metric-label">Active Hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Heartbeat Tab -->
+        <div id="heartbeat" class="tab-content">
+            <div class="card">
+                <h3>Heartbeat Content</h3>
+                <div class="input-group">
+                    <label>HEARTBEAT.md Content</label>
+                    <textarea id="heartbeat-content" placeholder="Edit heartbeat content..."></textarea>
+                </div>
+                <button class="button" onclick="saveHeartbeat()">Save Heartbeat</button>
+                <div id="heartbeat-success" class="success-message">Heartbeat saved successfully!</div>
+            </div>
+
+            <div class="card">
+                <h3>Pending Tasks</h3>
+                <div id="pending-tasks">
+                    <!-- Checkboxes will be populated here -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Schedule Configuration</h3>
+                <div class="two-column">
+                    <div class="input-group">
+                        <label>Frequency (minutes)</label>
+                        <input type="number" id="heartbeat-frequency" min="1" value="30" />
+                    </div>
+                    <div class="input-group">
+                        <label>Active Hours</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="active-start" value="08:00" />
+                            <span style="color: #888;">to</span>
+                            <input type="time" id="active-end" value="23:00" />
+                        </div>
+                    </div>
+                </div>
+                <button class="button secondary" onclick="saveHeartbeatConfig()">Save Schedule</button>
+            </div>
+        </div>
+
+        <!-- Soul Tab -->
+        <div id="soul" class="tab-content">
+            <div class="card">
+                <h3>Soul Configuration</h3>
+                <div class="input-group">
+                    <label>SOUL.md Content</label>
+                    <textarea id="soul-content" placeholder="Edit soul content..."></textarea>
+                </div>
+                <button class="button" onclick="saveSoul()">Save Soul</button>
+                <div id="soul-success" class="success-message">Soul saved successfully!</div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="card">
+                <h3>Gateway Configuration</h3>
+                <div class="input-group">
+                    <label>Default Model</label>
+                    <select id="default-model">
+                        <option value="anthropic/claude-opus-4-5">Claude Opus 4.5</option>
+                        <option value="anthropic/claude-sonnet-4-20250514">Claude Sonnet 4</option>
+                        <option value="anthropic/claude-haiku-4-20250514">Claude Haiku 4</option>
+                    </select>
+                </div>
+                <button class="button secondary" onclick="saveSettings()">Save Settings</button>
+                <div id="settings-success" class="success-message">Settings saved successfully!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let authToken = localStorage.getItem('mc_token');
+        let statusRefreshInterval;
+        let pendientes = [];
+
+        // Authentication functions
+        function checkAuth() {
+            if (!authToken) {
+                showLoginScreen();
+                return false;
+            }
+            showMainInterface();
+            return true;
+        }
+
+        function showLoginScreen() {
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('main-interface').style.display = 'none';
+        }
+
+        function showMainInterface() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-interface').style.display = 'block';
+            loadData();
+            startStatusRefresh();
+        }
+
+        async function attemptLogin() {
+            const tokenInput = document.getElementById('token-input');
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                showLoginError('Please enter a token');
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_BASE + '/api/status', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    authToken = token;
+                    localStorage.setItem('mc_token', token);
+                    showMainInterface();
+                } else {
+                    showLoginError('Invalid token');
+                }
+            } catch (error) {
+                showLoginError('Connection error: ' + error.message);
+            }
+        }
+
+        function showLoginError(message) {
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.removeItem('mc_token');
+            authToken = null;
+            if (statusRefreshInterval) {
+                clearInterval(statusRefreshInterval);
+            }
+            showLoginScreen();
+        }
+
+        // API helper functions
+        async function apiRequest(endpoint, options = {}) {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                ...options
+            };
+            
+            try {
+                const response = await fetch(API_BASE + endpoint, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'API request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                if (error.message.includes('Unauthorized') || error.message.includes('Invalid token')) {
+                    logout();
+                }
+                throw error;
+            }
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Data loading functions
+        async function loadData() {
+            try {
+                await Promise.all([
+                    loadStatus(),
+                    loadHeartbeat(),
+                    loadSoul(),
+                    loadConfig(),
+                    loadPendientes()
+                ]);
+            } catch (error) {
+                showToast('Error loading data: ' + error.message, 'error');
+            }
+        }
+
+        async function loadStatus() {
+            try {
+                const status = await apiRequest('/api/status');
+                
+                // Format uptime
+                const uptimeHours = Math.floor(status.uptime / 3600);
+                const uptimeMinutes = Math.floor((status.uptime % 3600) / 60);
+                document.getElementById('uptime').textContent = `${uptimeHours}h ${uptimeMinutes}m`;
+                
+                // Format memory usage
+                const memoryUsed = status.totalMemory - status.freeMemory;
+                const memoryPercent = Math.round((memoryUsed / status.totalMemory) * 100);
+                document.getElementById('memory-usage').textContent = `${memoryPercent}%`;
+                
+                // Display model and hostname
+                document.getElementById('current-model').textContent = status.model.split('/').pop() || status.model;
+                document.getElementById('hostname').textContent = status.hostname;
+                
+                // Display heartbeat config
+                const hbConfig = status.heartbeatConfig;
+                document.getElementById('heartbeat-every').textContent = hbConfig.every || '-';
+                
+                const activeHours = hbConfig.activeHours;
+                if (activeHours && activeHours.start && activeHours.end) {
+                    document.getElementById('heartbeat-hours').textContent = `${activeHours.start}-${activeHours.end}`;
+                } else {
+                    document.getElementById('heartbeat-hours').textContent = '-';
+                }
+                
+            } catch (error) {
+                console.error('Error loading status:', error);
+            }
+        }
+
+        async function loadHeartbeat() {
+            try {
+                const response = await apiRequest('/api/files/heartbeat');
+                document.getElementById('heartbeat-content').value = response.content || '';
+                parsePendingTasks();
+            } catch (error) {
+                console.error('Error loading heartbeat:', error);
+            }
+        }
+
+        async function loadSoul() {
+            try {
+                const response = await apiRequest('/api/files/soul');
+                document.getElementById('soul-content').value = response.content || '';
+            } catch (error) {
+                console.error('Error loading soul:', error);
+            }
+        }
+
+        async function loadConfig() {
+            try {
+                const config = await apiRequest('/api/config');
+                
+                // Set default model
+                const model = config.agents?.defaults?.model || 'anthropic/claude-opus-4-5';
+                document.getElementById('default-model').value = model;
+                
+                // Set heartbeat config in form
+                const hbConfig = config.agents?.defaults?.heartbeat || {};
+                if (hbConfig.every) {
+                    document.getElementById('heartbeat-frequency').value = parseInt(hbConfig.every.replace('min', '')) || 30;
+                }
+                
+                if (hbConfig.activeHours) {
+                    document.getElementById('active-start').value = hbConfig.activeHours.start || '08:00';
+                    document.getElementById('active-end').value = hbConfig.activeHours.end || '23:00';
+                }
+                
+            } catch (error) {
+                console.error('Error loading config:', error);
+            }
+        }
+
+        async function loadPendientes() {
+            try {
+                pendientes = await apiRequest('/api/pendientes');
+                renderPendientes();
+            } catch (error) {
+                console.error('Error loading pendientes:', error);
+            }
+        }
+
+        // Render functions
+        function renderPendientes() {
+            const container = document.getElementById('pending-tasks');
+            container.innerHTML = '';
+            
+            pendientes.forEach((pendiente, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'checkbox-item';
+                taskDiv.innerHTML = `
+                    <input type="checkbox" id="task-${index}" ${pendiente.done ? 'checked' : ''} 
+                           onchange="togglePendiente(${index})">
+                    <label for="task-${index}">${pendiente.text}</label>
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        function parsePendingTasks() {
+            const content = document.getElementById('heartbeat-content').value;
+            const lines = content.split('\n');
+            const tasks = [];
+            
+            lines.forEach((line, lineIndex) => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('- [') && (trimmed.includes('[ ]') || trimmed.includes('[x]'))) {
+                    const isChecked = trimmed.includes('[x]');
+                    const taskText = trimmed.substring(trimmed.indexOf(']') + 1).trim();
+                    tasks.push({ text: taskText, done: isChecked, line: lineIndex });
+                }
+            });
+            
+            pendientes = tasks;
+            renderPendientes();
+        }
+
+        // Save functions
+        async function saveHeartbeat() {
+            try {
+                const content = document.getElementById('heartbeat-content').value;
+                await apiRequest('/api/files/heartbeat', {
+                    method: 'PUT',
+                    body: JSON.stringify({ content })
+                });
+                
+                parsePendingTasks(); // Update pendientes after saving
+                showToast('Heartbeat saved successfully!');
+            } catch (error) {
+                showToast('Error saving heartbeat: ' + error.message, 'error');
+            }
+        }
+
+        async function saveSoul() {
+            try {
+                const content = document.getElementById('soul-content').value;
+                await apiRequest('/api/files/soul', {
+                    method: 'PUT',
+                    body: JSON.stringify({ content })
+                });
+                
+                showToast('Soul saved successfully!');
+            } catch (error) {
+                showToast('Error saving soul: ' + error.message, 'error');
+            }
+        }
+
+        async function saveHeartbeatConfig() {
+            try {
+                const frequency = document.getElementById('heartbeat-frequency').value;
+                const activeStart = document.getElementById('active-start').value;
+                const activeEnd = document.getElementById('active-end').value;
+                
+                const configPatch = {
+                    agents: {
+                        defaults: {
+                            heartbeat: {
+                                every: `${frequency}min`,
+                                activeHours: {
+                                    start: activeStart,
+                                    end: activeEnd
+                                }
+                            }
+                        }
+                    }
+                };
+                
+                await apiRequest('/api/config', {
+                    method: 'PATCH',
+                    body: JSON.stringify(configPatch)
+                });
+                
+                showToast('Heartbeat schedule saved successfully!');
+                loadStatus(); // Refresh status to show new config
+            } catch (error) {
+                showToast('Error saving heartbeat config: ' + error.message, 'error');
+            }
+        }
+
+        async function saveSettings() {
+            try {
+                const defaultModel = document.getElementById('default-model').value;
+                
+                const configPatch = {
+                    agents: {
+                        defaults: {
+                            model: defaultModel
+                        }
+                    }
+                };
+                
+                await apiRequest('/api/config', {
+                    method: 'PATCH',
+                    body: JSON.stringify(configPatch)
+                });
+                
+                showToast('Settings saved successfully!');
+                loadStatus(); // Refresh status to show new config
+            } catch (error) {
+                showToast('Error saving settings: ' + error.message, 'error');
+            }
+        }
+
+        async function togglePendiente(index) {
+            try {
+                const pendiente = pendientes[index];
+                const newState = !pendiente.done;
+                
+                await apiRequest('/api/pendientes', {
+                    method: 'PATCH',
+                    body: JSON.stringify({ index, done: newState })
+                });
+                
+                // Update local state
+                pendientes[index].done = newState;
+                
+                showToast(`Task ${newState ? 'completed' : 'reopened'}!`);
+            } catch (error) {
+                // Revert checkbox state on error
+                document.getElementById(`task-${index}`).checked = pendientes[index].done;
+                showToast('Error updating task: ' + error.message, 'error');
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Auto-refresh status
+        function startStatusRefresh() {
+            if (statusRefreshInterval) {
+                clearInterval(statusRefreshInterval);
+            }
+            
+            statusRefreshInterval = setInterval(() => {
+                const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+                if (activeTab === 'status') {
+                    loadStatus();
+                }
+            }, 30000); // Refresh every 30 seconds
+        }
+
+        // Event listeners
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+
+        document.getElementById('heartbeat-content').addEventListener('input', parsePendingTasks);
+
+        // Enter key to login
+        document.getElementById('token-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                attemptLogin();
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                // Already logged in, switch to main interface
+            }
+        });
+    </script>
+</body>
+</html>

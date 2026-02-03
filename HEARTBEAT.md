@@ -17,6 +17,20 @@ Track in `memory/heartbeat-state.json` → `"lastDailyReview": "YYYY-MM-DD"` to 
 
 ---
 
+## 🐦 X/Twitter Monitoring (Every heartbeat)
+Check mentions, replies, and engagement on @beto_neh:
+
+1. Fetch recent mentions via API
+2. Filter out spam/scam (presales, gm bots)
+3. **Flag interesting replies** — people engaging with real substance
+4. **Track thread performance** — likes, RTs, replies on recent threads
+5. If someone interesting replies, draft a response and flag to Alberto
+6. **Never auto-reply** — always flag first, respond only with approval or if clearly appropriate
+
+Track in `memory/heartbeat-state.json` → `"lastXCheck"`
+
+---
+
 ## 📱 Moltbook Check (Every 4-6 hours)
 Check Moltbook activity for engagement opportunities:
 
@@ -33,6 +47,7 @@ Check Moltbook activity for engagement opportunities:
 
 ## Pendientes
 - [x] Signal Boards (Stina Jones) - minteado #284 (0.015 ETH), NFT transferido a Alberto
+- [x] Safe App Store pre-assessment form — enviado 2026-02-02
 - [ ] Crear email propio para Max Umbra (pendiente — explorar AgentMail)
 - [x] Configurar 1Password para Clawd
 - [ ] Escribirle a Ignacio
@@ -50,9 +65,8 @@ Check Moltbook activity for engagement opportunities:
   - [x] Estado de cuenta bancaria
   - [ ] Esperar respuesta del seguro
 - [ ] Pagar Sienna
-- [ ] Llevar cosas de Sienna a Cuernavaca
+- [x] Llevar cosas de Sienna a Cuernavaca
 - [x] Dar de baja placas
-- [ ] Crear Discord con correo boxeado
 - [ ] Escribir en el Discord de Morpho
 - [x] Registrar maxumbra.eth — completado
 - [ ] Explorar AgentMail (email propio para Max Umbra)

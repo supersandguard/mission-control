@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0f0f0f',
+                        surface: '#1a1a2e',
+                        card: '#16213e',
+                        accent: '#0f3460',
+                        highlight: '#e94560',
+                        text: '#eeeeee',
+                        muted: '#888888'
+                    },
+                    animation: {
+                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        bounce: 'bounce 1s infinite',
+                        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; }
+        ::-webkit-scrollbar-thumb { background: #16213e; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0f3460; }
+        
+        .agent-active { box-shadow: 0 0 20px rgba(233, 69, 96, 0.3); }
+        .system-healthy { box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
+        .system-warning { box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
+        .system-error { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        
+        .notification-enter { 
+            transform: translateX(100%); 
+            opacity: 0; 
+        }
+        .notification-enter-active { 
+            transform: translateX(0); 
+            opacity: 1; 
+            transition: all 0.3s ease; 
+        }
+        .notification-exit { 
+            transform: translateX(0); 
+            opacity: 1; 
+        }
+        .notification-exit-active { 
+            transform: translateX(100%); 
+            opacity: 0; 
+            transition: all 0.3s ease; 
+        }
+
+        .task-drag-over {
+            background: rgba(233, 69, 96, 0.1);
+            border: 2px dashed #e94560;
+        }
+
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        .loading-shimmer {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-text">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        // Enhanced API with WebSocket support
+        const api = {
+            ws: null,
+            listeners: new Map(),
+
+            // Initialize WebSocket connection
+            initWebSocket() {
+                const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsUrl = `${wsProtocol}//${window.location.host}`;
+                
+                this.ws = new WebSocket(wsUrl);
+                
+                this.ws.onopen = () => {
+                    console.log('🔌 WebSocket connected');
+                    this.notifyListeners('connection', { status: 'connected' });
+                };
+                
+                this.ws.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        this.notifyListeners(message.type, message.data);
+                    } catch (error) {
+                        console.error('WebSocket message parse error:', error);
+                    }
+                };
+                
+                this.ws.onclose = () => {
+                    console.log('🔌 WebSocket disconnected');
+                    this.notifyListeners('connection', { status: 'disconnected' });
+                    // Attempt reconnection after 3 seconds
+                    setTimeout(() => this.initWebSocket(), 3000);
+                };
+                
+                this.ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    this.notifyListeners('connection', { status: 'error', error });
+                };
+            },
+
+            // Subscribe to WebSocket events
+            subscribe(eventType, callback) {
+                if (!this.listeners.has(eventType)) {
+                    this.listeners.set(eventType, new Set());
+                }
+                this.listeners.get(eventType).add(callback);
+                
+                return () => {
+                    const listeners = this.listeners.get(eventType);
+                    if (listeners) {
+                        listeners.delete(callback);
+                    }
+                };
+            },
+
+            notifyListeners(eventType, data) {
+                const listeners = this.listeners.get(eventType);
+                if (listeners) {
+                    listeners.forEach(callback => callback(data));
+                }
+            },
+
+            async call(endpoint, options = {}) {
+                try {
+                    const response = await fetch(`/api${endpoint}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers,
+                        },
+                        ...options,
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || `HTTP ${response.status}`);
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error(`API call failed: ${endpoint}`, error);
+                    throw error;
+                }
+            },
+
+            // Enhanced API methods
+            health: {
+                check: () => api.call('/health'),
+                system: () => api.call('/system')
+            },
+
+            sessions: {
+                list: (params = {}) => api.call(`/sessions?${new URLSearchParams(params)}`),
+                getHistory: (sessionKey, params = {}) => 
+                    api.call(`/sessions/${encodeURIComponent(sessionKey)}/history?${new URLSearchParams(params)}`),
+                sendMessage: (sessionKey, message) => 
+                    api.call(`/sessions/${encodeURIComponent(sessionKey)}/send`, {
+                        method: 'POST',
+                        body: JSON.stringify({ message }),
+                    }),
+                spawn: (task, label, model, agentId) =>
+                    api.call('/sessions/spawn', {
+                        method: 'POST',
+                        body: JSON.stringify({ task, label, model, agentId }),
+                    }),
+            },
+
+            agents: {
+                list: () => api.call('/agents'),
+                create: (agent) => api.call('/agents', {
+                    method: 'POST',
+                    body: JSON.stringify(agent),
+                }),
+                update: (agents) => api.call('/agents', {
+                    method: 'PUT',
+                    body: JSON.stringify(agents),
+                }),
+                delete: (agentId) => api.call(`/agents/${agentId}`, {
+                    method: 'DELETE',
+                }),
+            },
+
+            tasks: {
+                list: (params = {}) => api.call(`/tasks?${new URLSearchParams(params)}`),
+                create: (task) => api.call('/tasks', {
+                    method: 'POST',
+                    body: JSON.stringify(task),
+                }),
+                update: (taskId, updates) => api.call(`/tasks/${taskId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(updates),
+                }),
+                delete: (taskId) => api.call(`/tasks/${taskId}`, {
+                    method: 'DELETE',
+                }),
+                batch: (action, taskIds, updates) => api.call('/tasks/batch', {
+                    method: 'POST',
+                    body: JSON.stringify({ action, taskIds, updates }),
+                }),
+            },
+
+            activity: {
+                list: (params = {}) => api.call(`/activity?${new URLSearchParams(params)}`),
+            },
+
+            cron: {
+                list: () => api.call('/cron'),
+                create: (job) => api.call('/cron', {
+                    method: 'POST',
+                    body: JSON.stringify(job),
+                }),
+            }
+        };
+
+        // Initialize WebSocket connection
+        api.initWebSocket();
+
+        // Notification System
+        function useNotifications() {
+            const [notifications, setNotifications] = useState([]);
+
+            const addNotification = useCallback((notification) => {
+                const id = Date.now() + Math.random();
+                const newNotification = {
+                    id,
+                    type: 'info',
+                    title: 'Notification',
+                    message: '',
+                    duration: 5000,
+                    ...notification
+                };
+
+                setNotifications(prev => [...prev, newNotification]);
+
+                // Auto remove
+                setTimeout(() => {
+                    setNotifications(prev => prev.filter(n => n.id !== id));
+                }, newNotification.duration);
+
+                return id;
+            }, []);
+
+            const removeNotification = useCallback((id) => {
+                setNotifications(prev => prev.filter(n => n.id !== id));
+            }, []);
+
+            return { notifications, addNotification, removeNotification };
+        }
+
+        // Notifications Component
+        function NotificationCenter({ notifications, removeNotification }) {
+            if (notifications.length === 0) return null;
+
+            return (
+                <div className="fixed top-4 right-4 z-50 space-y-2">
+                    {notifications.map(notification => (
+                        <div
+                            key={notification.id}
+                            className={`p-4 rounded-lg shadow-lg border max-w-sm transform transition-all duration-300 ${
+                                notification.type === 'error' ? 'bg-red-900/20 border-red-500 text-red-300' :
+                                notification.type === 'success' ? 'bg-green-900/20 border-green-500 text-green-300' :
+                                notification.type === 'warning' ? 'bg-yellow-900/20 border-yellow-500 text-yellow-300' :
+                                'bg-surface border-accent text-text'
+                            }`}
+                        >
+                            <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                    <h4 className="font-semibold text-sm">{notification.title}</h4>
+                                    <p className="text-xs mt-1 opacity-90">{notification.message}</p>
+                                </div>
+                                <button
+                                    onClick={() => removeNotification(notification.id)}
+                                    className="ml-2 text-muted hover:text-text"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        // System Status Component
+        function SystemStatus({ stats, gatewayStatus }) {
+            const getStatusColor = () => {
+                if (gatewayStatus !== 'connected') return 'system-error';
+                if (stats.memory > 90 || stats.cpu > 95) return 'system-error';
+                if (stats.memory > 75 || stats.cpu > 80) return 'system-warning';
+                return 'system-healthy';
+            };
+
+            const getStatusText = () => {
+                if (gatewayStatus !== 'connected') return 'Gateway Error';
+                if (stats.memory > 90 || stats.cpu > 95) return 'System Critical';
+                if (stats.memory > 75 || stats.cpu > 80) return 'System Warning';
+                return 'All Systems Operational';
+            };
+
+            return (
+                <div className={`bg-card border border-accent rounded-lg p-4 ${getStatusColor()}`}>
+                    <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold">System Status</h3>
+                        <span className={`text-xs px-2 py-1 rounded ${getStatusColor().includes('error') ? 'bg-red-500/20 text-red-300' :
+                            getStatusColor().includes('warning') ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-green-500/20 text-green-300'}`}>
+                            {getStatusText()}
+                        </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <div className="flex justify-between">
+                                <span className="text-muted">CPU:</span>
+                                <span>{stats.cpu}%</span>
+                            </div>
+                            <div className="w-full bg-surface rounded-full h-2 mt-1">
+                                <div 
+                                    className={`h-2 rounded-full transition-all ${
+                                        stats.cpu > 80 ? 'bg-red-500' : 
+                                        stats.cpu > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                                    }`}
+                                    style={{ width: `${Math.min(stats.cpu, 100)}%` }}
+                                ></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div className="flex justify-between">
+                                <span className="text-muted">RAM:</span>
+                                <span>{stats.memory}%</span>
+                            </div>
+                            <div className="w-full bg-surface rounded-full h-2 mt-1">
+                                <div 
+                                    className={`h-2 rounded-full transition-all ${
+                                        stats.memory > 85 ? 'bg-red-500' : 
+                                        stats.memory > 70 ? 'bg-yellow-500' : 'bg-green-500'
+                                    }`}
+                                    style={{ width: `${Math.min(stats.memory, 100)}%` }}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-3 pt-3 border-t border-accent text-xs text-muted">
+                        <div className="flex justify-between">
+                            <span>Gateway:</span>
+                            <span className={gatewayStatus === 'connected' ? 'text-green-400' : 'text-red-400'}>
+                                {gatewayStatus}
+                            </span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Uptime:</span>
+                            <span>{Math.floor(stats.uptime / 3600)}h {Math.floor((stats.uptime % 3600) / 60)}m</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Sidebar Component
+        function Sidebar({ currentPage, setCurrentPage, systemStats, connectionStatus }) {
+            const menuItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
+                { id: 'tasks', label: 'Tasks', icon: '📋' },
+                { id: 'activity', label: 'Activity', icon: '📈' },
+                { id: 'settings', label: 'Settings', icon: '⚙️' },
+            ];
+
+            return (
+                <aside className="w-64 bg-surface border-r border-card flex flex-col">
+                    <div className="p-6">
+                        <h1 className="text-xl font-bold text-highlight flex items-center">
+                            <span className="mr-2">🎛️</span>
+                            Mission Control
+                        </h1>
+                        <p className="text-muted text-sm mt-1">Multi-Agent Command Center</p>
+                    </div>
+                    
+                    <nav className="flex-1">
+                        {menuItems.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => setCurrentPage(item.id)}
+                                className={`w-full flex items-center px-6 py-3 text-left transition-all hover:bg-card ${
+                                    currentPage === item.id 
+                                        ? 'bg-card border-r-2 border-highlight text-highlight' 
+                                        : 'text-text hover:text-highlight'
+                                }`}
+                            >
+                                <span className="mr-3">{item.icon}</span>
+                                {item.label}
+                            </button>
+                        ))}
+                    </nav>
+
+                    <div className="p-4">
+                        <SystemStatus stats={systemStats} gatewayStatus={connectionStatus?.gateway || 'unknown'} />
+                    </div>
+
+                    <div className="p-6 border-t border-card text-muted text-xs">
+                        <div className="flex items-center justify-between">
+                            <span>WebSocket:</span>
+                            <span className={`w-2 h-2 rounded-full ${connectionStatus?.ws === 'connected' ? 'bg-green-400' : 'bg-red-400'}`}></span>
+                        </div>
+                        <div>Node: clawdbot</div>
+                        <div>Gateway: :18789</div>
+                    </div>
+                </aside>
+            );
+        }
+
+        // Enhanced AgentCard Component
+        function AgentCard({ agent, session, onSendMessage, onViewHistory, onSpawnTask }) {
+            const isActive = session?.isActive || false;
+            const lastActive = session?.lastActivity ? new Date(session.lastActivity).toLocaleString() : 'Never';
+
+            const getStatusColor = () => {
+                if (isActive) return 'text-green-400';
+                if (session?.lastActivity) {
+                    const timeDiff = Date.now() - new Date(session.lastActivity).getTime();
+                    if (timeDiff < 300000) return 'text-yellow-400'; // 5 minutes = idle
+                    return 'text-gray-400'; // sleeping
+                }
+                return 'text-gray-400';
+            };
+
+            const getStatusText = () => {
+                if (isActive) return 'Active';
+                if (session?.lastActivity) {
+                    const timeDiff = Date.now() - new Date(session.lastActivity).getTime();
+                    if (timeDiff < 300000) return 'Idle';
+                    return 'Sleeping';
+                }
+                return 'Unknown';
+            };
+
+            return (
+                <div className={`bg-card border border-accent rounded-lg p-6 transition-all hover:border-highlight ${
+                    isActive ? 'agent-active' : ''
+                }`}>
+                    <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center">
+                            <span className="text-3xl mr-3">{agent.emoji}</span>
+                            <div>
+                                <h3 className="font-semibold text-lg">{agent.name}</h3>
+                                <p className="text-muted text-sm">{agent.role}</p>
+                                <span className="text-xs bg-accent px-2 py-1 rounded">{agent.level}</span>
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <div className={`text-sm font-medium ${getStatusColor()}`}>
+                                {getStatusText()}
+                            </div>
+                            {isActive && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mx-auto mt-1"></div>}
+                        </div>
+                    </div>
+
+                    <p className="text-sm mb-4 text-muted">{agent.description}</p>
+
+                    <div className="space-y-2 mb-4 text-sm">
+                        <div className="flex justify-between">
+                            <span className="text-muted">Last Active:</span>
+                            <span className="text-right">{lastActive}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-muted">Messages:</span>
+                            <span>{session?.messageCount || 0}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-muted">Model:</span>
+                            <span className="text-xs">{session?.model || 'default'}</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                        <button
+                            onClick={() => onSendMessage(agent)}
+                            className="bg-accent hover:bg-highlight text-text text-xs py-2 px-2 rounded transition-all"
+                        >
+                            💬 Message
+                        </button>
+                        <button
+                            onClick={() => onViewHistory(agent)}
+                            className="bg-surface hover:bg-card text-text text-xs py-2 px-2 rounded border border-accent transition-all"
+                        >
+                            📜 History
+                        </button>
+                        <button
+                            onClick={() => onSpawnTask(agent)}
+                            className="bg-surface hover:bg-card text-text text-xs py-2 px-2 rounded border border-accent transition-all"
+                        >
+                            🚀 Spawn
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Dashboard Component
+        function Dashboard({ addNotification }) {
+            const [agents, setAgents] = useState([]);
+            const [sessions, setSessions] = useState([]);
+            const [systemStats, setSystemStats] = useState({ cpu: 0, memory: 0, disk: 0, uptime: 0 });
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            const [showMessageModal, setShowMessageModal] = useState(false);
+            const [showSpawnModal, setShowSpawnModal] = useState(false);
+            const [selectedAgent, setSelectedAgent] = useState(null);
+            const [messageText, setMessageText] = useState('');
+            const [spawnTask, setSpawnTask] = useState('');
+            const [spawnLabel, setSpawnLabel] = useState('');
+            const [sendingMessage, setSendingMessage] = useState(false);
+
+            useEffect(() => {
+                loadDashboardData();
+                
+                // Subscribe to real-time updates
+                const unsubscribeSessions = api.subscribe('sessions_update', (data) => {
+                    setSessions(data.sessions || []);
+                });
+                
+                const unsubscribeSystem = api.subscribe('system_stats', (data) => {
+                    setSystemStats(data);
+                });
+
+                const unsubscribeMessage = api.subscribe('message_sent', (data) => {
+                    addNotification({
+                        type: 'success',
+                        title: 'Message Sent',
+                        message: `Message sent to ${data.sessionKey}`,
+                        duration: 3000
+                    });
+                });
+
+                return () => {
+                    unsubscribeSessions();
+                    unsubscribeSystem();
+                    unsubscribeMessage();
+                };
+            }, []);
+
+            const loadDashboardData = async () => {
+                try {
+                    const [agentsData, sessionsData, healthData] = await Promise.all([
+                        api.agents.list(),
+                        api.sessions.list({ limit: 20, activeMinutes: 1440 }),
+                        api.health.system()
+                    ]);
+                    
+                    setAgents(agentsData.agents || []);
+                    setSessions(sessionsData.sessions || []);
+                    setSystemStats(healthData);
+                    setError(null);
+                } catch (err) {
+                    setError(err.message);
+                    addNotification({
+                        type: 'error',
+                        title: 'Dashboard Error',
+                        message: err.message,
+                        duration: 5000
+                    });
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleSendMessage = (agent) => {
+                setSelectedAgent(agent);
+                setMessageText('');
+                setShowMessageModal(true);
+            };
+
+            const handleViewHistory = async (agent) => {
+                try {
+                    const historyData = await api.sessions.getHistory(agent.sessionKey, { limit: 20 });
+                    const messages = historyData.messages || [];
+                    const preview = messages.slice(0, 3).map(m => `${new Date(m.timestamp).toLocaleTimeString()}: ${m.content?.substring(0, 50)}...`).join('\n');
+                    
+                    addNotification({
+                        type: 'info',
+                        title: `${agent.name} History`,
+                        message: preview || 'No recent messages',
+                        duration: 8000
+                    });
+                } catch (err) {
+                    addNotification({
+                        type: 'error',
+                        title: 'History Error',
+                        message: err.message,
+                        duration: 5000
+                    });
+                }
+            };
+
+            const handleSpawnTask = (agent) => {
+                setSelectedAgent(agent);
+                setSpawnTask('');
+                setSpawnLabel('');
+                setShowSpawnModal(true);
+            };
+
+            const submitMessage = async () => {
+                if (!messageText.trim() || !selectedAgent) return;
+                
+                setSendingMessage(true);
+                try {
+                    await api.sessions.sendMessage(selectedAgent.sessionKey, messageText);
+                    setShowMessageModal(false);
+                    setMessageText('');
+                } catch (err) {
+                    addNotification({
+                        type: 'error',
+                        title: 'Message Failed',
+                        message: err.message,
+                        duration: 5000
+                    });
+                } finally {
+                    setSendingMessage(false);
+                }
+            };
+
+            const submitSpawn = async () => {
+                if (!spawnTask.trim() || !selectedAgent) return;
+                
+                try {
+                    await api.sessions.spawn(spawnTask, spawnLabel || `Task for ${selectedAgent.name}`, null, selectedAgent.id);
+                    setShowSpawnModal(false);
+                    setSpawnTask('');
+                    setSpawnLabel('');
+                    
+                    addNotification({
+                        type: 'success',
+                        title: 'Task Spawned',
+                        message: `Spawned task for ${selectedAgent.name}`,
+                        duration: 3000
+                    });
+                } catch (err) {
+                    addNotification({
+                        type: 'error',
+                        title: 'Spawn Failed',
+                        message: err.message,
+                        duration: 5000
+                    });
+                }
+            };
+
+            const getSessionForAgent = (agent) => {
+                return sessions.find(s => s.key === agent.sessionKey);
+            };
+
+            if (loading) {
+                return (
+                    <div className="space-y-4">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="h-32 bg-card rounded-lg loading-shimmer"></div>
+                        ))}
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="bg-red-900/20 border border-red-500 rounded-lg p-6">
+                        <h3 className="text-red-300 font-semibold text-lg">Dashboard Error</h3>
+                        <p className="text-red-400 text-sm mt-2">{error}</p>
+                        <button 
+                            onClick={loadDashboardData}
+                            className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-all"
+                        >
+                            🔄 Retry
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div>
+                    <div className="mb-8">
+                        <h1 className="text-4xl font-bold mb-2">Mission Control Dashboard</h1>
+                        <div className="flex items-center space-x-4 text-muted">
+                            <span>Managing {agents.length} agent{agents.length !== 1 ? 's' : ''}</span>
+                            <span>•</span>
+                            <span>{sessions.filter(s => s.isActive).length} active sessions</span>
+                            <span>•</span>
+                            <span>{systemStats.memory}% RAM used</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {agents.map(agent => (
+                            <AgentCard
+                                key={agent.id}
+                                agent={agent}
+                                session={getSessionForAgent(agent)}
+                                onSendMessage={handleSendMessage}
+                                onViewHistory={handleViewHistory}
+                                onSpawnTask={handleSpawnTask}
+                            />
+                        ))}
+                    </div>
+
+                    {agents.length === 0 && (
+                        <div className="text-center py-16">
+                            <div className="text-6xl mb-6">🤖</div>
+                            <h3 className="text-2xl font-semibold mb-4">No agents configured</h3>
+                            <p className="text-muted mb-6">Add agents to your system to see them here.</p>
+                            <button className="bg-highlight hover:bg-highlight/80 text-white px-6 py-3 rounded-lg transition-all">
+                                + Add Agent
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Send Message Modal */}
+                    {showMessageModal && (
+                        <div className="fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center z-50">
+                            <div className="bg-surface border border-card rounded-lg p-6 w-[500px] max-w-[90vw]">
+                                <h3 className="text-lg font-semibold mb-4">
+                                    💬 Send Message to {selectedAgent?.name}
+                                </h3>
+                                <textarea
+                                    value={messageText}
+                                    onChange={(e) => setMessageText(e.target.value)}
+                                    placeholder="Enter your message..."
+                                    className="w-full bg-card border border-accent rounded-lg p-4 text-text h-32 resize-none focus:border-highlight focus:outline-none"
+                                    disabled={sendingMessage}
+                                />
+                                <div className="flex gap-3 mt-6">
+                                    <button
+                                        onClick={submitMessage}
+                                        disabled={!messageText.trim() || sendingMessage}
+                                        className="flex-1 bg-highlight hover:bg-highlight/80 disabled:bg-accent disabled:opacity-50 text-white py-3 rounded-lg transition-all font-medium"
+                                    >
+                                        {sendingMessage ? '🔄 Sending...' : '📤 Send Message'}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowMessageModal(false)}
+                                        disabled={sendingMessage}
+                                        className="px-6 py-3 bg-surface border border-accent rounded-lg hover:bg-card transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Spawn Task Modal */}
+                    {showSpawnModal && (
+                        <div className="fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center z-50">
+                            <div className="bg-surface border border-card rounded-lg p-6 w-[500px] max-w-[90vw]">
+                                <h3 className="text-lg font-semibold mb-4">
+                                    🚀 Spawn Task for {selectedAgent?.name}
+                                </h3>
+                                <input
+                                    type="text"
+                                    value={spawnLabel}
+                                    onChange={(e) => setSpawnLabel(e.target.value)}
+                                    placeholder="Task label (optional)"
+                                    className="w-full bg-card border border-accent rounded-lg p-3 text-text mb-3 focus:border-highlight focus:outline-none"
+                                />
+                                <textarea
+                                    value={spawnTask}
+                                    onChange={(e) => setSpawnTask(e.target.value)}
+                                    placeholder="Describe the task to spawn..."
+                                    className="w-full bg-card border border-accent rounded-lg p-4 text-text h-32 resize-none focus:border-highlight focus:outline-none"
+                                />
+                                <div className="flex gap-3 mt-6">
+                                    <button
+                                        onClick={submitSpawn}
+                                        disabled={!spawnTask.trim()}
+                                        className="flex-1 bg-highlight hover:bg-highlight/80 disabled:bg-accent disabled:opacity-50 text-white py-3 rounded-lg transition-all font-medium"
+                                    >
+                                        🚀 Spawn Task
+                                    </button>
+                                    <button
+                                        onClick={() => setShowSpawnModal(false)}
+                                        className="px-6 py-3 bg-surface border border-accent rounded-lg hover:bg-card transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Enhanced Tasks Component (placeholder for now)
+        function Tasks() {
+            return (
+                <div>
+                    <h1 className="text-3xl font-bold mb-6">Task Management</h1>
+                    <div className="text-center py-12">
+                        <div className="text-4xl mb-4">📋</div>
+                        <h3 className="text-xl font-semibold mb-2">Advanced Task Board</h3>
+                        <p className="text-muted">Full task management system coming in next update</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Activity Component (placeholder for now)
+        function Activity() {
+            return (
+                <div>
+                    <h1 className="text-3xl font-bold mb-6">System Activity</h1>
+                    <div className="text-center py-12">
+                        <div className="text-4xl mb-4">📈</div>
+                        <h3 className="text-xl font-semibold mb-2">Real-time Activity Feed</h3>
+                        <p className="text-muted">Live activity monitoring coming in next update</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Settings Component
+        function Settings() {
+            return (
+                <div>
+                    <h1 className="text-3xl font-bold mb-6">System Settings</h1>
+                    <div className="text-center py-12">
+                        <div className="text-4xl mb-4">⚙️</div>
+                        <h3 className="text-xl font-semibold mb-2">Configuration Panel</h3>
+                        <p className="text-muted">System configuration options coming soon</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [currentPage, setCurrentPage] = useState('dashboard');
+            const [systemStats, setSystemStats] = useState({ cpu: 0, memory: 0, disk: 0, uptime: 0 });
+            const [connectionStatus, setConnectionStatus] = useState({ ws: 'disconnected', gateway: 'unknown' });
+            const { notifications, addNotification, removeNotification } = useNotifications();
+
+            useEffect(() => {
+                // Subscribe to WebSocket connection status
+                const unsubscribeConnection = api.subscribe('connection', (data) => {
+                    setConnectionStatus(prev => ({ ...prev, ws: data.status }));
+                    if (data.status === 'connected') {
+                        addNotification({
+                            type: 'success',
+                            title: 'Connected',
+                            message: 'Real-time connection established',
+                            duration: 2000
+                        });
+                    }
+                });
+
+                // Subscribe to system stats updates
+                const unsubscribeSystemStats = api.subscribe('system_stats', (data) => {
+                    setSystemStats(data);
+                    setConnectionStatus(prev => ({ ...prev, gateway: data.gatewayStatus }));
+                });
+
+                // Subscribe to gateway status updates
+                const unsubscribeGatewayStatus = api.subscribe('gateway_status', (data) => {
+                    setConnectionStatus(prev => ({ ...prev, gateway: data.status }));
+                    addNotification({
+                        type: data.status === 'connected' ? 'success' : 'error',
+                        title: 'Gateway Status',
+                        message: `Gateway ${data.status}`,
+                        duration: 3000
+                    });
+                });
+
+                return () => {
+                    unsubscribeConnection();
+                    unsubscribeSystemStats();
+                    unsubscribeGatewayStatus();
+                };
+            }, []);
+
+            const renderPage = () => {
+                switch (currentPage) {
+                    case 'dashboard':
+                        return <Dashboard addNotification={addNotification} />;
+                    case 'tasks':
+                        return <Tasks />;
+                    case 'activity':
+                        return <Activity />;
+                    case 'settings':
+                        return <Settings />;
+                    default:
+                        return <Dashboard addNotification={addNotification} />;
+                }
+            };
+
+            return (
+                <>
+                    <div className="flex h-screen bg-background">
+                        <Sidebar 
+                            currentPage={currentPage} 
+                            setCurrentPage={setCurrentPage}
+                            systemStats={systemStats}
+                            connectionStatus={connectionStatus}
+                        />
+                        <main className="flex-1 overflow-hidden">
+                            <div className="h-full p-6 overflow-auto">
+                                {renderPage()}
+                            </div>
+                        </main>
+                    </div>
+                    <NotificationCenter 
+                        notifications={notifications}
+                        removeNotification={removeNotification}
+                    />
+                </>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #16213e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0f3460;
+}
+
+/* Glow effect for active agents */
+.agent-active {
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition: all 0.2s ease;
+}

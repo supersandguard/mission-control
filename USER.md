@@ -6,7 +6,7 @@
 - **What to call them:** Alberto
 - **Pronouns:** he/him
 - **Timezone:** America/Mexico_City
-- **Email:** beto@oasisvault.io
+- **Email:** beto@oasisvault.io (siempre enviar calendar invites aquí, no preguntar)
 - **Twitter/X:** @beto_neh
 - **Notes:** 
 
@@ -40,6 +40,7 @@
 - Casual, directo
 - Usa expresiones mexicanas (chingón, vientos, etc)
 - No exceso de emojis ni signos de exclamación
+- Siempre enumerar opciones/listas — más fácil para referirse a ellas (ej: "va la 3")
 
 ---
 
