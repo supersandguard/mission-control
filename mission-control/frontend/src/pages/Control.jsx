@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { cronApi } from '../api'
 
 const API = '/api'
@@ -56,9 +56,18 @@ function CommandBar() {
   const [text, setText] = useState('')
   const [prefs, setPrefs] = useState([])
   const [sending, setSending] = useState(false)
-  const [showHistory, setShowHistory] = useState(false)
+  const chatRef = useRef(null)
 
   useEffect(() => { loadPrefs() }, [])
+
+  // Poll for updates on pending items
+  useEffect(() => {
+    const hasPending = prefs.some(p => p.status === 'pending')
+    if (!hasPending) return
+    const id = setInterval(loadPrefs, 5000)
+    return () => clearInterval(id)
+  }, [prefs])
+
   const loadPrefs = async () => { try { const d = await api('/preferences'); setPrefs(d.preferences || []) } catch (e) {} }
 
   const send = async () => {
@@ -68,87 +77,64 @@ function CommandBar() {
       await api('/preferences', { method: 'POST', body: JSON.stringify({ text: text.trim() }) })
       setText('')
       loadPrefs()
+      setTimeout(() => { chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' }) }, 100)
     } catch (e) { alert('Error: ' + e.message) }
     setSending(false)
   }
 
-  const removePref = async (id) => {
-    await api(`/preferences/${id}`, { method: 'DELETE' })
-    loadPrefs()
-  }
+  const removePref = async (id) => { await api(`/preferences/${id}`, { method: 'DELETE' }); loadPrefs() }
 
-  const pending = prefs.filter(p => p.status === 'pending')
-  const applied = prefs.filter(p => p.status === 'applied')
-  const categoryColors = {
-    personality: 'bg-purple-500/20 text-purple-300',
-    communication: 'bg-blue-500/20 text-blue-300',
-    routine: 'bg-green-500/20 text-green-300',
-    operation: 'bg-yellow-500/20 text-yellow-300',
-    security: 'bg-red-500/20 text-red-300',
-  }
+  const sorted = [...prefs].reverse()
 
   return (
-    <section>
-      {/* Input */}
-      <div className="flex gap-2">
-        <div className="flex-1 relative">
-          <input value={text} onChange={e => setText(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') send() }}
-            placeholder="Tell Max what you want..."
-            disabled={sending}
-            className="w-full bg-surface border border-card rounded-lg px-4 py-3 text-sm text-text placeholder:text-muted/50 focus:outline-none focus:border-highlight transition-all disabled:opacity-50" />
-          {sending && <span className="absolute right-3 top-3.5 text-xs text-muted animate-pulse">Sending...</span>}
-        </div>
-        <button onClick={send} disabled={!text.trim() || sending}
-          className="bg-highlight hover:bg-highlight/90 text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-30 transition-colors shrink-0">
-          Send
-        </button>
-      </div>
-
-      {/* Pending preferences */}
-      {pending.length > 0 && (
-        <div className="mt-3 space-y-1.5">
-          {pending.map(p => (
-            <div key={p.id} className="flex items-center gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-3 py-2">
-              <span className="animate-pulse text-yellow-400 text-xs">⏳</span>
-              <span className="text-xs text-text flex-1">{p.text}</span>
-              <span className="text-xs text-yellow-400/70">Processing...</span>
-              <button onClick={() => removePref(p.id)} className="text-xs text-muted hover:text-red-400">✕</button>
+    <section className="bg-surface border border-card rounded-lg overflow-hidden">
+      {/* Chat history */}
+      {sorted.length > 0 && (
+        <div ref={chatRef} className="max-h-48 overflow-auto p-3 space-y-2">
+          {sorted.map(p => (
+            <div key={p.id}>
+              {/* User message */}
+              <div className="flex justify-end">
+                <div className="bg-highlight/20 rounded-lg rounded-br-sm px-3 py-2 max-w-[85%]">
+                  <p className="text-xs text-text">{p.text}</p>
+                </div>
+              </div>
+              {/* Response */}
+              {p.status === 'applied' && p.response ? (
+                <div className="flex justify-start mt-1">
+                  <div className="bg-card rounded-lg rounded-bl-sm px-3 py-2 max-w-[85%]">
+                    <p className="text-xs text-text">{p.response}</p>
+                    {p.target && <span className="text-xs text-highlight">→ {p.target}</span>}
+                  </div>
+                </div>
+              ) : p.status === 'pending' ? (
+                <div className="flex justify-start mt-1">
+                  <div className="bg-card/50 rounded-lg rounded-bl-sm px-3 py-2">
+                    <span className="text-xs text-muted animate-pulse flex items-center gap-1.5">
+                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" />
+                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" style={{animationDelay:'0.15s'}} />
+                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" style={{animationDelay:'0.3s'}} />
+                    </span>
+                  </div>
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
       )}
 
-      {/* Applied preferences */}
-      {applied.length > 0 && (
-        <div className="mt-2">
-          <button onClick={() => setShowHistory(!showHistory)}
-            className="flex items-center gap-1.5 text-xs text-muted hover:text-text py-1">
-            <span className={`transition-transform ${showHistory ? 'rotate-90' : ''}`}>▶</span>
-            Applied ({applied.length})
-          </button>
-          {showHistory && (
-            <div className="space-y-1.5 mt-1">
-              {applied.map(p => (
-                <div key={p.id} className="bg-surface border border-card rounded-lg px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-green-400 text-xs">✓</span>
-                    <span className="text-xs text-text flex-1">{p.text}</span>
-                    {p.category && (
-                      <span className={`text-xs px-1.5 py-0.5 rounded ${categoryColors[p.category] || 'bg-card text-muted'}`}>
-                        {p.category}
-                      </span>
-                    )}
-                    <button onClick={() => removePref(p.id)} className="text-xs text-muted hover:text-red-400">✕</button>
-                  </div>
-                  {p.response && <p className="text-xs text-muted mt-1 pl-5">{p.response}</p>}
-                  {p.target && <span className="text-xs text-muted pl-5">→ {p.target}</span>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      {/* Input */}
+      <div className="flex gap-2 p-2 border-t border-card/50">
+        <input value={text} onChange={e => setText(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') send() }}
+          placeholder="Tell Max what you want..."
+          disabled={sending}
+          className="flex-1 bg-card/50 rounded-lg px-3 py-2.5 text-sm text-text placeholder:text-muted/50 focus:outline-none focus:ring-1 focus:ring-highlight transition-all disabled:opacity-50" />
+        <button onClick={send} disabled={!text.trim() || sending}
+          className="bg-highlight hover:bg-highlight/90 text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-30 transition-colors shrink-0">
+          ↑
+        </button>
+      </div>
     </section>
   )
 }

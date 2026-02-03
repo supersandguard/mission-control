@@ -1,3 +1,14 @@
 {
-  "preferences": []
+  "preferences": [
+    {
+      "id": "pref_1770156786453",
+      "text": "Donde iría esta manera de hacer los mindmaps o marktrees?",
+      "category": "operation",
+      "target": "TOOLS.md or new skill",
+      "status": "applied",
+      "createdAt": 1770156786453,
+      "appliedAt": 1770157500000,
+      "response": "Los mindmaps/marktrees podrían ir como un nuevo Tool (si usamos una herramienta externa como markmap) o como un Skill (si es una capacidad que aprendo). Lo más práctico: instalar markmap-cli como Tool y documentarlo en TOOLS.md. ¿Quieres que lo explore?"
+    }
+  ]
 }
