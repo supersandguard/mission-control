@@ -182,43 +182,92 @@ function StatusBar({ status, onPatch }) {
   }
 
   return (
-    <div className={`rounded-lg px-3 py-2 relative ${
-      mem.pct > 85 ? 'bg-red-500/10 border border-red-500/30' : 'bg-surface border border-card'
-    }`}>
-      <div className="flex items-center justify-between gap-2">
+    <div className="space-y-3 relative">
+      {/* Hardware info row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="bg-card/50 rounded-lg p-2.5">
+          <span className="text-xs text-muted block">Device</span>
+          <span className="text-sm text-text font-medium">Raspberry Pi 3B</span>
+          <span className="text-xs text-muted block">4 cores · {status.cpu?.temp ? `${status.cpu.temp}°C` : '~53°C'}</span>
+        </div>
+        <div className="bg-card/50 rounded-lg p-2.5">
+          <span className="text-xs text-muted block">OS</span>
+          <span className="text-sm text-text font-medium">Debian 13</span>
+          <span className="text-xs text-muted block">Kernel {status.kernel || '6.12'}</span>
+        </div>
+        <div className="bg-card/50 rounded-lg p-2.5">
+          <span className="text-xs text-muted block">Uptime</span>
+          <span className="text-sm text-text font-medium">{fmtUptime(status.systemUptime)}</span>
+          <span className="text-xs text-muted block">v{status.session?.version}</span>
+        </div>
+        <div className="bg-card/50 rounded-lg p-2.5">
+          <span className="text-xs text-muted block">Channels</span>
+          <span className="text-sm text-text font-medium">WhatsApp</span>
+          <span className="text-xs text-muted block">Dashboard</span>
+        </div>
+      </div>
+
+      {/* Storage & RAM */}
+      <div className="space-y-2">
+        {/* RAM */}
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted w-10">RAM</span>
+          <div className="flex-1 h-2.5 bg-card rounded-full overflow-hidden">
+            <div className={`h-full rounded-full transition-all ${mem.pct > 85 ? 'bg-red-500' : mem.pct > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
+              style={{ width: `${mem.pct}%` }} />
+          </div>
+          <span className={`text-xs font-medium w-12 text-right ${memColor}`}>{mem.pct}%</span>
+        </div>
+        {/* SD */}
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted w-10">SD</span>
+          <div className="flex-1 h-2.5 bg-card rounded-full overflow-hidden">
+            <div className="h-full bg-highlight/70 rounded-full" style={{ width: status.disk?.pct || '0%' }} />
+          </div>
+          <span className="text-xs text-muted w-12 text-right">{status.disk?.pct}</span>
+        </div>
+        {/* SSD */}
+        {status.ssd && (
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted w-10">SSD</span>
+            <div className="flex-1 h-2.5 bg-card rounded-full overflow-hidden">
+              <div className="h-full bg-highlight/70 rounded-full" style={{ width: status.ssd.pct || '0%' }} />
+            </div>
+            <span className="text-xs text-muted w-12 text-right">{status.ssd.pct}</span>
+          </div>
+        )}
+        {/* CPU */}
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted w-10">CPU</span>
+          <div className="flex-1 h-2.5 bg-card rounded-full overflow-hidden">
+            <div className="h-full bg-highlight/70 rounded-full" style={{ width: `${Math.min((status.cpu?.load?.[0] || 0) * 25, 100)}%` }} />
+          </div>
+          <span className="text-xs text-muted w-12 text-right">{status.cpu?.load?.[0]?.toFixed(1)}</span>
+        </div>
+      </div>
+
+      {/* Model selector + restart */}
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {/* Model - clickable */}
+          <span className="text-xs text-muted">Model:</span>
           <button onClick={() => setShowModelPicker(!showModelPicker)}
-            className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2 py-1 hover:bg-highlight/20 transition-all shrink-0">
+            className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2.5 py-1 hover:bg-highlight/20 transition-all">
             <span className="text-xs font-medium text-highlight">{model}</span>
             <span className="text-xs text-muted">▼</span>
           </button>
-          {/* RAM bar visual */}
-          <div className="flex items-center gap-1.5">
-            <div className="w-16 h-2 bg-card rounded-full overflow-hidden">
-              <div className={`h-full rounded-full transition-all ${mem.pct > 85 ? 'bg-red-500' : mem.pct > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
-                style={{ width: `${mem.pct}%` }} />
-            </div>
-            <span className={`text-xs font-medium ${memColor}`}>{mem.pct}%</span>
-          </div>
+          <span className="text-xs text-muted">ctx {ctx}</span>
         </div>
-
-        {/* Right side: minimal stats + restart */}
-        <div className="flex items-center gap-2 text-xs text-muted">
-          <span className="hidden md:inline">CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
-          <span className="hidden md:inline">Up {fmtUptime(status.systemUptime)}</span>
-          <button onClick={doRestart} disabled={restarting}
-            className={`px-1.5 py-0.5 rounded text-xs transition-all ${
-              restarting ? 'bg-yellow-500/20 text-yellow-400 animate-pulse' : 'bg-card hover:bg-red-500/20 hover:text-red-400 text-muted'
-            }`}>
-            {restarting ? '⏳' : '🔄'}
-          </button>
-        </div>
+        <button onClick={doRestart} disabled={restarting}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            restarting ? 'bg-yellow-500/20 text-yellow-400 animate-pulse' : 'bg-card hover:bg-red-500/20 hover:text-red-400 text-muted'
+          }`}>
+          {restarting ? '⏳ Restarting...' : '🔄 Restart'}
+        </button>
       </div>
 
       {/* Model picker dropdown */}
       {showModelPicker && (
-        <div className="absolute left-0 top-full mt-1 bg-surface border border-card rounded-lg shadow-xl z-10 w-64">
+        <div className="absolute left-0 bottom-0 mb-12 bg-surface border border-card rounded-lg shadow-xl z-10 w-64">
           {MODELS.map(m => {
             const active = status.model === m.id
             return (
@@ -1005,7 +1054,10 @@ export default function Control() {
   return (
     <div className="h-full overflow-auto p-3 md:p-6 space-y-2">
       <CommandBar />
-      <StatusBar status={status} onPatch={patchConfig} />
+
+      <Section icon="⚙️" title="System" preview={status ? `${(status.model||'').replace('anthropic/claude-','')} · RAM ${status.memory?.pct}%` : ''} defaultOpen={false}>
+        <StatusBar status={status} onPatch={patchConfig} />
+      </Section>
 
       <Section icon="👥" title="Team" preview={previews.team} defaultOpen={false}>
         <SubAgentsSection />
