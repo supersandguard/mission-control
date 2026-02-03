@@ -1,10 +1,11 @@
 {
   "lastChecks": {
-    "email": null,
-    "calendar": null,
+    "email": 1770133909,
+    "calendar": 1770129060,
     "weather": null,
-    "x_mentions": null
+    "x_mentions": 1770129060
   },
   "lastDailyReview": "2026-02-02",
-  "lastMoltbookCheck": 1770063068
+  "lastMoltbookCheck": 1770063068,
+  "notes": "Moltbook API timing out since Feb 2. X mentions: @lobsec replied 3x to Safe+AI thread."
 }

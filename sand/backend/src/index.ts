@@ -149,6 +149,3 @@ if (isDirectRun) {
     console.log(`🛡️  SandGuard API running on http://localhost:${PORT}`);
   });
 }
-p://localhost:${PORT}`);
-  });
-}

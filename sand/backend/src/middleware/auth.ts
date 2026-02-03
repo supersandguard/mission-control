@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,14 +9,22 @@ import { getSubscriptionByAddress, getSubscriptionByApiKey, Subscription } from 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load JWT secret
+// Load or generate JWT secret
 const JWT_SECRET_PATH = path.join(__dirname, '..', '..', 'data', '.jwt-secret');
 let JWT_SECRET: string;
 
 try {
   JWT_SECRET = fs.readFileSync(JWT_SECRET_PATH, 'utf8').trim();
 } catch (error) {
-  throw new Error('JWT secret not found. Please ensure .jwt-secret file exists in data/ directory.');
+  // Auto-generate secret if not found (first deploy)
+  JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+  try {
+    fs.mkdirSync(path.dirname(JWT_SECRET_PATH), { recursive: true });
+    fs.writeFileSync(JWT_SECRET_PATH, JWT_SECRET, { mode: 0o600 });
+    console.log('🔑 Generated new JWT secret');
+  } catch (writeErr) {
+    console.warn('⚠️ Could not persist JWT secret - using in-memory (tokens won\'t survive restarts)');
+  }
 }
 
 export interface JWTPayload {

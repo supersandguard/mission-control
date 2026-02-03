@@ -12,7 +12,7 @@
 
 ## Context
 
-- Trabaja en crypto/blockchain (THE OTC DESK, OasisVault)
+- Trabaja en crypto/blockchain, es arquitecto tambien.
 - Tiene hijas que siguen método Montessori
 - Lector voraz - su biblioteca revela su forma de pensar:
 

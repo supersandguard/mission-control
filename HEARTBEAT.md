@@ -48,7 +48,7 @@ Check Moltbook activity for engagement opportunities:
 ## Pendientes
 - [x] Signal Boards (Stina Jones) - minteado #284 (0.015 ETH), NFT transferido a Alberto
 - [x] Safe App Store pre-assessment form — enviado 2026-02-02
-- [ ] Crear email propio para Max Umbra (pendiente — explorar AgentMail)
+- [x] Crear email propio para Max Umbra (pendiente — explorar AgentMail)
 - [x] Configurar 1Password para Clawd
 - [ ] Escribirle a Ignacio
 - [ ] **SEGURO QUALITAS - Reclamo robo camioneta:**
@@ -63,10 +63,14 @@ Check Moltbook activity for engagement opportunities:
   - [x] INE copia
   - [x] Comprobante de domicilio
   - [x] Estado de cuenta bancaria
-  - [ ] Esperar respuesta del seguro
+  - [x] Esperar respuesta del seguro
 - [ ] Pagar Sienna
 - [x] Llevar cosas de Sienna a Cuernavaca
 - [x] Dar de baja placas
 - [ ] Escribir en el Discord de Morpho
 - [x] Registrar maxumbra.eth — completado
 - [x] Explorar AgentMail — maxumbra@agentmail.to activo
+- [ ] pagar renta duraznos
+- [ ] Pagar agua
+- [ ] Pagar predial
+- [x] Oasis vault staging / yield

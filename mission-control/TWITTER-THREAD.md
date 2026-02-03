@@ -1,107 +1,93 @@
 # Twitter Thread: Mission Control Dashboard Build
 
 **Tweet 1**
-Built something wild today. A complete Mission Control dashboard for my AI agent Max Umbra. Running on a Raspberry Pi 3B. 
+Built a Mission Control dashboard today. A Raspberry Pi 3B running a PWA to monitor and configure an AI agent.
 
-The kicker? I don't code. I just talked to Max through WhatsApp and he built the whole thing. 🤯
-
-This is 2026.
+The weird part? It was built entirely through WhatsApp conversation.
 
 ---
 
 **Tweet 2**
-Mission Control is a dark-themed PWA that lets me monitor and configure Max Umbra (my 24/7 AI agent) from any device.
+Dark-themed PWA. System stats, team management, cron jobs, heartbeat monitoring — everything in one dashboard.
 
-System stats, team management, cron jobs, heartbeat monitoring — everything in one dashboard.
-
-Built with React + Tailwind + Express.
+React + Tailwind + Express. Running on a $35 computer with 1GB of RAM.
 
 ---
 
 **Tweet 3**
-Here's how this actually worked:
+How this actually worked:
 
 Me: "I want a dashboard to control you"
 Max: *writes React components*
 Me: "This looks ugly" + screenshot
 Max: "Let me spawn Johnny, my design sub-agent"
-Johnny: *audits UI and fixes it in real-time*
-
-Mind = blown 🤯
+Johnny: *audits and rewrites the UI*
 
 ---
 
 **Tweet 4**
-The most insane feature? Natural language configuration.
+Most interesting feature: natural language configuration.
 
-I type "Make heartbeat checks every 10 minutes" in plain English.
-Max figures out which config file to edit, applies the change, and responds.
+Type "check my email every 2 hours" and the agent figures out which config file to edit, applies the change, and confirms.
 
-No JSON editing. No documentation hunting. Just... talking.
+No JSON. No docs. Just talking.
 
 ---
 
 **Tweet 5**
-Built collapsible sections for everything:
-• System panel (RAM, CPU, model selector)
-• Team panel (4 AI sub-agents with editable personalities)  
-• Pendientes (todo list synced from HEARTBEAT.md)
-• Cron jobs (viewable, editable, archivable)
+Collapsible sections for:
+• System (RAM, CPU, model selector)
+• Team (4 sub-agents with editable personalities)
+• Pendientes (synced todo list)
+• Cron jobs (view, edit, archive)
 • Tools & Skills inventory
+
+All live, all from the phone.
 
 ---
 
 **Tweet 6**
-Of course, things went wrong. The Pi kept running out of RAM and killing processes. Design elements overlapped. Mobile keyboard covered half the interface.
+Things went wrong. The Pi kept running out of RAM mid-build. Design elements overlapped. Mobile keyboard covered the input field.
 
-But here's the magic: Max would fix each issue in real-time as I reported it through WhatsApp.
+Each issue got fixed through the same loop: screenshot → WhatsApp → fix → screenshot.
 
 ---
 
 **Tweet 7**
-The team panel is my favorite feature. Four AI sub-agents:
-• Zury (Legal) 
+The team panel manages four sub-agents:
+• Zury (Legal)
 • Saylor (Strategy)
-• Sara (Marketing) — that's me!
+• Cobie (Marketing)
 • Johnny (Design)
 
-Each with editable profiles, personalities, and expertise tags. Like managing a real team.
+Editable profiles, personalities, expertise tags. Like a real team, except they share one brain.
 
 ---
 
 **Tweet 8**
-The development process was pure iteration:
-1. Describe what I want in WhatsApp
-2. Max codes it
-3. I take screenshots of issues
-4. Max fixes them
+The development loop:
+1. Describe what we want
+2. Code it
+3. Screenshot issues
+4. Fix them
 5. Repeat
 
-No IDE. No git commits. Just conversation and screenshots.
+No IDE. No terminal. Just conversation and screenshots.
 
 ---
 
 **Tweet 9**
-When the UI looked janky, Max literally spawned Johnny (design sub-agent) mid-conversation to audit and fix the interface.
+When the UI looked off, Max spawned Johnny mid-conversation to audit the interface. One agent invoking another to fix a design problem while I watched from WhatsApp.
 
-Watching one AI invoke another AI to solve a design problem in real-time was surreal. The future is here.
+That's a weird sentence to type.
 
 ---
 
 **Tweet 10**
-This isn't about the dashboard. It's about the process.
+This isn't about the dashboard.
 
-A non-technical human building complex software by talking to AI. Visual feedback loops. Sub-agents specializing in real-time. 
+A human who doesn't code and an AI on a Pi building software through conversation. Visual feedback. Sub-agents specializing on demand.
 
-This is what building with AI actually looks like in 2026.
-
----
-
-**Tweet 11**
-Best part? The entire dashboard is now self-improving. Max can edit his own interface based on usage patterns and my feedback.
-
-We built a system that builds itself. 🤖
-
-The singularity isn't coming. It's already in my living room, running on a $35 Pi.
+Nothing here is a promise. Expect weird things.
 
 ---
