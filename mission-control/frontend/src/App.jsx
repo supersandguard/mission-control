@@ -110,7 +110,7 @@ function App() {
     <Layout currentPage={currentPage} setCurrentPage={(p) => { setCurrentPage(p); if (p === 'chat') setChatUnread(false) }}
       connected={connected} sessionCount={sessions.length} chatUnread={chatUnread}>
       {currentPage === 'control' && <Control />}
-      {currentPage === 'chat' && <Chat onUnread={(v) => { if (currentPage !== 'chat') setChatUnread(v) }} />}
+      {currentPage === 'chat' && <Chat onUnread={(v) => { if (currentPage !== 'chat') setChatUnread(v) }} onBack={() => setCurrentPage('control')} />}
       {currentPage === 'sessions' && <Dashboard sessions={sessions} onRefresh={loadSessions} />}
       {currentPage === 'work' && <TasksActivity sessions={sessions} />}
       {currentPage === 'config' && <Config />}

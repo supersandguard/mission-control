@@ -7,7 +7,7 @@ function api(url, opts = {}) {
   return fetch(API + url, { ...opts, headers }).then(r => r.json())
 }
 
-export default function Chat({ onUnread }) {
+export default function Chat({ onUnread, onBack }) {
   const [text, setText] = useState('')
   const [prefs, setPrefs] = useState([])
   const [sending, setSending] = useState(false)
@@ -68,6 +68,15 @@ export default function Chat({ onUnread }) {
 
   return (
     <div className="h-full flex flex-col bg-background">
+      {/* Chat header with back button (mobile only) */}
+      <div className="md:hidden flex items-center gap-3 px-3 py-2 border-b border-card/50 shrink-0">
+        <button onClick={onBack} className="text-highlight text-sm">← Back</button>
+        <span className="text-sm font-medium text-text">💬 Chat</span>
+        {prefs.length > 0 && (
+          <button onClick={clearAll} className="text-xs text-muted hover:text-red-400 ml-auto">Clear</button>
+        )}
+      </div>
+
       {/* Messages area */}
       <div ref={chatRef} className="flex-1 overflow-auto px-3 py-4">
         {sorted.length === 0 ? (
@@ -131,9 +140,6 @@ export default function Chat({ onUnread }) {
       {/* Input bar */}
       <div className="border-t border-card/50 px-3 py-2 shrink-0 safe-area-bottom bg-surface">
         <div className="flex gap-2 items-end max-w-lg mx-auto">
-          {prefs.length > 0 && (
-            <button onClick={clearAll} className="text-muted hover:text-red-400 pb-2.5 text-xs shrink-0">🗑</button>
-          )}
           <input ref={inputRef} value={text} onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             placeholder="Escribe algo..."

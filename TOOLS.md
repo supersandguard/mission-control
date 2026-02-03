@@ -2,8 +2,17 @@
 
 Skills define *how* tools work. This file is for *your* specifics — the stuff that's unique to your setup.
 
+## Markmap (Mindmaps)
+- **Sitio:** https://markmap.js.org/
+- **CLI:** `markmap-cli` (npm) — convierte Markdown a mindmap interactivo (SVG/HTML)
+- **Instalación:** ✅ Instalado (v0.18.12)
+- **Uso:** `markmap input.md -o output.html` → abre HTML interactivo
+- **VSCode ext:** `gera2ld.markmap-vscode`
+- **Cómo funciona:** parsea la jerarquía de headers/bullets del Markdown y genera un SVG interactivo
+- **Tip:** Para compartir, generar HTML y servir o screenshot con Chromium headless
+
 ## Google APIs (betooo.neh@gmail.com)
-- **Calendar** - Crear eventos con Meet automático
+- **Calendar** - Crear eventos con Meet automático y siempre mandar invite a beto@oasisvault.io
 - **Gmail** - Enviar correos
 - **Sheets** - Leer/escribir hojas
 - **Drive** - Acceso a archivos
