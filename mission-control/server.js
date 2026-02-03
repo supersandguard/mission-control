@@ -113,7 +113,16 @@ app.get('/api/status', async (req, res) => {
         try {
             const { execSync } = require('child_process');
             const dfOut = execSync("df -h / | tail -1").toString().trim().split(/\s+/);
-            disk = { total: dfOut[1], used: dfOut[2], avail: dfOut[3], pct: dfOut[4] };
+            disk = { label: 'SD', mount: '/', total: dfOut[1], used: dfOut[2], avail: dfOut[3], pct: dfOut[4] };
+        } catch (e) {}
+
+        let ssd = {};
+        try {
+            const { execSync } = require('child_process');
+            const ssdOut = execSync("df -h /mnt/ssd 2>/dev/null | tail -1").toString().trim().split(/\s+/);
+            if (ssdOut.length >= 5 && ssdOut[5]?.includes('ssd')) {
+                ssd = { label: 'SSD', mount: '/mnt/ssd', total: ssdOut[1], used: ssdOut[2], avail: ssdOut[3], pct: ssdOut[4] };
+            }
         } catch (e) {}
 
         // Gateway config for heartbeat/model info
@@ -160,6 +169,7 @@ app.get('/api/status', async (req, res) => {
             },
             cpu: { cores: cpus.length, model: cpus[0]?.model || 'unknown', load: loadAvg },
             disk,
+            ssd,
             network: ips,
             model,
             heartbeat: {
@@ -286,6 +296,42 @@ app.get('/api/pendientes', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+app.post('/api/pendientes', async (req, res) => {
+    try {
+        const text = req.body.text;
+        if (!text) return res.status(400).json({ error: 'Text required' });
+        const content = await fs.readFile(path.join(WORKSPACE, 'HEARTBEAT.md'), 'utf8');
+        const lines = content.split('\n');
+
+        // Find the "## Pendientes" section and add after it
+        let insertAt = -1;
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].match(/^##\s+Pendientes/i)) {
+                // Find the last checkbox line in this section
+                for (let j = i + 1; j < lines.length; j++) {
+                    if (lines[j].match(/^\s*-\s+\[/)) {
+                        insertAt = j + 1;
+                    } else if (lines[j].match(/^##\s/) && j > i + 1) {
+                        break; // next section
+                    }
+                }
+                if (insertAt === -1) insertAt = i + 1;
+                break;
+            }
+        }
+
+        if (insertAt === -1) {
+            // No Pendientes section, append at end
+            lines.push('', '## Pendientes', `- [ ] ${text}`);
+        } else {
+            lines.splice(insertAt, 0, `- [ ] ${text}`);
+        }
+
+        await fs.writeFile(path.join(WORKSPACE, 'HEARTBEAT.md'), lines.join('\n'));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 app.patch('/api/pendientes/:line', async (req, res) => {
     try {
         const lineNum = parseInt(req.params.line);
@@ -398,6 +444,12 @@ app.get('/api/cron', async (req, res) => {
 app.patch('/api/cron/:id', async (req, res) => {
     try {
         res.json(await gw('cron', { action: 'update', jobId: req.params.id, patch: req.body }));
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/cron/:id', async (req, res) => {
+    try {
+        res.json(await gw('cron', { action: 'remove', jobId: req.params.id }));
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
