@@ -69,4 +69,4 @@ Check Moltbook activity for engagement opportunities:
 - [x] Dar de baja placas
 - [ ] Escribir en el Discord de Morpho
 - [x] Registrar maxumbra.eth — completado
-- [ ] Explorar AgentMail (email propio para Max Umbra)
+- [x] Explorar AgentMail — maxumbra@agentmail.to activo

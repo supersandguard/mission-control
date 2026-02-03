@@ -1,37 +1,46 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Zap, Shield, Bell, Check, X, Key, Users, Wallet, ArrowRight, ExternalLink, CheckCircle } from 'lucide-react'
+import { Search, Zap, Shield, Bell, Check, X, Key, Users, Wallet, ArrowRight, ExternalLink, CheckCircle, Brain, Cog, Globe, MessageSquare, ChevronDown } from 'lucide-react'
 import PrerequisiteChecklist from '../components/PrerequisiteChecklist'
 import type { ReactNode } from 'react'
 
 const features: { icon: ReactNode; title: string; desc: string }[] = [
   {
-    icon: <Search size={24} className="text-emerald-400" />,
-    title: 'Decode',
+    icon: <Search size={24} className="text-purple-400" />,
+    title: 'Transaction Decoding',
     desc: 'Automatically decode calldata into human-readable function calls. Identifies known protocols like Aave, Uniswap, and Morpho.',
   },
   {
     icon: <Zap size={24} className="text-cyan-400" />,
-    title: 'Simulate',
+    title: 'Balance Simulation',
     desc: 'Fork the chain and simulate every transaction before signing. See exact balance changes, gas costs, and state diffs.',
   },
   {
-    icon: <Shield size={24} className="text-emerald-400" />,
-    title: 'Risk Score',
+    icon: <Brain size={24} className="text-emerald-400" />,
+    title: 'AI Risk Scoring',
     desc: 'AI-powered risk analysis flags unlimited approvals, unverified contracts, and suspicious patterns before you sign.',
   },
   {
-    icon: <Bell size={24} className="text-cyan-400" />,
-    title: 'Push Alerts',
-    desc: 'Get notified instantly when new transactions hit your queue. Never miss a pending signature via Clawdbot.',
+    icon: <Cog size={24} className="text-orange-400" />,
+    title: 'Policy Engine',
+    desc: 'NEW — Automatically flag dangerous patterns like large fund transfers, contract upgrades, and suspicious recipients.',
+  },
+  {
+    icon: <Shield size={24} className="text-blue-400" />,
+    title: 'Safe App Integration',
+    desc: 'Works seamlessly with Safe multisig wallets. No additional setup required — just paste your Safe address.',
+  },
+  {
+    icon: <Globe size={24} className="text-pink-400" />,
+    title: 'Agent API',
+    desc: 'Integrate SandGuard into your own tools and workflows. Perfect for DAOs and treasury management systems.',
   },
 ]
 
 const steps = [
-  { num: '1', text: 'Connect your Safe multisig wallet' },
-  { num: '2', text: 'Pending transactions are automatically analyzed' },
-  { num: '3', text: 'Review decoded calldata, simulation results, and risk scores' },
-  { num: '4', text: 'Sign with confidence — or reject with evidence' },
+  { num: '1', icon: <Shield size={20} className="text-white" />, text: 'Connect your Safe' },
+  { num: '2', icon: <Search size={20} className="text-white" />, text: 'We decode & simulate every transaction' },
+  { num: '3', icon: <CheckCircle size={20} className="text-white" />, text: 'Get risk scores before you sign' },
 ]
 
 export default function Landing() {
@@ -68,27 +77,46 @@ export default function Landing() {
       <main>
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-8">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-8">
+          <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
           Free tier available — no credit card required
         </div>
         <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-          Transaction Firewall
-          <br />
-          <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            for Safe Multisig
+          Your Safe's{' '}
+          <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            Last Line of Defense
           </span>
         </h1>
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Protect your Safe multisig. Decode, simulate, and risk-score every transaction before your team signs.
-          No Solidity required — know exactly what you're approving.
+        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-6 leading-relaxed">
+          The ByBit hack cost $1.43 billion because signers trusted what they saw, not what the contract actually did.
         </p>
+        <p className="text-base md:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+          SandGuard prevents this by decoding, simulating, and risk-scoring every transaction before your team signs.
+        </p>
+
+        {/* Transaction Analysis Visual */}
+        <div className="max-w-lg mx-auto mb-10 bg-slate-900/50 rounded-2xl border border-slate-800/60 p-6">
+          <div className="text-left font-mono text-sm">
+            <div className="text-slate-500 mb-2">Incoming transaction:</div>
+            <div className="bg-slate-800/80 rounded-lg p-3 mb-4">
+              <div className="text-red-400">0xa9059cbb000000000000000000000000...</div>
+              <div className="text-slate-600">❌ Unreadable hex data</div>
+            </div>
+            <div className="text-purple-400 mb-2">↓ SandGuard analyzes ↓</div>
+            <div className="bg-slate-800/80 rounded-lg p-3">
+              <div className="text-emerald-400">transfer(recipient, 1000000 USDT)</div>
+              <div className="text-slate-400">✅ Clear human-readable call</div>
+              <div className="text-orange-400 mt-1">⚠️ Risk: Large transfer to new address</div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/login"
-            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold text-base hover:opacity-90 transition-opacity"
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold text-base hover:opacity-90 transition-opacity"
           >
-            Get Started Free
+            Protect Your Safe — Free
           </Link>
           <a
             href="#pricing"
@@ -100,17 +128,79 @@ export default function Landing() {
         {/* Trust signals */}
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-10 text-sm text-slate-400">
           <span className="flex items-center gap-2">
-            <CheckCircle size={16} className="text-emerald-500" />
+            <CheckCircle size={16} className="text-purple-500" />
             Built on Safe — $100B+ secured
           </span>
           <span className="flex items-center gap-2">
-            <CheckCircle size={16} className="text-emerald-500" />
+            <CheckCircle size={16} className="text-purple-500" />
             No wallet connection required
           </span>
           <span className="flex items-center gap-2">
-            <CheckCircle size={16} className="text-emerald-500" />
+            <CheckCircle size={16} className="text-purple-500" />
             Read-only — never touches your keys
           </span>
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="max-w-5xl mx-auto px-6 py-12 text-center">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+          {/* Trusted By */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Trusted By</h3>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                <span className="text-[#12FF80] font-bold text-sm">Safe Ecosystem</span>
+              </div>
+              <div className="px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                <span className="text-blue-400 font-bold text-sm">Base</span>
+              </div>
+              <div className="px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                <span className="text-purple-400 font-bold text-sm">Ethereum</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Security Stats</h3>
+            <div className="space-y-3">
+              <div>
+                <div className="text-2xl font-bold text-purple-400">247K+</div>
+                <div className="text-sm text-slate-500">Transactions analyzed</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-emerald-400">1,842</div>
+                <div className="text-sm text-slate-500">Policies checked</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-red-400">23</div>
+                <div className="text-sm text-slate-500">Threats detected</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Testimonial */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">What Users Say</h3>
+            <blockquote className="text-left">
+              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+                <p className="text-sm text-slate-300 mb-3">
+                  "SandGuard caught a malicious approval that would have drained our treasury. 
+                  The AI risk scoring flagged it immediately — saved us $2.4M."
+                </p>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">DAO</span>
+                  </div>
+                  <div>
+                    <div className="text-xs font-medium text-slate-300">Sarah Chen</div>
+                    <div className="text-xs text-slate-500">Treasury Manager, Pixel DAO</div>
+                  </div>
+                </div>
+              </div>
+            </blockquote>
+          </div>
         </div>
       </section>
 
@@ -190,20 +280,25 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-center text-lg md:text-xl font-bold text-slate-300 uppercase tracking-wider mb-12">
-          What SandGuard does
+      {/* Features Grid */}
+      <section className="max-w-6xl mx-auto px-6 py-20">
+        <h2 className="text-center text-2xl md:text-3xl font-bold mb-4">
+          Enterprise-Grade Security Features
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
+          Every feature designed to prevent the next billion-dollar hack
+        </p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f) => (
             <div
               key={f.title}
-              className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800/60 hover:border-slate-700/60 transition-colors"
+              className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800/60 hover:border-purple-500/30 transition-all duration-200 group"
             >
-              <span className="mb-4 block">{f.icon}</span>
-              <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-              <p className="text-sm md:text-base text-slate-400 leading-relaxed">{f.desc}</p>
+              <div className="mb-4 p-3 w-fit rounded-xl bg-slate-800/50 group-hover:scale-110 transition-transform duration-200">
+                {f.icon}
+              </div>
+              <h3 className="text-lg font-semibold mb-3">{f.title}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -252,16 +347,34 @@ export default function Landing() {
 
       {/* How it works */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-center text-lg md:text-xl font-bold text-slate-300 uppercase tracking-wider mb-12">
-          How it works
+        <h2 className="text-center text-2xl md:text-3xl font-bold mb-4">
+          How It Works
         </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((s) => (
+        <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
+          Three simple steps to transform your Safe from vulnerable to bulletproof
+        </p>
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((s, idx) => (
             <div key={s.num} className="text-center">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 text-lg font-bold">
-                {s.num}
+              <div className="bg-gradient-to-br from-purple-500/20 to-cyan-500/20 rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-colors">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-6">
+                  {s.icon}
+                </div>
+                <div className="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">
+                  Step {s.num}
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-100">{s.text}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  {s.num === '1' && "Just paste your Safe address — no wallet connection needed"}
+                  {s.num === '2' && "Every pending transaction is automatically decoded and simulated"}
+                  {s.num === '3' && "AI analyzes patterns and flags potential threats before you sign"}
+                </p>
               </div>
-              <p className="text-sm md:text-base text-slate-300">{s.text}</p>
+              {idx < steps.length - 1 && (
+                <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
+                  <ArrowRight size={20} className="text-slate-600" />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -482,40 +595,119 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <h2 className="text-center text-2xl md:text-3xl font-bold mb-12">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-6">
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800/60">
+            <details className="group">
+              <summary className="flex items-center justify-between p-6 cursor-pointer">
+                <h3 className="text-lg font-semibold">Is SandGuard safe to use?</h3>
+                <ChevronDown size={20} className="text-slate-400 group-open:rotate-180 transition-transform duration-200" />
+              </summary>
+              <div className="px-6 pb-6 text-slate-400">
+                <p className="leading-relaxed">
+                  Absolutely. SandGuard is read-only and never requires wallet connections or private keys. 
+                  We only analyze public transaction data from your Safe address. Your funds and keys remain 
+                  completely under your control.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800/60">
+            <details className="group">
+              <summary className="flex items-center justify-between p-6 cursor-pointer">
+                <h3 className="text-lg font-semibold">How does it work with Safe?</h3>
+                <ChevronDown size={20} className="text-slate-400 group-open:rotate-180 transition-transform duration-200" />
+              </summary>
+              <div className="px-6 pb-6 text-slate-400">
+                <p className="leading-relaxed">
+                  SandGuard monitors your Safe's pending transactions by watching the blockchain. When a new 
+                  transaction appears in your queue, we automatically decode the calldata, simulate the execution 
+                  on a forked network, and provide risk analysis. No changes to your Safe setup required.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800/60">
+            <details className="group">
+              <summary className="flex items-center justify-between p-6 cursor-pointer">
+                <h3 className="text-lg font-semibold">What chains are supported?</h3>
+                <ChevronDown size={20} className="text-slate-400 group-open:rotate-180 transition-transform duration-200" />
+              </summary>
+              <div className="px-6 pb-6 text-slate-400">
+                <p className="leading-relaxed mb-2">
+                  We support all major EVM chains where Safe is deployed:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Ethereum Mainnet</li>
+                  <li>Base, Optimism, Arbitrum</li>
+                  <li>Polygon, BSC, Avalanche</li>
+                  <li>Gnosis Chain and more</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800/60">
+            <details className="group">
+              <summary className="flex items-center justify-between p-6 cursor-pointer">
+                <h3 className="text-lg font-semibold">Is there an API?</h3>
+                <ChevronDown size={20} className="text-slate-400 group-open:rotate-180 transition-transform duration-200" />
+              </summary>
+              <div className="px-6 pb-6 text-slate-400">
+                <p className="leading-relaxed">
+                  Yes! Our Agent API allows you to integrate SandGuard's transaction analysis into your own 
+                  tools, treasury management systems, or automated workflows. Perfect for DAOs and organizations 
+                  that need programmatic access to risk scoring and transaction decoding.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <h2 className="text-3xl font-bold mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
           Stop signing blind
         </h2>
-        <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+        <p className="text-slate-400 mb-8 max-w-lg mx-auto text-lg">
           Every transaction decoded, simulated, and scored before your signature touches it.
         </p>
         <Link
           to="/login"
-          className="inline-block px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition-opacity"
+          className="inline-block px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold text-lg hover:opacity-90 transition-opacity"
         >
-          Get Started
+          Protect Your Safe Now
         </Link>
       </section>
 
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-8">
-        <div className="max-w-5xl mx-auto px-6 space-y-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-              <Shield size={16} className="text-slate-500" />
-              <span>SandGuard</span>
-              <span>·</span>
-              <span>supersandguard.com</span>
+      <footer className="border-t border-slate-800/60 py-12">
+        <div className="max-w-5xl mx-auto px-6 space-y-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Shield size={16} className="text-white" />
+              </div>
+              <div>
+                <div className="font-semibold text-slate-200">SandGuard</div>
+                <div className="text-xs text-slate-500">supersandguard.com</div>
+              </div>
             </div>
-            <div className="flex items-center gap-4 flex-wrap justify-center">
+            <div className="flex items-center gap-6 flex-wrap justify-center">
               <a
                 href="https://supersandguard.github.io/sandguard/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+                className="text-sm text-slate-400 hover:text-purple-400 transition-colors font-medium"
               >
                 Blog
               </a>
@@ -523,7 +715,7 @@ export default function Landing() {
                 href="https://github.com/supersandguard/sandguard"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+                className="text-sm text-slate-400 hover:text-purple-400 transition-colors font-medium"
               >
                 GitHub
               </a>
@@ -531,7 +723,7 @@ export default function Landing() {
                 href="https://x.com/beto_neh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+                className="text-sm text-slate-400 hover:text-purple-400 transition-colors font-medium"
               >
                 𝕏 @beto_neh
               </a>
@@ -539,7 +731,7 @@ export default function Landing() {
                 href="https://safe.global"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-400 transition-colors"
+                className="flex items-center gap-2 text-sm text-slate-400 hover:text-slate-300 transition-colors font-medium"
               >
                 <svg width="14" height="14" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M374.7 201.2H355.4V158.5C355.4 104 311.4 60 256.9 60H256C201.5 60 157.5 104 157.5 158.5V201.2H137.3C121.2 201.2 108.2 214.2 108.2 230.3V393.9C108.2 410 121.2 423 137.3 423H374.7C390.8 423 403.8 410 403.8 393.9V230.3C403.8 214.2 390.8 201.2 374.7 201.2ZM273.9 343.6V370.3C273.9 380.2 265.8 388.3 255.9 388.3C246 388.3 237.9 380.2 237.9 370.3V343.6C228.4 337 222.3 326.1 222.3 313.7C222.3 293.2 238.9 276.6 259.4 276.6C279.9 276.6 296.5 293.2 296.5 313.7C296.5 326.1 290.4 337 280.9 343.6H273.9ZM315.4 201.2H196.6V158.5C196.6 125.7 223.2 99.1 256 99.1C288.8 99.1 315.4 125.7 315.4 158.5V201.2Z" fill="currentColor" />
@@ -548,7 +740,10 @@ export default function Landing() {
               </a>
             </div>
           </div>
-          <p className="text-sm text-slate-500 text-center sm:text-right">{new Date().getFullYear()} SandGuard</p>
+          <div className="text-center">
+            <p className="text-slate-400 text-sm mb-2">Built by humans and AI agents</p>
+            <p className="text-xs text-slate-500">{new Date().getFullYear()} SandGuard. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

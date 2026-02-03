@@ -3,6 +3,13 @@ import { explainTransaction } from '../services/explainService';
 import { decodeTransaction } from '../services/decodeService';
 import { simulateTransaction } from '../services/simulationService';
 import { ExplainRequest } from '../types';
+import { 
+  isValidEthereumAddress, 
+  isValidChainId, 
+  isValidHexString, 
+  isValidCalldataSize,
+  ValidationException
+} from '../middleware/validation';
 
 const router = Router();
 

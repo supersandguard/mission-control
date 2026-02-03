@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Protect Your DAO Treasury — SandGuard Blog</title>
+    <meta name="description" content="DAOs manage billions in treasuries through multisig wallets, but governance attacks and blind signing put everything at risk. Here's how to build real security around your DAO's assets.">
+    
+    <meta property="og:title" content="How to Protect Your DAO Treasury">
+    <meta property="og:description" content="Governance attacks, malicious proposals, and blind signing threaten DAO treasuries. Here's the security playbook every DAO needs.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/how-to-protect-your-dao-treasury.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/how-to-protect-your-dao-treasury.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+        .header-nav a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        .article-page {
+            max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .article-meta {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .article-date { color: var(--text-muted); font-size: 0.8125rem; }
+        .article-tag {
+            font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1); color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .article-tag.red {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--red);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;
+        }
+        .back-link:hover { color: var(--text-secondary); }
+        .article-body h2 {
+            font-size: 1.375rem; font-weight: 700;
+            margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem; font-weight: 600;
+            margin-top: 2rem; margin-bottom: 0.5rem; color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem; margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05); border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary); padding: 0.15em 0.4em;
+            border-radius: 4px; font-size: 0.875em; color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none; padding: 0; font-size: 0.8125rem;
+            line-height: 1.6; color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0;
+        }
+        .risk-box {
+            background: rgba(248, 113, 113, 0.05);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .safe-box {
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .warning-box {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .cta-section {
+            text-align: center; padding: 3rem 2rem; margin: 2rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 16px;
+        }
+        .cta-section h3 {
+            font-size: 1.375rem; font-weight: 700; margin-bottom: 0.75rem;
+        }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.75rem 1.75rem;
+            border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        .footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 2rem 1.5rem; text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 0.5rem;
+            color: var(--text-muted); font-size: 0.8125rem;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a { color: var(--text-muted); font-size: 0.8125rem; }
+        .footer-links a:hover { color: var(--text-secondary); }
+        @media (max-width: 640px) {
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="article-page">
+        <a href="/sandguard/" class="back-link">← Back to Blog</a>
+        
+        <h1>How to Protect Your DAO Treasury</h1>
+        
+        <div class="article-meta">
+            <span class="article-date">February 2, 2026</span>
+            <span class="article-tag">DAO Security</span>
+            <span class="article-tag">Treasury Management</span>
+        </div>
+        
+        <div class="article-body">
+            <p>Your DAO's treasury is the backbone of your organization. It funds development, rewards contributors, and powers growth. But with billions locked in DAO treasuries across thousands of multisig wallets, they've become irresistible targets for attackers.</p>
+            
+            <p><strong>The stark reality:</strong> Most DAO treasuries are protected by nothing more than a multisig threshold and the hope that signers will carefully review every transaction. That's not enough anymore.</p>
+
+            <div class="risk-box">
+                <p><strong>💰 The Stakes Are High</strong></p>
+                <p>As of January 2026, DAO treasuries hold over $12 billion in assets. The average treasury hack now exceeds $25 million. When your DAO gets hit, it's not just about the money — it's about survival.</p>
+            </div>
+
+            <h2>Why DAOs Are Prime Targets</h2>
+            
+            <p>DAOs present a unique attack surface that makes them especially vulnerable:</p>
+
+            <h3>Distributed Decision Making</h3>
+            <p>Traditional organizations have centralized security teams and clear chains of command. DAOs have contributors scattered across timezones, many of whom may not have deep security expertise. When a critical transaction needs approval, there's often pressure to move fast and trust the process.</p>
+
+            <h3>Governance Token Concentration</h3>
+            <p>While DAOs aim for decentralization, voting power often concentrates in the hands of a few large holders. Compromise just a few key accounts, and an attacker can push through any proposal they want — including draining the treasury.</p>
+
+            <h3>Complex Treasury Operations</h3>
+            <p>DAOs don't just hold assets — they actively deploy them. Yield farming, liquidity provision, token swaps, grant payments, and protocol integrations create a constant flow of complex transactions. Each one is an opportunity for something to go wrong.</p>
+
+            <h3>Public Operations</h3>
+            <p>Everything happens in public. Attackers can study your treasury composition, identify large holdings, monitor governance discussions, and time their attacks when security attention is lowest.</p>
+
+            <h2>Common Attack Vectors</h2>
+
+            <h3>1. Governance Attacks</h3>
+            <p>The most devastating attacks don't hack the treasury directly — they hack the governance process itself.</p>
+
+            <div class="warning-box">
+                <p><strong>🌪️ Case Study: Tornado Cash Governance Attack</strong></p>
+                <p>In May 2023, an attacker bought enough TORN tokens to control governance, then submitted a proposal to update the governance contract. The "update" included malicious code that drained 10,000 ETH from the treasury. The proposal passed because token holders assumed it was a routine upgrade.</p>
+            </div>
+
+            <p><strong>How it works:</strong></p>
+            <ul>
+                <li>Accumulate governance tokens through buying, borrowing, or flash loans</li>
+                <li>Submit seemingly legitimate proposals with hidden malicious code</li>
+                <li>Social engineer other voters or time the vote when participation is low</li>
+                <li>Execute the proposal and drain funds before anyone realizes what happened</li>
+            </ul>
+
+            <h3>2. Malicious Proposals</h3>
+            <p>Even without governance control, attackers can submit proposals that appear legitimate but contain hidden traps.</p>
+
+            <p><strong>Common disguises:</strong></p>
+            <ul>
+                <li><strong>Token swaps</strong> — "Let's diversify into this new token" (which the attacker controls)</li>
+                <li><strong>Protocol integrations</strong> — "Let's farm yield on this new DeFi protocol" (which has a backdoor)</li>
+                <li><strong>Grant proposals</strong> — "Fund this promising project" (to an attacker-controlled address)</li>
+                <li><strong>Emergency actions</strong> — "We need to move funds quickly due to security concerns" (manufactured urgency)</li>
+            </ul>
+
+            <div class="risk-box">
+                <p><strong>🥢 Case Study: Beanstalk Flash Loan Attack</strong></p>
+                <p>In April 2022, an attacker used flash loans to temporarily gain 67% of Beanstalk's governance power. They immediately passed a proposal to send all treasury assets to themselves, then repaid the flash loan. Total damage: $182 million stolen in a single transaction.</p>
+            </div>
+
+            <h3>3. Social Engineering & Blind Signing</h3>
+            <p>Sometimes the simplest attacks are the most effective. Get trusted signers to approve transactions they don't understand.</p>
+
+            <p><strong>How it works:</strong></p>
+            <ul>
+                <li>Compromise one trusted contributor's account or impersonate a team member</li>
+                <li>Create urgent situations that pressure signers to act quickly</li>
+                <li>Present complex transactions that look legitimate on the surface</li>
+                <li>Exploit the fact that most people can't read raw transaction data</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>⚡ The Speed Problem</strong></p>
+                <p>In DeFi, opportunities and emergencies move fast. "This arbitrage opportunity will disappear in 20 minutes" or "We need to move funds before the hack spreads" creates pressure to approve first, verify later. That's exactly when mistakes happen.</p>
+            </div>
+
+            <h2>How SandGuard Protects DAO Treasuries</h2>
+
+            <p>Transaction firewalls work by creating a verification layer between "proposal submitted" and "transaction executed." Every transaction gets automatically decoded, simulated, and analyzed before anyone signs.</p>
+
+            <h3>Automatic Calldata Decoding</h3>
+            <p>Instead of seeing cryptic hexadecimal data, signers see exactly what each transaction does in plain English.</p>
+
+            <pre><code>// What signers see without SandGuard:
+0x095ea7b3000000000000000000000000a0b86a33e6...
+
+// What signers see with SandGuard:
+Function: approve(spender, amount)
+  Spender: 0xa0b86a33e6B2a41AaE0b8C9BC35c5f8B5C5A8D91
+  Amount: 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,935 (UNLIMITED)
+
+❌ WARNING: Unlimited token approval detected</code></pre>
+
+            <h3>Transaction Simulation</h3>
+            <p>See exactly how balances will change before executing the transaction. No surprises.</p>
+
+            <pre><code>Balance Changes:
+  Treasury: -2,000 USDC
+  0x1234...5678: +2,000 USDC
+  
+Gas Cost: 52,847 gas (~$3.47)
+Status: ✅ Success</code></pre>
+
+            <h3>AI Risk Scoring</h3>
+            <p>Machine learning models trained on millions of transactions automatically flag suspicious patterns.</p>
+
+            <div class="risk-box">
+                <p><strong>🚨 High Risk Transaction Detected</strong></p>
+                <ul>
+                    <li>Unlimited token approval to unverified contract</li>
+                    <li>Contract deployed less than 7 days ago</li>
+                    <li>Large value transfer (>$100k)</li>
+                    <li>No Etherscan verification</li>
+                </ul>
+                <p><strong>Recommendation:</strong> Do not sign without manual review</p>
+            </div>
+
+            <h3>Policy Engine</h3>
+            <p>Set automatic rules that prevent entire categories of risky transactions.</p>
+
+            <ul>
+                <li><strong>Spending limits</strong> — Block transfers above a certain threshold</li>
+                <li><strong>Whitelist enforcement</strong> — Only allow interactions with pre-approved contracts</li>
+                <li><strong>Time delays</strong> — Require 48-hour waiting periods for large transactions</li>
+                <li><strong>Multi-step approval</strong> — Require additional signatures for high-risk actions</li>
+            </ul>
+
+            <h2>Implementation Best Practices</h2>
+
+            <h3>1. Start with High-Value Transactions</h3>
+            <p>Begin by implementing transaction firewall protection for any transfer above $10k. This catches the vast majority of treasury-draining attacks while maintaining operational speed for smaller transactions.</p>
+
+            <h3>2. Educate Your Signers</h3>
+            <p>The best security tool is useless if people don't understand what they're looking at. Train your multisig signers on:</p>
+            <ul>
+                <li>How to read transaction decode outputs</li>
+                <li>Common red flags in balance change previews</li>
+                <li>When to escalate unclear transactions for review</li>
+                <li>The difference between "normal" and "suspicious" risk scores</li>
+            </ul>
+
+            <h3>3. Set Conservative Policies Initially</h3>
+            <p>Start with strict rules and relax them as your team gets comfortable. It's easier to whitelist a legitimate protocol than to recover stolen funds.</p>
+
+            <h3>4. Monitor and Audit Regularly</h3>
+            <p>Review transaction logs monthly. Look for patterns like:</p>
+            <ul>
+                <li>Transactions that scored high risk but were approved anyway</li>
+                <li>Rapid sequences of approvals (potential pressure tactics)</li>
+                <li>Unusual transaction types or destinations</li>
+                <li>Policy violations that were overridden</li>
+            </ul>
+
+            <h3>5. Plan for Emergencies</h3>
+            <p>Real emergencies do happen. Have a clear process for when speed matters more than normal security procedures, including:</p>
+            <ul>
+                <li>Who has authority to declare an emergency</li>
+                <li>What verification steps can be skipped</li>
+                <li>How to validate emergency transactions after the fact</li>
+                <li>Post-incident review procedures</li>
+            </ul>
+
+            <h2>Beyond Technology: Governance Security</h2>
+
+            <p>A transaction firewall protects against execution-level attacks, but DAOs also need governance-level protections:</p>
+
+            <h3>Proposal Review Process</h3>
+            <ul>
+                <li>Require detailed technical specifications for any treasury-related proposal</li>
+                <li>Mandate minimum discussion periods before voting begins</li>
+                <li>Use specialized review committees for complex financial operations</li>
+                <li>Implement proposal staging — test on smaller amounts first</li>
+            </ul>
+
+            <h3>Voting Security</h3>
+            <ul>
+                <li>Monitor for unusual voting patterns or token accumulation before proposals</li>
+                <li>Consider voting power caps or quadratic voting mechanisms</li>
+                <li>Implement time delays between large token acquisitions and voting eligibility</li>
+                <li>Use commit-reveal schemes for sensitive votes</li>
+            </ul>
+
+            <h3>Emergency Powers</h3>
+            <ul>
+                <li>Define clear criteria for when emergency actions are justified</li>
+                <li>Limit the scope of emergency powers (time-bounded, value-capped)</li>
+                <li>Require multiple independent parties to confirm emergencies</li>
+                <li>Always follow up emergency actions with full governance review</li>
+            </ul>
+
+            <div class="safe-box">
+                <p><strong>💡 Pro Tip: Layer Your Defenses</strong></p>
+                <p>No single security measure is perfect. The most secure DAOs use transaction firewalls, governance monitoring, community oversight, and operational security in combination. Each layer catches different types of attacks.</p>
+            </div>
+
+            <h2>The Cost of Getting It Wrong</h2>
+
+            <p>Treasury hacks don't just steal money — they kill DAOs. When Beanstalk lost $182 million, the protocol effectively died. When Tornado Cash's governance was compromised, the community never recovered trust in the system.</p>
+
+            <p>Compare the cost of implementing security measures against the cost of a successful attack:</p>
+
+            <ul>
+                <li><strong>Transaction firewall implementation:</strong> A few hours of setup, minimal ongoing maintenance</li>
+                <li><strong>Treasury hack recovery:</strong> Months of investigation, potential legal battles, community rebuilding, and often complete project failure</li>
+            </ul>
+
+            <p>The choice is obvious.</p>
+
+            <h2>Getting Started</h2>
+
+            <p>You don't need to implement everything at once. Start with these three basic protections:</p>
+
+            <ol>
+                <li><strong>Enable transaction decoding</strong> for all treasury operations</li>
+                <li><strong>Set spending limits</strong> that require additional approvals for large transfers</li>
+                <li><strong>Train your signers</strong> to recognize and question suspicious transactions</li>
+            </ol>
+
+            <p>These simple steps prevent 90% of treasury attacks while requiring minimal operational changes.</p>
+
+            <hr>
+
+            <div class="cta-section">
+                <h3>Try SandGuard free for your DAO's Safe</h3>
+                <p>Get transaction decoding, simulation, and risk scoring for your DAO treasury. No setup required — just paste your Safe address.</p>
+                <a href="https://supersandguard.com" class="cta-btn">Protect Your Treasury →</a>
+            </div>
+            
+            <blockquote>
+                <p><em>SandGuard is a transaction firewall for Safe multisig wallets. It automatically decodes calldata, simulates balance changes, and flags risky transactions before you sign. Try it free at <a href="https://supersandguard.com">supersandguard.com</a></em></p>
+            </blockquote>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

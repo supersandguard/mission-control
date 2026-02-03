@@ -1,5 +1,6 @@
 import { RiskRequest, RiskResult, RiskReason, RiskLevel, DecodedTransaction } from '../types';
 import { KNOWN_PROTOCOLS, MAX_UINT256_DECIMAL } from '../utils/constants';
+import { evaluatePolicies } from './policyEngine';
 
 // Threshold for "large transfer" in USD
 const LARGE_TRANSFER_THRESHOLD = 10_000;
@@ -185,12 +186,21 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
+  // ─── Evaluate Policies ───
+  const policies = evaluatePolicies({
+    to: req.to,
+    data: req.data,
+    value: req.value,
+    decoded: req.decoded,
+  });
+
   // ─── Calculate overall score ───
-  const score = calculateOverallScore(reasons);
+  const score = calculateOverallScore(reasons, policies);
 
   return {
     score,
     reasons,
+    policies,
     details: {
       contractAge: req.contractAge,
       contractVerified: req.contractVerified ?? req.decoded?.contractVerified,
@@ -255,13 +265,18 @@ function estimateTransferValueUsd(req: RiskRequest): number {
 }
 
 /**
- * Calculate overall risk score from individual reasons
+ * Calculate overall risk score from individual reasons and policies
  */
-function calculateOverallScore(reasons: RiskReason[]): RiskLevel {
+function calculateOverallScore(reasons: RiskReason[], policies: import('./policyEngine').PolicyResult[] = []): RiskLevel {
   const hasRed = reasons.some(r => r.level === 'red');
   const hasYellow = reasons.some(r => r.level === 'yellow');
+  
+  // Check policy triggers for critical/high severity
+  const hasCriticalPolicy = policies.some(p => p.triggered && (p.severity === 'CRITICAL' || p.severity === 'HIGH'));
+  const hasWarningPolicy = policies.some(p => p.triggered && (p.severity === 'WARNING' || p.severity === 'MEDIUM'));
 
-  if (hasRed) return 'red';
-  if (hasYellow) return 'yellow';
+  // Critical/High policy triggers override to red
+  if (hasRed || hasCriticalPolicy) return 'red';
+  if (hasYellow || hasWarningPolicy) return 'yellow';
   return 'green';
 }

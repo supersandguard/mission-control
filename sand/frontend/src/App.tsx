@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import TxQueue from './pages/TxQueue'
 import TxDetail from './pages/TxDetail'
 import Settings from './pages/Settings'
+import ApiDocs from './pages/ApiDocs'
 import Layout from './components/Layout'
 
 // Protected route wrapper
@@ -38,6 +39,7 @@ function AppRoutes() {
       {/* Public pages — skip if inside Safe App and authenticated */}
       <Route path="/" element={<SafeAwareRoute><Landing /></SafeAwareRoute>} />
       <Route path="/login" element={<SafeAwareRoute><Login /></SafeAwareRoute>} />
+      <Route path="/docs" element={<ApiDocs />} />
 
       {/* App pages — with Layout (header + bottom nav) and auth protection */}
       <Route element={

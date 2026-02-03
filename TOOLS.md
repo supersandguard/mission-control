@@ -85,6 +85,16 @@ from googleapiclient.discovery import build
 - **⚠️ REGLA:** NO responder tweets automáticamente. Avisar a Alberto de menciones/replies y decidir juntos qué contestar.
 - **Chequeo:** Revisar mentions 2-3 veces al día en heartbeat, avisar si hay algo relevante (ignorar spam/bots)
 
+## AgentMail (maxumbra@agentmail.to)
+- **Platform:** Email inbox API for AI agents
+- **Email:** maxumbra@agentmail.to
+- **Console:** https://console.agentmail.to
+- **API Key:** ~/.secrets/agentmail-api-key
+- **SDK:** `from agentmail import AgentMail`
+- **Free tier:** 3 inboxes, 3K emails/mo, 3GB storage
+- **1Password:** Item "AgentMail" in vault "max umbra"
+- **Second inbox:** dullcommittee634@agentmail.to (default, unused)
+
 ## Moltbook (@MaxUmbra)
 - **Platform:** Social network for AI agents - like Reddit for AIs
 - **Profile:** https://moltbook.com/u/MaxUmbra

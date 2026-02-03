@@ -12,11 +12,13 @@ import simulateRouter from './routes/simulate';
 import decodeRouter from './routes/decode';
 import explainRouter from './routes/explain';
 import riskRouter from './routes/risk';
+import policiesRouter from './routes/policies';
 import pollRouter from './routes/poll';
 import paymentsRouter from './routes/payments';
 import stripeRouter from './routes/stripe';
 import promoRouter from './routes/promo';
 import daimoWebhookRouter from './routes/daimo-webhook';
+import authRouter from './routes/auth';
 import foundersRouter from './routes/founders';
 
 dotenv.config();
@@ -69,7 +71,7 @@ app.use(cors({
   ],
   credentials: true,
 }));
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '100kb' }));
 
 // Apply rate limiting only to API routes
 app.use('/api', apiLimiter);
@@ -80,12 +82,14 @@ app.use('/api/simulate', simulateRouter);
 app.use('/api/decode', decodeRouter);
 app.use('/api/explain', explainRouter);
 app.use('/api/risk', riskRouter);
+app.use('/api/policies', policiesRouter);
 app.use('/api/poll', pollRouter);
 app.use('/api/payments', paymentsRouter);
 app.use('/api/stripe', stripeRouter);
 app.use('/api/promo', promoRouter);
 app.use('/api/webhooks', daimoWebhookRouter);
 app.use('/api/founders', foundersRouter);
+app.use('/api/auth', authRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {
@@ -143,5 +147,8 @@ if (isDirectRun) {
   const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
     console.log(`🛡️  SandGuard API running on http://localhost:${PORT}`);
+  });
+}
+p://localhost:${PORT}`);
   });
 }

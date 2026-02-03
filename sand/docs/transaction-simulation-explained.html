@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Simulation Explained — SandGuard Blog</title>
+    <meta name="description" content="Understanding transaction simulation: how blockchain forks work, what Tenderly does behind the scenes, and why you should simulate every transaction before signing.">
+    
+    <meta property="og:title" content="Transaction Simulation Explained">
+    <meta property="og:description" content="Ever wonder what happens when you click 'simulate transaction'? Here's how blockchain forks, balance predictions, and gas estimation actually work.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://supersandguard.github.io/sandguard/transaction-simulation-explained.html">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://supersandguard.github.io/sandguard/transaction-simulation-explained.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1a2332;
+            --border: #334155;
+            --border-subtle: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --emerald: #34d399;
+            --emerald-dim: #059669;
+            --cyan: #22d3ee;
+            --red: #f87171;
+            --amber: #fbbf24;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--emerald); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--cyan); }
+        .header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 1.5rem;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+        .header-nav a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .btn-cta {
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+        }
+        .btn-cta:hover { opacity: 0.9; color: white !important; }
+        .article-page {
+            max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem;
+        }
+        .article-page h1 {
+            font-size: 2.25rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .article-meta {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .article-date { color: var(--text-muted); font-size: 0.8125rem; }
+        .article-tag {
+            font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px;
+            background: rgba(52, 211, 153, 0.1); color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .article-tag.blue {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--cyan);
+            border-color: rgba(34, 211, 238, 0.2);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem;
+        }
+        .back-link:hover { color: var(--text-secondary); }
+        .article-body h2 {
+            font-size: 1.375rem; font-weight: 700;
+            margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .article-body h3 {
+            font-size: 1.125rem; font-weight: 600;
+            margin-top: 2rem; margin-bottom: 0.5rem; color: var(--emerald);
+        }
+        .article-body p {
+            color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 1rem;
+        }
+        .article-body strong { color: var(--text-primary); }
+        .article-body em { color: var(--text-secondary); font-style: italic; }
+        .article-body ul, .article-body ol {
+            color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.5rem;
+        }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body blockquote {
+            border-left: 3px solid var(--emerald);
+            padding: 0.75rem 1.25rem; margin: 1.5rem 0;
+            background: rgba(52, 211, 153, 0.05); border-radius: 0 8px 8px 0;
+        }
+        .article-body blockquote p { color: var(--text-secondary); margin-bottom: 0; }
+        .article-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary); padding: 0.15em 0.4em;
+            border-radius: 4px; font-size: 0.875em; color: var(--cyan);
+        }
+        .article-body pre {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0;
+        }
+        .article-body pre code {
+            background: none; padding: 0; font-size: 0.8125rem;
+            line-height: 1.6; color: var(--text-secondary);
+        }
+        .article-body hr {
+            border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0;
+        }
+        .info-box {
+            background: rgba(34, 211, 238, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .safe-box {
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .warning-box {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+        }
+        .diagram {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem;
+            color: var(--text-secondary); line-height: 1.4;
+        }
+        .cta-section {
+            text-align: center; padding: 3rem 2rem; margin: 2rem 0;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.15); border-radius: 16px;
+        }
+        .cta-section h3 {
+            font-size: 1.375rem; font-weight: 700; margin-bottom: 0.75rem;
+        }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--emerald-dim), #0d9488);
+            color: white !important; padding: 0.75rem 1.75rem;
+            border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
+        }
+        .cta-btn:hover { opacity: 0.9; color: white !important; }
+        .footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 2rem 1.5rem; text-align: center;
+        }
+        .footer-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 0.5rem;
+            color: var(--text-muted); font-size: 0.8125rem;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a { color: var(--text-muted); font-size: 0.8125rem; }
+        .footer-links a:hover { color: var(--text-secondary); }
+        @media (max-width: 640px) {
+            .article-page h1 { font-size: 1.625rem; }
+            .header-nav .hide-mobile { display: none; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/sandguard/" class="logo">
+                <span class="logo-icon">🛡️</span>
+                SandGuard
+            </a>
+            <nav class="header-nav">
+                <a href="/sandguard/" class="hide-mobile">Blog</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener" class="hide-mobile">GitHub</a>
+                <a href="https://supersandguard.com" class="btn-cta">Try Free →</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="article-page">
+        <a href="/sandguard/" class="back-link">← Back to Blog</a>
+        
+        <h1>Transaction Simulation Explained</h1>
+        
+        <div class="article-meta">
+            <span class="article-date">February 2, 2026</span>
+            <span class="article-tag blue">Technical Guide</span>
+            <span class="article-tag">Simulation</span>
+        </div>
+        
+        <div class="article-body">
+            <p>You're about to sign a transaction that will swap 1,000 USDC for ETH through a complex DeFi protocol. The interface shows you'll receive "≈ 0.42 ETH," but how do you know that's accurate? What if there's slippage? What if the transaction fails and you still pay gas?</p>
+            
+            <p><strong>Transaction simulation</strong> answers these questions by running your transaction in a safe, isolated environment before you commit to it on the real blockchain. Think of it as a "practice run" that shows you exactly what will happen without any risk.</p>
+
+            <h2>How Transaction Simulation Works</h2>
+
+            <p>At its core, transaction simulation uses blockchain forking technology to create a perfect copy of the current blockchain state, then runs your transaction against that copy to see what happens.</p>
+
+            <div class="diagram">
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Real Chain    │───▶│  Forked Chain   │───▶│   Simulation    │
+│   (Block 456)   │    │   (Block 456)   │    │    Results      │
+│                 │    │                 │    │                 │
+│ Your wallet:    │    │ Your wallet:    │    │ Your wallet:    │
+│  1000 USDC      │    │  1000 USDC      │    │   742 USDC      │
+│  0.15 ETH       │    │  0.15 ETH       │    │   0.57 ETH      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                ↓
+                       ┌─────────────────┐
+                       │  Execute Your   │
+                       │  Transaction    │
+                       └─────────────────┘
+            </div>
+
+            <h3>Step 1: Fork the Blockchain</h3>
+            <p>The simulation service creates an exact copy of the blockchain at the current block height. This fork contains all the same smart contracts, account balances, and state that exists on the real chain at that moment.</p>
+
+            <h3>Step 2: Execute Your Transaction</h3>
+            <p>Your transaction is executed against this forked environment. The virtual machine runs all the same code paths, makes all the same calls, and modifies state exactly as it would on the real blockchain.</p>
+
+            <h3>Step 3: Capture the Results</h3>
+            <p>The simulation engine records everything that happens: balance changes, gas usage, events emitted, internal transactions, and whether the transaction succeeds or reverts.</p>
+
+            <h3>Step 4: Present the Outcome</h3>
+            <p>All this data is formatted into human-readable results showing exactly what your transaction will do before you sign it.</p>
+
+            <h2>What Tenderly Does Behind the Scenes</h2>
+
+            <p>Tenderly is the most popular blockchain simulation platform, powering transaction previews for thousands of DeFi protocols and wallet applications.</p>
+
+            <div class="info-box">
+                <p><strong>💡 How Tenderly Works</strong></p>
+                <p>Tenderly maintains real-time forks of major blockchains (Ethereum, Polygon, Arbitrum, etc.) using their own node infrastructure. When you simulate a transaction, they:</p>
+                <ul>
+                    <li>Route your request to a node running your target chain</li>
+                    <li>Create a lightweight fork from the latest block</li>
+                    <li>Execute your transaction in an isolated environment</li>
+                    <li>Parse the results and return structured data</li>
+                </ul>
+            </div>
+
+            <h3>The Technology Stack</h3>
+
+            <p><strong>Node Infrastructure:</strong> Tenderly runs dedicated blockchain nodes for all major networks. These nodes maintain complete blockchain state and can create forks instantly.</p>
+
+            <p><strong>Virtual Machine:</strong> Each simulation runs in an isolated EVM (Ethereum Virtual Machine) instance. This ensures your simulation can't affect other users or the real blockchain.</p>
+
+            <p><strong>State Management:</strong> The fork includes not just balances, but all smart contract state: AMM pool reserves, lending protocol positions, governance votes, NFT ownership, etc.</p>
+
+            <p><strong>Gas Simulation:</strong> The simulation tracks exact gas usage for every operation, giving you accurate gas estimates including the impact of network congestion.</p>
+
+            <h2>Balance Changes: The Most Important Output</h2>
+
+            <p>The most valuable part of transaction simulation is seeing exactly how your balances will change. Here's what a typical balance change report looks like:</p>
+
+            <pre><code>Balance Changes for 0x742d35cc64b8581a4d8ae4f06c7b1d9a8f1234567:
+
+Before Transaction:
+  ETH: 2.45167834
+  USDC: 1,000.000000
+  WETH: 0.000000
+
+After Transaction:
+  ETH: 2.42855193  (-0.02312641 ETH)  ← Gas cost
+  USDC: 742.830000  (-257.170000 USDC)  ← Swap input
+  WETH: 0.085142000  (+0.085142000 WETH)  ← Swap output
+
+Net Change: Swapped 257.17 USDC for 0.085 WETH</code></pre>
+
+            <h3>Why This Matters</h3>
+
+            <p>Balance changes catch problems that aren't obvious from transaction descriptions:</p>
+
+            <ul>
+                <li><strong>Slippage:</strong> You expect 0.42 ETH but the simulation shows 0.085 — massive slippage detected</li>
+                <li><strong>Fees:</strong> Hidden protocol fees that weren't disclosed in the UI</li>
+                <li><strong>Failed swaps:</strong> The transaction succeeds but you receive 0 tokens due to poor routing</li>
+                <li><strong>Unexpected approvals:</strong> The transaction includes token approvals you didn't expect</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>⚠️ Simulation Limitations</strong></p>
+                <p>Simulations show what <em>would</em> happen if the transaction executed right now. But blockchain state changes constantly, so:</p>
+                <ul>
+                    <li>Large trades may have different slippage when actually executed</li>
+                    <li>Gas prices fluctuate between simulation and execution</li>
+                    <li>MEV bots might front-run your transaction</li>
+                    <li>Network congestion can cause failures not shown in simulation</li>
+                </ul>
+                <p>Always use recent simulations and understand they're estimates, not guarantees.</p>
+            </div>
+
+            <h2>Gas Estimation and Optimization</h2>
+
+            <p>Accurate gas estimation is crucial for transaction success. Set your gas limit too low and the transaction reverts. Set it too high and you waste money on unused gas.</p>
+
+            <h3>How Simulation Improves Gas Estimates</h3>
+
+            <div class="diagram">
+Traditional Gas Estimation:
+├─ Static analysis of bytecode
+├─ Historical average for similar transactions  
+├─ Often inaccurate for complex DeFi interactions
+└─ No accounting for current network state
+
+Simulation-Based Gas Estimation:
+├─ Actually executes every operation
+├─ Accounts for current blockchain state
+├─ Includes dynamic costs (storage reads/writes)
+├─ Tests different gas price scenarios
+└─ Provides confidence intervals
+            </div>
+
+            <h3>Dynamic vs. Static Costs</h3>
+
+            <p>Smart contract operations have two types of gas costs:</p>
+
+            <p><strong>Static costs</strong> are predictable — things like basic arithmetic, memory allocation, and simple function calls. These can be estimated without simulation.</p>
+
+            <p><strong>Dynamic costs</strong> depend on blockchain state at execution time:</p>
+            <ul>
+                <li><strong>Storage operations:</strong> Writing to an empty storage slot costs 20,000 gas; updating an existing slot costs 5,000 gas</li>
+                <li><strong>External calls:</strong> Gas costs vary based on the target contract's complexity</li>
+                <li><strong>Loop iterations:</strong> The number of iterations depends on current state (e.g., how many positions need to be liquidated)</li>
+                <li><strong>Conditional logic:</strong> Different code paths have different gas costs</li>
+            </ul>
+
+            <p>Simulation captures all these dynamic costs by actually running the code.</p>
+
+            <h3>Gas Price Optimization</h3>
+
+            <p>Modern simulations can test multiple gas price scenarios:</p>
+
+            <pre><code>Gas Analysis:
+┌─────────────┬──────────┬─────────────┬──────────────┐
+│ Gas Price   │ Gas Used │ Total Cost  │ Est. Time    │
+├─────────────┼──────────┼─────────────┼──────────────┤
+│ 12 gwei     │ 185,420  │ $3.41       │ 2-5 minutes  │
+│ 15 gwei     │ 185,420  │ $4.26       │ 1-2 minutes  │
+│ 20 gwei     │ 185,420  │ $5.68       │ < 1 minute   │
+│ 30 gwei     │ 185,420  │ $8.52       │ Next block   │
+└─────────────┴──────────┴─────────────┴──────────────┘
+
+Recommendation: 15 gwei for optimal cost/speed balance</code></pre>
+
+            <h2>Advanced Simulation Features</h2>
+
+            <h3>State Override</h3>
+            <p>Simulations can modify blockchain state before running your transaction. This enables powerful "what if" scenarios:</p>
+
+            <ul>
+                <li><strong>Balance simulation:</strong> "What if I had 10 ETH instead of 1 ETH?"</li>
+                <li><strong>Price simulation:</strong> "How would this trade perform if ETH was $3,000?"</li>
+                <li><strong>Governance simulation:</strong> "What if this proposal had already passed?"</li>
+                <li><strong>Emergency simulation:</strong> "What if this contract was paused?"</li>
+            </ul>
+
+            <h3>Multi-Transaction Simulation</h3>
+            <p>Some protocols require multiple transactions to complete an operation. Simulation can bundle these together to show the complete outcome:</p>
+
+            <pre><code>Multi-Step Operation: Compound Leverage
+│
+├─ Transaction 1: Supply 1000 USDC as collateral
+│  └─ Balance: +1000 cUSDC, -1000 USDC
+│
+├─ Transaction 2: Borrow 500 USDC against collateral  
+│  └─ Balance: +500 USDC, +debt position
+│
+├─ Transaction 3: Swap 500 USDC → 0.18 ETH
+│  └─ Balance: -500 USDC, +0.18 ETH
+│
+└─ Final Position:
+   ├─ Collateral: 1000 cUSDC (~$1,000)
+   ├─ Debt: 500 USDC
+   └─ Net Assets: $1,000 collateral + $518 ETH - $500 debt = $1,018
+</code></pre>
+
+            <h3>Trace Analysis</h3>
+            <p>Advanced simulations provide complete execution traces showing every function call, event emission, and state change. This is invaluable for debugging complex transactions:</p>
+
+            <pre><code>Execution Trace:
+├─ yourWallet.approve(uniswap, 1000 USDC) 
+├─ uniswap.exactInputSingle(...)
+│  ├─ usdc.transferFrom(yourWallet, pool, 1000 USDC)
+│  ├─ pool.swap(...)  
+│  │  ├─ pool.beforeSwapHook(...)
+│  │  ├─ pool.computeSwapAmount(...)
+│  │  └─ weth.transfer(yourWallet, 0.32 WETH)
+│  └─ uniswap.refundETH()
+└─ Transaction completed successfully</code></pre>
+
+            <h2>Why You Should Simulate Every Transaction</h2>
+
+            <h3>Catch Errors Before They're Expensive</h3>
+            <p>Transaction reverts on mainnet still cost gas. A failed transaction might cost $50+ in gas fees with nothing to show for it. Simulation catches these failures for free.</p>
+
+            <h3>Verify UI Accuracy</h3>
+            <p>Dapp interfaces sometimes show incorrect information due to bugs, outdated data, or intentional deception. Simulation gives you ground truth about what will actually happen.</p>
+
+            <h3>Understand Total Costs</h3>
+            <p>Many protocols have hidden fees not disclosed in the UI. Simulation shows exactly how much you'll pay in gas, protocol fees, slippage, and MEV.</p>
+
+            <div class="safe-box">
+                <p><strong>✅ Real Example: Avoiding a Costly Mistake</strong></p>
+                <p>A user was about to provide liquidity to a "new DeFi protocol" promising 400% APY. The UI showed they would receive LP tokens worth $10,000 for their $10,000 deposit.</p>
+                <p>Simulation revealed the truth: the transaction would succeed, but the LP tokens received would be worth exactly $0. The protocol's "mint" function contained malicious code that granted worthless tokens.</p>
+                <p>Simulation cost: $0. Avoided loss: $10,000.</p>
+            </div>
+
+            <h3>Plan Complex Strategies</h3>
+            <p>DeFi strategies often involve multiple steps across different protocols. Simulation lets you test the entire strategy before committing funds:</p>
+
+            <ul>
+                <li>Will the leverage position be profitable after fees?</li>
+                <li>What's the liquidation price after all transactions?</li>
+                <li>How much gas will the complete strategy cost?</li>
+                <li>What if one of the intermediate transactions fails?</li>
+            </ul>
+
+            <h2>Common Simulation Patterns</h2>
+
+            <h3>Token Swaps</h3>
+            <p><strong>What to check:</strong> Actual output amount, slippage percentage, fee breakdown, and gas cost relative to trade size.</p>
+
+            <h3>Liquidity Operations</h3>
+            <p><strong>What to check:</strong> LP token value, impermanent loss risk, position health after deposit/withdrawal.</p>
+
+            <h3>Lending & Borrowing</h3>
+            <p><strong>What to check:</strong> Collateral ratios, liquidation thresholds, interest rate changes, position sustainability.</p>
+
+            <h3>Governance Actions</h3>
+            <p><strong>What to check:</strong> Vote weight calculation, proposal execution effects, token lock periods.</p>
+
+            <h3>NFT Transactions</h3>
+            <p><strong>What to check:</strong> Ownership transfer, royalty payments, marketplace fees, authenticity verification.</p>
+
+            <h2>Simulation Best Practices</h2>
+
+            <h3>Always Use Fresh Simulations</h3>
+            <p>Blockchain state changes rapidly. A simulation from 10 minutes ago may no longer be accurate, especially for DEX trades or lending protocols.</p>
+
+            <h3>Understand Your Risk Tolerance</h3>
+            <p>Decide what level of slippage, gas cost, and outcome variance you're comfortable with before simulating. This helps you interpret results objectively.</p>
+
+            <h3>Compare Multiple Scenarios</h3>
+            <p>Test different gas prices, slippage tolerances, and route options. The "optimal" choice depends on your priorities (speed vs. cost vs. success probability).</p>
+
+            <h3>Read the Full Report</h3>
+            <p>Don't just look at the final balance changes. Review gas costs, intermediate steps, and any warnings or unusual patterns.</p>
+
+            <div class="info-box">
+                <p><strong>🔧 Power User Tip: Simulation APIs</strong></p>
+                <p>If you're building tools or automating trades, most simulation services offer APIs:</p>
+                <ul>
+                    <li><strong>Tenderly:</strong> tenderly.co/api</li>
+                    <li><strong>Alchemy:</strong> alchemy.com/simulate</li>
+                    <li><strong>Infura:</strong> infura.io/product/ethereum/transactions</li>
+                </ul>
+                <p>These APIs enable automated testing, strategy backtesting, and integration into trading bots.</p>
+            </div>
+
+            <h2>The Future of Transaction Simulation</h2>
+
+            <p>Simulation technology continues to evolve:</p>
+
+            <h3>Real-Time MEV Simulation</h3>
+            <p>Next-generation simulations will account for MEV (Maximal Extractable Value) by simulating how searchers and builders might interact with your transaction.</p>
+
+            <h3>Cross-Chain Simulation</h3>
+            <p>As bridge protocols mature, simulations will preview transactions that span multiple blockchains.</p>
+
+            <h3>AI-Powered Analysis</h3>
+            <p>Machine learning models will automatically identify suspicious patterns, optimal execution strategies, and potential risks.</p>
+
+            <h3>Social Simulation</h3>
+            <p>Simulations will show not just what your transaction does, but how other users are likely to respond (front-running, arbitrage, etc.).</p>
+
+            <hr>
+
+            <div class="cta-section">
+                <h3>SandGuard simulates every transaction automatically</h3>
+                <p>Get instant transaction simulation, balance change previews, and risk analysis for every Safe multisig transaction.</p>
+                <a href="https://supersandguard.com" class="cta-btn">Try SandGuard Free →</a>
+            </div>
+            
+            <blockquote>
+                <p><em>SandGuard is a transaction firewall for Safe multisig wallets. Every transaction gets automatically decoded, simulated, and risk-scored before you sign. Try it free at <a href="https://supersandguard.com">supersandguard.com</a></em></p>
+            </blockquote>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span>🛡️</span>
+                <span>SandGuard — Transaction Firewall for Safe Multisig</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://supersandguard.com">supersandguard.com</a>
+                <a href="https://github.com/supersandguard/sandguard" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://safe.global" target="_blank" rel="noopener">Built for Safe{Wallet}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

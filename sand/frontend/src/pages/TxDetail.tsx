@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { FileText, Coins, Search, ShieldCheck, Fuel, Package, X, Check, AlertTriangle, Copy, CheckCircle, XCircle, Info, ExternalLink } from 'lucide-react'
 import { useTransactionsContext } from '../context/TransactionsContext'
 import RiskBadge from '../components/RiskBadge'
+import PolicyBadges from '../components/PolicyBadges'
 import BalanceChangeCard from '../components/BalanceChangeCard'
 
 // Etherscan base URLs by chain
@@ -143,6 +144,13 @@ export default function TxDetail() {
             <p className="text-sm text-slate-500 mt-1">
               To: <CopyableAddress address={tx.to} chainId={chainId} />
             </p>
+            
+            {/* Policy Badges */}
+            {tx.risk?.policies && tx.risk.policies.length > 0 && (
+              <div className="mt-2">
+                <PolicyBadges policies={tx.risk.policies} size="md" maxVisible={3} />
+              </div>
+            )}
           </div>
           {tx.risk && <RiskBadge level={tx.risk.score} size="lg" reasons={tx.risk.reasons} />}
         </div>
@@ -312,6 +320,43 @@ export default function TxDetail() {
                 <p className="text-sm text-slate-500">No parameters decoded</p>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Policy Violations */}
+      {tx.risk?.policies && tx.risk.policies.some(p => p.triggered) && (
+        <div className="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <AlertTriangle className="w-4 h-4" /> Policy Violations
+          </h3>
+          <div className="space-y-3">
+            {tx.risk.policies.filter(p => p.triggered).map((policy, i) => {
+              const severityConfig = {
+                CRITICAL: { color: 'text-red-300', icon: '🚨', bg: 'bg-red-500/10 border-red-500/30' },
+                HIGH: { color: 'text-red-400', icon: '🔴', bg: 'bg-red-500/10 border-red-500/30' },
+                WARNING: { color: 'text-amber-300', icon: '⚠️', bg: 'bg-amber-500/10 border-amber-500/30' },
+                MEDIUM: { color: 'text-yellow-400', icon: '🟡', bg: 'bg-yellow-500/10 border-yellow-500/30' },
+                LOW: { color: 'text-blue-400', icon: '🔵', bg: 'bg-blue-500/10 border-blue-500/30' },
+              }[policy.severity]
+
+              return (
+                <div key={i} className={`border rounded-lg p-3 ${severityConfig.bg}`}>
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg flex-shrink-0 mt-0.5">{severityConfig.icon}</span>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className={`font-medium text-sm ${severityConfig.color}`}>{policy.name}</p>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${severityConfig.color} border ${policy.severity === 'CRITICAL' ? 'border-red-500/50' : policy.severity === 'HIGH' ? 'border-red-500/50' : policy.severity === 'WARNING' ? 'border-amber-500/50' : policy.severity === 'MEDIUM' ? 'border-yellow-500/50' : 'border-blue-500/50'}`}>
+                          {policy.severity}
+                        </span>
+                      </div>
+                      <p className={`text-sm ${severityConfig.color}`}>{policy.message}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

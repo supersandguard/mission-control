@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { decodeTransaction } from '../services/decodeService';
 import { DecodeRequest } from '../types';
+import { optionalAuth } from '../middleware/auth';
+import { validateDecodeRequest } from '../middleware/validation';
 
 const router = Router();
 
@@ -8,7 +10,7 @@ function sanitize(input: string): string {
   return input.replace(/[<>"'&]/g, '');
 }
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', validateDecodeRequest, async (req: Request, res: Response) => {
   try {
     const { calldata, contractAddress, chainId } = req.body as DecodeRequest;
     if (!calldata || !contractAddress) {

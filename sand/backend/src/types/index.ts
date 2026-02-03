@@ -225,6 +225,7 @@ export interface RiskReason {
 export interface RiskResult {
   score: RiskLevel;
   reasons: RiskReason[];
+  policies?: PolicyResult[];
   details: {
     contractAge?: number;
     contractVerified?: boolean;
@@ -233,4 +234,16 @@ export interface RiskResult {
     transferValueUsd?: number;
     isUnlimitedApproval: boolean;
   };
+}
+
+// ─── Policy Types ───
+
+export type PolicySeverity = 'LOW' | 'MEDIUM' | 'WARNING' | 'HIGH' | 'CRITICAL';
+
+export interface PolicyResult {
+  policyId: string;
+  name: string;
+  severity: PolicySeverity;
+  triggered: boolean;
+  message: string;
 }
