@@ -139,6 +139,14 @@
       "credentials": "iamnehmad@ account",
       "lastUsed": 1770134000000,
       "notes": "100.105.206.114 — iPhone, Mac, PC connected"
+    },
+    {
+      "id": "markmap",
+      "name": "Markmap",
+      "icon": "🗺️",
+      "description": "Markdown → mindmaps interactivos (SVG/HTML)",
+      "status": "working",
+      "version": "v0.18.12"
     }
   ]
 }
