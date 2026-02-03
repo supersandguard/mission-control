@@ -161,7 +161,15 @@ function CommandBar() {
 function StatusBar({ status, onPatch }) {
   const [showModelPicker, setShowModelPicker] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [restarting, setRestarting] = useState(false)
   if (!status) return null
+
+  const doRestart = async () => {
+    if (!confirm('Restart Max?')) return
+    setRestarting(true)
+    try { await api('/gateway/restart', { method: 'POST' }) } catch (e) {}
+    setTimeout(() => setRestarting(false), 8000)
+  }
 
   const mem = status.memory || {}
   const model = (status.model || '').replace('anthropic/claude-','')
@@ -194,6 +202,12 @@ function StatusBar({ status, onPatch }) {
           <span>CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
           <span>Up {fmtUptime(status.systemUptime)}</span>
           <span className="hidden md:inline font-mono">v{status.session?.version}</span>
+          <button onClick={doRestart} disabled={restarting}
+            className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+              restarting ? 'bg-yellow-500/20 text-yellow-400 animate-pulse' : 'bg-card hover:bg-red-500/20 hover:text-red-400 text-muted'
+            }`}>
+            {restarting ? '⏳ Restarting...' : '🔄'}
+          </button>
         </div>
       </div>
 

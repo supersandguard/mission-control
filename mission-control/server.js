@@ -278,6 +278,22 @@ app.delete('/api/heartbeat/checks/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// GATEWAY RESTART
+// ══════════════════════════════════════════════════════════
+
+app.post('/api/gateway/restart', async (req, res) => {
+    try {
+        const gwRes = await fetch('http://127.0.0.1:18789/tools/invoke', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tool: 'gateway', args: { action: 'restart', reason: 'Dashboard restart button' } })
+        });
+        const data = await gwRes.json();
+        res.json(data);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // PREFERENCES (Command Bar)
 // ══════════════════════════════════════════════════════════
 
