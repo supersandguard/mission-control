@@ -1,3 +1,14 @@
 {
-  "preferences": []
+  "preferences": [
+    {
+      "id": "pref_1770152985164",
+      "text": "Quiero que siempre tengas presente que cualquier Password, que generes en cualquier login, sea guardado en 1Password. Y quiero que siempre recuerdes todo lo que has guardado en Password y sepas qué cuentas con esas herramientas.",
+      "category": null,
+      "target": null,
+      "status": "pending",
+      "createdAt": 1770152985164,
+      "appliedAt": null,
+      "response": null
+    }
+  ]
 }

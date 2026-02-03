@@ -340,6 +340,59 @@ app.delete('/api/preferences/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// SUB-AGENTS
+// ══════════════════════════════════════════════════════════
+
+const AGENTS_FILE = path.join(__dirname, 'data', 'subagents.json');
+
+app.get('/api/subagents', async (req, res) => {
+    try { res.json(JSON.parse(await fs.readFile(AGENTS_FILE, 'utf8'))); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/subagents/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(AGENTS_FILE, 'utf8'));
+        const idx = data.agents.findIndex(a => a.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Agent not found' });
+        data.agents[idx] = { ...data.agents[idx], ...req.body };
+        await fs.writeFile(AGENTS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/subagents', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(AGENTS_FILE, 'utf8'));
+        const agent = {
+            id: req.body.id || 'agent_' + Date.now(),
+            name: req.body.name || 'New Agent',
+            emoji: req.body.emoji || '🤖',
+            role: req.body.role || '',
+            personality: req.body.personality || '',
+            expertise: req.body.expertise || [],
+            model: req.body.model || 'anthropic/claude-sonnet-4-20250514',
+            status: 'active',
+            invocations: 0,
+            lastInvoked: null,
+            createdAt: new Date().toISOString()
+        };
+        data.agents.push(agent);
+        await fs.writeFile(AGENTS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true, agent });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/subagents/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(AGENTS_FILE, 'utf8'));
+        data.agents = data.agents.filter(a => a.id !== req.params.id);
+        await fs.writeFile(AGENTS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // TOOLS STATUS
 // ══════════════════════════════════════════════════════════
 

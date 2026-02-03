@@ -568,6 +568,187 @@ function CronSection() {
 }
 
 // ═══════════════════════════════════════════════════
+// SUB-AGENTS SECTION
+// ═══════════════════════════════════════════════════
+function SubAgentsSection() {
+  const [agents, setAgents] = useState([])
+  const [expanded, setExpanded] = useState(null)
+  const [editing, setEditing] = useState(null)
+  const [editFields, setEditFields] = useState({})
+  const [newExpertise, setNewExpertise] = useState('')
+
+  useEffect(() => { load() }, [])
+  const load = async () => { try { const d = await api('/subagents'); setAgents(d.agents || []) } catch (e) {} }
+
+  const startEdit = (agent) => {
+    setEditing(agent.id)
+    setEditFields({ name: agent.name, emoji: agent.emoji, role: agent.role, personality: agent.personality, expertise: [...agent.expertise], model: agent.model })
+  }
+
+  const saveEdit = async (agent) => {
+    await api(`/subagents/${agent.id}`, { method: 'PATCH', body: JSON.stringify(editFields) })
+    setEditing(null); load()
+  }
+
+  const toggleStatus = async (agent) => {
+    const newStatus = agent.status === 'active' ? 'paused' : 'active'
+    await api(`/subagents/${agent.id}`, { method: 'PATCH', body: JSON.stringify({ status: newStatus }) }); load()
+  }
+
+  const addExpertise = () => {
+    if (!newExpertise.trim()) return
+    setEditFields(prev => ({ ...prev, expertise: [...prev.expertise, newExpertise.trim()] }))
+    setNewExpertise('')
+  }
+
+  const removeExpertise = (idx) => {
+    setEditFields(prev => ({ ...prev, expertise: prev.expertise.filter((_, i) => i !== idx) }))
+  }
+
+  const modelLabel = (m) => {
+    if (m?.includes('opus')) return 'Opus'
+    if (m?.includes('sonnet')) return 'Sonnet'
+    if (m?.includes('haiku')) return 'Haiku'
+    return m?.split('/')?.pop() || '?'
+  }
+
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-text">👥 Team</h3>
+        <span className="text-[10px] text-muted">{agents.filter(a => a.status === 'active').length} active</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {agents.map(agent => {
+          const isExp = expanded === agent.id
+          const isEdit = editing === agent.id
+
+          return (
+            <div key={agent.id} className={`bg-surface border rounded-lg overflow-hidden transition-all ${
+              agent.status === 'paused' ? 'border-card opacity-50' : 'border-card'
+            } ${isExp ? 'md:col-span-2' : ''}`}>
+
+              {/* Card header */}
+              <button onClick={() => setExpanded(isExp ? null : agent.id)}
+                className="w-full px-4 py-3 text-left hover:bg-card/30 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{agent.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-text">{agent.name}</span>
+                      <span className={`w-2 h-2 rounded-full ${agent.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}`} />
+                    </div>
+                    <p className="text-xs text-muted">{agent.role}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="text-[10px] text-muted">{modelLabel(agent.model)}</div>
+                    {agent.invocations > 0 && <div className="text-[10px] text-muted">{agent.invocations} runs</div>}
+                  </div>
+                </div>
+              </button>
+
+              {/* Expanded view */}
+              {isExp && !isEdit && (
+                <div className="px-4 pb-4 border-t border-card pt-3 space-y-3">
+                  {/* Personality */}
+                  <div>
+                    <span className="text-[10px] text-muted uppercase tracking-wider">Personality</span>
+                    <p className="text-xs text-text mt-1 leading-relaxed">{agent.personality}</p>
+                  </div>
+
+                  {/* Expertise tags */}
+                  <div>
+                    <span className="text-[10px] text-muted uppercase tracking-wider">Expertise</span>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {agent.expertise.map((tag, i) => (
+                        <span key={i} className="text-[10px] bg-highlight/10 text-highlight px-2 py-0.5 rounded-full">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="flex gap-4 text-[10px] text-muted">
+                    <span>Model: <span className="text-text">{modelLabel(agent.model)}</span></span>
+                    <span>Invocations: <span className="text-text">{agent.invocations}</span></span>
+                    <span>Last: <span className="text-text">{agent.lastInvoked ? timeAgo(new Date(agent.lastInvoked).getTime()) : 'never'}</span></span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3 pt-1">
+                    <button onClick={() => startEdit(agent)} className="text-xs text-highlight hover:underline">✏️ Edit</button>
+                    <button onClick={() => toggleStatus(agent)}
+                      className={`text-xs ${agent.status === 'active' ? 'text-yellow-400/70 hover:text-yellow-400' : 'text-green-400/70 hover:text-green-400'}`}>
+                      {agent.status === 'active' ? '⏸ Pause' : '▶ Activate'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit mode */}
+              {isExp && isEdit && (
+                <div className="px-4 pb-4 border-t border-card pt-3 space-y-3">
+                  <div className="grid grid-cols-[3rem_1fr] gap-2">
+                    <input value={editFields.emoji} onChange={e => setEditFields(p => ({...p, emoji: e.target.value}))}
+                      className="bg-card border border-accent rounded px-2 py-1.5 text-center text-lg" maxLength={4} />
+                    <input value={editFields.name} onChange={e => setEditFields(p => ({...p, name: e.target.value}))}
+                      className="bg-card border border-accent rounded px-3 py-1.5 text-sm text-text" placeholder="Name" />
+                  </div>
+                  <input value={editFields.role} onChange={e => setEditFields(p => ({...p, role: e.target.value}))}
+                    className="w-full bg-card border border-accent rounded px-3 py-1.5 text-xs text-text" placeholder="Role title" />
+                  <div>
+                    <label className="text-[10px] text-muted">Personality</label>
+                    <textarea value={editFields.personality} onChange={e => setEditFields(p => ({...p, personality: e.target.value}))}
+                      className="w-full bg-card border border-accent rounded px-3 py-2 text-xs text-text h-20 resize-none mt-1" />
+                  </div>
+
+                  {/* Expertise editor */}
+                  <div>
+                    <label className="text-[10px] text-muted">Expertise</label>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {editFields.expertise?.map((tag, i) => (
+                        <span key={i} className="text-[10px] bg-highlight/10 text-highlight px-2 py-0.5 rounded-full flex items-center gap-1">
+                          {tag}
+                          <button onClick={() => removeExpertise(i)} className="text-highlight/50 hover:text-red-400">×</button>
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-1 mt-1.5">
+                      <input value={newExpertise} onChange={e => setNewExpertise(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addExpertise() } }}
+                        placeholder="Add expertise..." className="flex-1 bg-card border border-accent rounded px-2 py-1 text-[10px] text-text" />
+                      <button onClick={addExpertise} className="text-[10px] text-highlight px-2">+</button>
+                    </div>
+                  </div>
+
+                  {/* Model selector */}
+                  <div>
+                    <label className="text-[10px] text-muted">Model</label>
+                    <div className="flex gap-2 mt-1">
+                      {MODELS.map(m => (
+                        <button key={m.id} onClick={() => setEditFields(p => ({...p, model: m.id}))}
+                          className={`text-[10px] px-3 py-1 rounded ${editFields.model === m.id ? 'bg-highlight text-white' : 'bg-card text-muted hover:text-text'}`}>
+                          {m.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-1">
+                    <button onClick={() => saveEdit(agent)} className="text-xs text-highlight font-medium">Save</button>
+                    <button onClick={() => setEditing(null)} className="text-xs text-muted">Cancel</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+// ═══════════════════════════════════════════════════
 // TOOLS SECTION
 // ═══════════════════════════════════════════════════
 function ToolsSection() {
@@ -767,6 +948,9 @@ export default function Control() {
     <div className="h-full overflow-auto p-3 md:p-6 space-y-5">
       <CommandBar />
       <StatusBar status={status} onPatch={patchConfig} />
+
+      <div className="border-t border-card/50" />
+      <SubAgentsSection />
 
       <div className="border-t border-card/50" />
       <HeartbeatSection status={status} onPatch={patchConfig} />
