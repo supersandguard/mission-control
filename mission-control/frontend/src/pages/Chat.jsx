@@ -68,61 +68,59 @@ export default function Chat({ onUnread, onBack }) {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      {/* Chat header with back button (mobile only) */}
-      <div className="md:hidden flex items-center gap-3 px-3 py-2 border-b border-card/50 shrink-0">
-        <button onClick={onBack} className="text-highlight text-sm">← Back</button>
-        <span className="text-sm font-medium text-text">💬 Chat</span>
-        {prefs.length > 0 && (
-          <button onClick={clearAll} className="text-xs text-muted hover:text-red-400 ml-auto">Clear</button>
-        )}
-      </div>
-
       {/* Messages area */}
-      <div ref={chatRef} className="flex-1 overflow-auto px-3 py-4">
+      <div ref={chatRef} className="flex-1 overflow-auto px-4 py-3">
         {sorted.length === 0 ? (
-          <div className="text-center py-16">
-            <span className="text-3xl block mb-2">💬</span>
-            <p className="text-sm text-text font-medium">¿Qué quieres cambiar?</p>
-            <p className="text-xs text-muted mt-1 mb-4">Dime en lenguaje normal y yo lo aplico.</p>
-            <div className="space-y-2">
-              {['Enumera siempre las listas', 'Sé más conciso', 'Revisa mi email cada 2 horas'].map(ex => (
-                <button key={ex} onClick={() => setText(ex)}
-                  className="block mx-auto text-xs bg-card hover:bg-accent text-muted hover:text-text px-4 py-2 rounded-full transition-all">
-                  "{ex}"
-                </button>
-              ))}
+          <div className="h-full flex flex-col items-center justify-center text-center px-4 -mt-8">
+            <div className="flex flex-col items-center max-w-sm">
+              <span className="text-4xl mb-3 opacity-60">💬</span>
+              <p className="text-base font-semibold text-text mb-2">¿Qué quieres cambiar?</p>
+              <p className="text-sm text-muted leading-relaxed mb-6">
+                Dime en lenguaje normal qué comportamiento quieres que tenga y yo lo aplico.
+              </p>
+              <div className="space-y-3 w-full">
+                {['Enumera siempre las listas', 'Sé más conciso en respuestas', 'Revisa mi email cada 2 horas'].map(ex => (
+                  <button key={ex} onClick={() => setText(ex)}
+                    className="block w-full text-sm bg-card/50 hover:bg-card text-muted hover:text-text px-4 py-3 rounded-2xl transition-all border border-card/30 hover:border-accent/30">
+                    "{ex}"
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
-          <div className="space-y-3 max-w-lg mx-auto">
+          <div className="space-y-4 max-w-md mx-auto pb-4">
             {sorted.map(p => (
-              <div key={p.id}>
-                {/* User bubble */}
+              <div key={p.id} className="space-y-2">
+                {/* User bubble (right aligned) */}
                 <div className="flex justify-end">
-                  <div className="bg-highlight/25 rounded-2xl rounded-br-md px-3.5 py-2 max-w-[75%]">
-                    <p className="text-[13px] text-text leading-snug">{p.text}</p>
-                    <span className="text-[10px] text-muted/40 block text-right mt-0.5">
+                  <div className="bg-highlight/90 rounded-[18px] rounded-br-md px-4 py-2.5 max-w-[85%] shadow-sm">
+                    <p className="text-[14px] text-white leading-[1.4] font-medium">{p.text}</p>
+                    <span className="text-[11px] text-white/70 block text-right mt-1 leading-none">
                       {new Date(p.createdAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 </div>
 
-                {/* Response bubble */}
+                {/* Response bubble (left aligned) */}
                 {p.status === 'applied' && p.response ? (
-                  <div className="flex justify-start mt-1.5">
-                    <div className="bg-card rounded-2xl rounded-bl-md px-3.5 py-2 max-w-[75%]">
-                      <p className="text-[13px] text-text leading-snug">{p.response}</p>
+                  <div className="flex justify-start">
+                    <div className="bg-card rounded-[18px] rounded-bl-md px-4 py-2.5 max-w-[85%] shadow-sm border border-card/50">
+                      <p className="text-[14px] text-text leading-[1.4]">{p.response}</p>
                       {(p.target || p.category) && (
-                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                          {p.target && <span className="text-[10px] text-highlight">→ {p.target}</span>}
-                          {p.category && <span className="text-[10px] text-muted/60 bg-surface px-1.5 py-0.5 rounded">{p.category}</span>}
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          {p.target && <span className="text-[11px] text-highlight font-medium">→ {p.target}</span>}
+                          {p.category && <span className="text-[10px] text-muted/70 bg-surface px-2 py-1 rounded-full">{p.category}</span>}
                         </div>
                       )}
+                      <span className="text-[11px] text-muted/60 block text-left mt-1 leading-none">
+                        {new Date(p.createdAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
                     </div>
                   </div>
                 ) : p.status === 'pending' ? (
-                  <div className="flex justify-start mt-1.5">
-                    <div className="bg-card/60 rounded-2xl rounded-bl-md px-4 py-3">
+                  <div className="flex justify-start">
+                    <div className="bg-card/70 rounded-[18px] rounded-bl-md px-4 py-3 border border-card/30">
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 bg-muted/60 rounded-full animate-bounce" />
                         <span className="w-1.5 h-1.5 bg-muted/60 rounded-full animate-bounce" style={{animationDelay:'0.15s'}} />
@@ -138,15 +136,26 @@ export default function Chat({ onUnread, onBack }) {
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-card/50 px-3 py-2 shrink-0 safe-area-bottom bg-surface">
-        <div className="flex gap-2 items-end max-w-lg mx-auto">
-          <input ref={inputRef} value={text} onChange={e => setText(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-            placeholder="Escribe algo..."
-            disabled={sending}
-            className="flex-1 bg-card rounded-full px-4 py-2.5 text-sm text-text placeholder:text-muted/40 focus:outline-none focus:ring-1 focus:ring-highlight/50 transition-all disabled:opacity-50" />
-          <button onClick={send} disabled={!text.trim() || sending}
-            className="bg-highlight hover:bg-highlight/90 text-white w-9 h-9 rounded-full text-sm font-bold disabled:opacity-20 transition-all shrink-0 flex items-center justify-center mb-0.5">
+      <div className="border-t border-card/30 px-4 py-3 shrink-0 bg-surface/80 backdrop-blur-sm safe-area-bottom">
+        <div className="flex gap-3 items-end max-w-md mx-auto">
+          {prefs.length > 0 && (
+            <button onClick={clearAll} 
+              className="text-muted hover:text-red-400 pb-3 text-sm shrink-0 transition-colors">
+              🗑️
+            </button>
+          )}
+          <div className="flex-1 relative">
+            <input ref={inputRef} 
+              value={text} 
+              onChange={e => setText(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+              placeholder="Escribe algo..."
+              disabled={sending}
+              className="w-full bg-card rounded-[22px] px-4 py-3 text-[14px] text-text placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-highlight/40 transition-all disabled:opacity-50 border border-card/50 focus:border-highlight/50" />
+          </div>
+          <button onClick={send} 
+            disabled={!text.trim() || sending}
+            className="bg-highlight hover:bg-highlight/90 disabled:bg-muted/20 text-white w-10 h-10 rounded-full text-lg font-bold disabled:opacity-30 transition-all shrink-0 flex items-center justify-center mb-0.5 shadow-sm disabled:shadow-none">
             ↑
           </button>
         </div>

@@ -14,6 +14,7 @@ function useKeyboardVisible() {
       setVisible(window.innerHeight - vv.height > 100)
     }
     vv.addEventListener('resize', check)
+    check() // Initial check
     return () => vv.removeEventListener('resize', check)
   }, [])
   return visible
@@ -21,6 +22,7 @@ function useKeyboardVisible() {
 
 export default function Layout({ children, currentPage, setCurrentPage, connected, sessionCount, chatUnread }) {
   const keyboardOpen = useKeyboardVisible()
+  
   const tabs = [
     { id: 'control', label: 'Control', icon: '🎛️' },
     { id: 'chat', label: 'Chat', icon: '💬', badge: chatUnread },
@@ -28,6 +30,7 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
     { id: 'work', label: 'Work', icon: '📋' },
     { id: 'config', label: 'Config', icon: '⚙️' },
   ]
+
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Desktop header */}
@@ -40,10 +43,16 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
           <nav className="flex gap-1">
             {tabs.map(t => (
               <button key={t.id} onClick={() => setCurrentPage(t.id)}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                  currentPage === t.id ? 'bg-highlight text-white' : 'text-muted hover:text-text hover:bg-card'
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all relative ${
+                  currentPage === t.id 
+                    ? 'bg-highlight text-white shadow-md' 
+                    : 'text-muted hover:text-text hover:bg-card/50'
                 }`}>
-                <span className="mr-1.5">{t.icon}</span>{t.label}
+                <span className="mr-2 text-base">{t.icon}</span>
+                {t.label}
+                {t.badge && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-surface" />
+                )}
               </button>
             ))}
           </nav>
@@ -60,39 +69,67 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
       </header>
 
       {/* Mobile header (compact) */}
-      <header className="md:hidden bg-surface border-b border-card px-3 py-2 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2">
-          <span>🖤</span>
-          <h1 className="font-bold text-text text-sm">MC</h1>
+      <header className="md:hidden bg-surface border-b border-card px-4 py-3 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-3">
+          <span className="text-xl">🖤</span>
+          <h1 className="font-bold text-text">Mission Control</h1>
         </div>
         <div className="flex items-center gap-2">
+          <span className="text-xs text-muted">{sessionCount || 0}</span>
           <StatusDot active={connected} />
-          <span className={`text-xs ${connected ? 'text-green-400' : 'text-red-400'}`}>
-            {connected ? 'Online' : 'Off'}
+          <span className={`text-xs font-medium ${connected ? 'text-green-400' : 'text-red-400'}`}>
+            {connected ? 'Online' : 'Offline'}
           </span>
         </div>
       </header>
 
-      {/* Main */}
-      <main className="flex-1 overflow-hidden">{children}</main>
+      {/* Main content */}
+      <main className="flex-1 overflow-hidden relative">
+        {children}
+      </main>
 
-      {/* Mobile bottom nav — hidden in chat to avoid keyboard overlap */}
-      {currentPage !== 'chat' && (
-        <nav className="md:hidden bg-surface border-t border-card flex shrink-0 safe-area-bottom">
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setCurrentPage(t.id)}
-              className={`flex-1 flex flex-col items-center py-2.5 text-xs font-medium transition-all relative ${
-                currentPage === t.id ? 'text-highlight' : 'text-muted'
+      {/* Mobile bottom nav - hide when keyboard is open */}
+      <nav className={`
+        md:hidden bg-surface/95 backdrop-blur border-t border-card/50 flex shrink-0 transition-all duration-200 ease-out
+        ${keyboardOpen 
+          ? 'transform translate-y-full opacity-0 pointer-events-none' 
+          : 'transform translate-y-0 opacity-100'
+        }
+      `}
+      style={{
+        paddingBottom: `max(env(safe-area-inset-bottom, 0px), ${keyboardOpen ? '0px' : '8px'})`
+      }}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setCurrentPage(t.id)}
+            className={`flex-1 flex flex-col items-center py-3 transition-all relative ${
+              currentPage === t.id 
+                ? 'text-highlight' 
+                : 'text-muted/70 hover:text-muted active:text-text'
+            }`}>
+            <div className="relative flex items-center justify-center mb-1">
+              <span className={`text-xl transition-transform ${
+                currentPage === t.id ? 'scale-110' : 'scale-100'
               }`}>
-              <span className="text-lg mb-0.5 relative">
                 {t.icon}
-                {t.badge && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-background" />}
               </span>
+              {t.badge && (
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-surface" />
+              )}
+            </div>
+            <span className={`text-[10px] font-medium leading-none transition-all ${
+              currentPage === t.id 
+                ? 'text-highlight' 
+                : 'text-muted/60'
+            }`}>
               {t.label}
-            </button>
-          ))}
-        </nav>
-      )}
+            </span>
+            {/* Active indicator */}
+            {currentPage === t.id && (
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-highlight rounded-full" />
+            )}
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }
