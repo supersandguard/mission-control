@@ -1,150 +1,109 @@
 import { useState, useEffect } from 'react'
-import { sessionsApi, agentsApi, cronApi } from '../api'
-import ActivityItem from '../components/ActivityItem'
+import { cronApi } from '../api'
 
-export default function Activity() {
-  const [activities, setActivities] = useState([])
-  const [agents, setAgents] = useState([])
+function timeAgo(ts) {
+  if (!ts) return 'never'
+  const diff = Date.now() - ts
+  const m = Math.floor(diff / 60000)
+  if (m < 1) return 'just now'
+  if (m < 60) return `${m}m ago`
+  const h = Math.floor(m / 60)
+  if (h < 24) return `${h}h ago`
+  return `${Math.floor(h / 24)}d ago`
+}
+
+function sessionName(s) {
+  if (s.label) return s.label
+  return (s.displayName || s.key || '?').replace('whatsapp:g-','').replace('agent-main-','').replace(/-/g,' ')
+}
+
+export default function Activity({ sessions = [] }) {
+  const [cronJobs, setCronJobs] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [filter, setFilter] = useState('')
+  const [tab, setTab] = useState('sessions')
 
   useEffect(() => {
-    loadActivityData()
-    const interval = setInterval(loadActivityData, 30000) // Poll every 30 seconds
-    return () => clearInterval(interval)
+    loadCron()
   }, [])
 
-  const loadActivityData = async () => {
+  const loadCron = async () => {
     try {
-      const [sessionsData, agentsData, cronData] = await Promise.all([
-        sessionsApi.list({ limit: 50, activeMinutes: 1440 }), // Last 24 hours
-        agentsApi.list(),
-        cronApi.list().catch(() => ({ jobs: [] })) // Graceful fail for cron
-      ])
-
-      const agentMap = {}
-      agentsData.agents.forEach(agent => {
-        agentMap[agent.sessionKey] = agent
-        agentMap[agent.id] = agent
-      })
-      
-      setAgents(agentsData.agents || [])
-
-      // Convert sessions and cron jobs to activity items
-      const sessionActivities = (sessionsData.sessions || []).map(session => ({
-        id: `session-${session.key}`,
-        timestamp: session.lastActivity || session.createdAt,
-        agentId: agentMap[session.key]?.id || 'unknown',
-        description: `Session ${session.isActive ? 'active' : 'idle'}: ${session.label || session.key}`,
-        details: `Messages: ${session.messageCount || 0} | Model: ${session.model || 'unknown'}`
-      }))
-
-      const cronActivities = (cronData.jobs || []).map(job => ({
-        id: `cron-${job.id}`,
-        timestamp: job.lastRun || job.createdAt,
-        agentId: 'system',
-        description: `Cron job: ${job.label || job.id}`,
-        details: `Schedule: ${job.schedule} | Status: ${job.enabled ? 'enabled' : 'disabled'}`
-      }))
-
-      // Combine and sort by timestamp
-      const allActivities = [...sessionActivities, ...cronActivities]
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-
-      setActivities(allActivities)
-      setError(null)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+      const data = await cronApi.list()
+      setCronJobs(data.jobs || [])
+    } catch (e) { console.error(e) }
+    setLoading(false)
   }
 
-  const filteredActivities = activities.filter(activity => {
-    if (!filter) return true
-    const agent = agents.find(a => a.id === activity.agentId)
-    return agent?.name.toLowerCase().includes(filter.toLowerCase()) ||
-           activity.description.toLowerCase().includes(filter.toLowerCase())
-  })
-
-  const getAgentForActivity = (activity) => {
-    if (activity.agentId === 'system') {
-      return { id: 'system', name: 'System', emoji: '⚙️', color: '#888888' }
-    }
-    return agents.find(a => a.id === activity.agentId) || 
-           { id: 'unknown', name: 'Unknown Agent', emoji: '❓', color: '#888888' }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted">Loading activity...</div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-900/20 border border-red-500 rounded-lg p-4">
-        <h3 className="text-red-300 font-semibold">Error loading activity</h3>
-        <p className="text-red-400 text-sm mt-1">{error}</p>
-        <button 
-          onClick={loadActivityData}
-          className="mt-3 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-        >
-          Retry
-        </button>
-      </div>
-    )
-  }
+  const sorted = [...sessions].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
 
   return (
-    <div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">System Activity</h1>
-            <p className="text-muted">{activities.length} activities in the last 24 hours</p>
-          </div>
-          <button
-            onClick={loadActivityData}
-            className="bg-accent hover:bg-highlight text-white px-4 py-2 rounded transition-all"
-          >
-            🔄 Refresh
-          </button>
+    <div className="h-full overflow-auto p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-text">Activity</h2>
+        <div className="flex gap-1">
+          {['sessions', 'cron'].map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`px-3 py-1.5 rounded text-sm ${tab === t ? 'bg-highlight text-white' : 'text-muted hover:text-text bg-card'}`}>
+              {t === 'sessions' ? '⚡ Sessions' : '⏰ Cron'}
+            </button>
+          ))}
         </div>
-
-        {/* Filter */}
-        <input
-          type="text"
-          placeholder="Filter activities..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="w-full max-w-md bg-card border border-accent rounded px-3 py-2 text-text"
-        />
       </div>
 
-      {/* Activity Feed */}
-      <div className="space-y-4">
-        {filteredActivities.length > 0 ? (
-          filteredActivities.map(activity => (
-            <ActivityItem
-              key={activity.id}
-              activity={activity}
-              agent={getAgentForActivity(activity)}
-            />
-          ))
-        ) : (
-          <div className="text-center py-12">
-            <div className="text-4xl mb-4">📈</div>
-            <h3 className="text-xl font-semibold mb-2">No activity found</h3>
-            <p className="text-muted">
-              {filter ? 'Try adjusting your filter' : 'System activity will appear here'}
-            </p>
-          </div>
-        )}
-      </div>
+      {tab === 'sessions' && (
+        <div className="space-y-2">
+          {sorted.map(s => {
+            const active = s.updatedAt && (Date.now() - s.updatedAt) < 300000
+            return (
+              <div key={s.key} className="bg-surface border border-card rounded-lg p-4 hover:border-highlight/40 transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className={`w-2.5 h-2.5 rounded-full ${active ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`} />
+                    <div>
+                      <span className="font-medium text-text">{sessionName(s)}</span>
+                      <span className="text-xs text-muted ml-2 bg-card px-1.5 py-0.5 rounded">{s.kind}</span>
+                    </div>
+                  </div>
+                  <span className="text-sm text-muted">{timeAgo(s.updatedAt)}</span>
+                </div>
+                <div className="flex gap-4 mt-2 text-xs text-muted">
+                  <span>Model: {(s.model||'?').replace('claude-','').replace('anthropic/','')}</span>
+                  <span>Tokens: {s.totalTokens ? `${(s.totalTokens/1000).toFixed(1)}K` : '0'}</span>
+                  <span className="font-mono text-[10px] opacity-60">{s.key}</span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {tab === 'cron' && (
+        <div className="space-y-3">
+          {cronJobs.length === 0 && <div className="text-center text-muted py-12">No cron jobs</div>}
+          {cronJobs.map(job => (
+            <div key={job.id} className="bg-surface border border-card rounded-lg p-4 hover:border-highlight/40 transition-all">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <span className={`w-2.5 h-2.5 rounded-full ${job.enabled ? 'bg-green-500' : 'bg-gray-600'}`} />
+                  <h3 className="font-semibold text-text">{job.name || (job.id||'').slice(0,8)}</h3>
+                  <span className="text-xs text-muted bg-card px-2 py-0.5 rounded font-mono">
+                    {job.schedule?.expr || job.schedule?.kind || '?'}
+                  </span>
+                </div>
+                <span className={`text-xs px-2 py-0.5 rounded ${job.enabled ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                  {job.enabled ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+              {job.payload?.text && <p className="text-sm text-muted mb-3">{job.payload.text}</p>}
+              <div className="flex gap-4 text-xs text-muted flex-wrap">
+                <span>Target: <span className="text-text">{job.sessionTarget || '?'}</span></span>
+                {job.state?.nextRunAtMs && <span>Next: <span className="text-text">{new Date(job.state.nextRunAtMs).toLocaleString()}</span></span>}
+                {job.state?.lastStatus && <span>Last: <span className={job.state.lastStatus === 'ok' ? 'text-green-400' : 'text-red-400'}>{job.state.lastStatus}</span></span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

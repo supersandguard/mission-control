@@ -1,17 +1,58 @@
 const express = require('express');
 const fs = require('fs').promises;
+const os = require('os');
 const path = require('path');
 const cors = require('cors');
 
 const app = express();
 const PORT = 3333;
 const GATEWAY = 'http://127.0.0.1:18789';
+const WORKSPACE = '/home/clawdbot/clawd';
+const SESSIONS_STORE = '/home/clawdbot/.clawdbot/agents/main/sessions/sessions.json';
+const SESSIONS_DIR = '/home/clawdbot/.clawdbot/agents/main/sessions';
+const MC_TOKEN_FILE = path.join(__dirname, 'data', '.mc-token');
+
+const startTime = Date.now();
 
 app.use(cors());
 app.use(express.json());
+
+// ── Auth Middleware ───────────────────────────────────────
+async function getToken() {
+    try { return (await fs.readFile(MC_TOKEN_FILE, 'utf8')).trim(); }
+    catch (e) { return null; }
+}
+
+async function auth(req, res, next) {
+    const token = await getToken();
+    if (!token) return next(); // no token set = open access
+    const provided = (req.headers.authorization || '').replace('Bearer ', '').trim()
+        || req.query.token;
+    if (provided === token) return next();
+    res.status(401).json({ error: 'Unauthorized' });
+}
+
+// Public routes (no auth)
+app.get('/api/auth/status', async (req, res) => {
+    const token = await getToken();
+    const provided = (req.headers.authorization || '').replace('Bearer ', '').trim();
+    res.json({ authRequired: !!token, authenticated: !token || provided === token });
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    const token = await getToken();
+    if (!token) return res.json({ ok: true });
+    if (req.body.token === token) return res.json({ ok: true });
+    res.status(401).json({ error: 'Invalid token' });
+});
+
+// Apply auth to everything else
+app.use('/api', auth);
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
-// Gateway proxy
+// ── Gateway proxy ────────────────────────────────────────
 async function gw(tool, args = {}) {
     const res = await fetch(`${GATEWAY}/tools/invoke`, {
         method: 'POST',
@@ -23,7 +64,14 @@ async function gw(tool, args = {}) {
     return data.result?.details || JSON.parse(data.result?.content?.[0]?.text || '{}');
 }
 
-// Data files
+// Gateway config has nested structure: details -> {ok, result} -> result.config
+async function getGwConfig() {
+    const raw = await gw('gateway', { action: 'config.get' });
+    // raw = {ok, result: {path, config, ...}}
+    return raw?.result?.config || raw?.config || raw;
+}
+
+// ── Data files ───────────────────────────────────────────
 async function readData(file) {
     try {
         return JSON.parse(await fs.readFile(path.join(__dirname, 'data', file), 'utf8'));
@@ -40,7 +88,154 @@ async function writeData(file, data) {
     await fs.writeFile(path.join(__dirname, 'data', file), JSON.stringify(data, null, 2));
 }
 
-// Sessions
+// ══════════════════════════════════════════════════════════
+// STATUS & SYSTEM
+// ══════════════════════════════════════════════════════════
+
+app.get('/api/status', async (req, res) => {
+    try {
+        const totalMem = os.totalmem();
+        const freeMem = os.freemem();
+        const usedMem = totalMem - freeMem;
+        const cpus = os.cpus();
+        const loadAvg = os.loadavg();
+        const ifaces = os.networkInterfaces();
+
+        // Get IPs
+        const ips = {};
+        for (const [name, addrs] of Object.entries(ifaces)) {
+            const v4 = addrs.find(a => a.family === 'IPv4' && !a.internal);
+            if (v4) ips[name] = v4.address;
+        }
+
+        // Disk usage
+        let disk = {};
+        try {
+            const { execSync } = require('child_process');
+            const dfOut = execSync("df -h / | tail -1").toString().trim().split(/\s+/);
+            disk = { total: dfOut[1], used: dfOut[2], avail: dfOut[3], pct: dfOut[4] };
+        } catch (e) {}
+
+        // Gateway config for heartbeat/model info
+        let gwCfg = {};
+        try { gwCfg = await getGwConfig(); } catch (e) {}
+
+        const heartbeat = gwCfg?.agents?.defaults?.heartbeat || {};
+        let model = gwCfg?.agents?.defaults?.model || 'unknown';
+
+        // Get runtime model from session_status
+        let sessionInfo = {};
+        try {
+            const ssRaw = await gw('session_status', {});
+            const ssText = ssRaw?.statusText || '';
+            const modelMatch = ssText.match(/Model:\s*(\S+)/);
+            if (modelMatch) model = modelMatch[1];
+            const contextMatch = ssText.match(/Context:\s*(\S+)/);
+            const versionMatch = ssText.match(/Clawdbot\s+(\S+)/);
+            const compactMatch = ssText.match(/Compactions:\s*(\d+)/);
+            sessionInfo = {
+                context: contextMatch ? contextMatch[1] : null,
+                version: versionMatch ? versionMatch[1] : null,
+                compactions: compactMatch ? parseInt(compactMatch[1]) : 0,
+            };
+        } catch (e) {}
+
+        // Heartbeat state
+        let hbState = {};
+        try {
+            hbState = JSON.parse(await fs.readFile(path.join(WORKSPACE, 'memory/heartbeat-state.json'), 'utf8'));
+        } catch (e) {}
+
+        res.json({
+            uptime: Math.floor((Date.now() - startTime) / 1000),
+            systemUptime: os.uptime(),
+            hostname: os.hostname(),
+            platform: `${os.type()} ${os.release()}`,
+            arch: os.arch(),
+            memory: {
+                total: totalMem,
+                used: usedMem,
+                free: freeMem,
+                pct: Math.round((usedMem / totalMem) * 100)
+            },
+            cpu: { cores: cpus.length, model: cpus[0]?.model || 'unknown', load: loadAvg },
+            disk,
+            network: ips,
+            model,
+            heartbeat: {
+                enabled: !!heartbeat.every,
+                every: heartbeat.every || null,
+                activeHours: heartbeat.activeHours || null,
+                prompt: heartbeat.prompt || null
+            },
+            heartbeatState: hbState,
+            session: sessionInfo,
+            gateway: {
+                url: GATEWAY,
+                channels: Object.keys(gwCfg?.channels || {}),
+                thinking: gwCfg?.agents?.defaults?.thinking || null
+            }
+        });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// GATEWAY CONFIG
+// ══════════════════════════════════════════════════════════
+
+app.get('/api/gateway/config', async (req, res) => {
+    try { res.json(await getGwConfig()); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/gateway/config', async (req, res) => {
+    try {
+        const result = await gw('gateway', { action: 'config.patch', raw: JSON.stringify(req.body) });
+        res.json({ ok: true, result });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// PENDIENTES (HEARTBEAT.md checkboxes)
+// ══════════════════════════════════════════════════════════
+
+app.get('/api/pendientes', async (req, res) => {
+    try {
+        const content = await fs.readFile(path.join(WORKSPACE, 'HEARTBEAT.md'), 'utf8');
+        const lines = content.split('\n');
+        const items = [];
+        lines.forEach((line, i) => {
+            const m = line.match(/^(\s*)-\s+\[([ xX])\]\s+(.+)$/);
+            if (m) {
+                items.push({ line: i, indent: m[1].length, done: m[2] !== ' ', text: m[3].trim() });
+            }
+        });
+        res.json({ items, total: items.length, done: items.filter(i => i.done).length });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/pendientes/:line', async (req, res) => {
+    try {
+        const lineNum = parseInt(req.params.line);
+        const content = await fs.readFile(path.join(WORKSPACE, 'HEARTBEAT.md'), 'utf8');
+        const lines = content.split('\n');
+        if (lineNum < 0 || lineNum >= lines.length) return res.status(400).json({ error: 'Invalid line' });
+
+        const line = lines[lineNum];
+        const m = line.match(/^(\s*-\s+\[)([ xX])(\]\s+.+)$/);
+        if (!m) return res.status(400).json({ error: 'Not a checkbox line' });
+
+        const newState = req.body.done ? 'x' : ' ';
+        lines[lineNum] = `${m[1]}${newState}${m[3]}`;
+        await fs.writeFile(path.join(WORKSPACE, 'HEARTBEAT.md'), lines.join('\n'));
+        res.json({ ok: true, line: lineNum, done: req.body.done });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// SESSIONS
+// ══════════════════════════════════════════════════════════
+
 app.get('/api/sessions', async (req, res) => {
     try {
         res.json(await gw('sessions_list', {
@@ -63,9 +258,8 @@ app.get('/api/sessions/:key/history', async (req, res) => {
 });
 
 app.post('/api/sessions/:key/send', async (req, res) => {
-    try {
-        res.json(await gw('sessions_send', { sessionKey: req.params.key, message: req.body.message }));
-    } catch (e) { res.status(500).json({ error: e.message }); }
+    try { res.json(await gw('sessions_send', { sessionKey: req.params.key, message: req.body.message })); }
+    catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/sessions/spawn', async (req, res) => {
@@ -78,13 +272,73 @@ app.get('/api/sessions/:key/status', async (req, res) => {
     catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Cron
+// ── Session cleanup ──────────────────────────────────────
+app.delete('/api/sessions/:key', async (req, res) => {
+    try {
+        const store = JSON.parse(await fs.readFile(SESSIONS_STORE, 'utf8'));
+        const key = req.params.key;
+        const session = store[key];
+        if (!session) return res.status(404).json({ error: 'Session not found' });
+        if (session.sessionId) {
+            const transcript = path.join(SESSIONS_DIR, `${session.sessionId}.jsonl`);
+            try { await fs.unlink(transcript); } catch (e) {}
+        }
+        delete store[key];
+        await fs.writeFile(SESSIONS_STORE, JSON.stringify(store, null, 2));
+        try {
+            const agentsData = await readData('agents.json');
+            agentsData.agents = (agentsData.agents || []).filter(a => a.sessionKey !== key);
+            await writeData('agents.json', agentsData);
+        } catch (e) {}
+        res.json({ ok: true, deleted: key });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/sessions/cleanup', async (req, res) => {
+    try {
+        const maxAgeHours = req.body.maxAgeHours || 24;
+        const cutoff = Date.now() - (maxAgeHours * 3600000);
+        const store = JSON.parse(await fs.readFile(SESSIONS_STORE, 'utf8'));
+        const deleted = [];
+        for (const [key, session] of Object.entries(store)) {
+            if (!key.includes('subagent')) continue;
+            if ((session.updatedAt || 0) > cutoff) continue;
+            if (session.sessionId) {
+                try { await fs.unlink(path.join(SESSIONS_DIR, `${session.sessionId}.jsonl`)); } catch (e) {}
+            }
+            delete store[key];
+            deleted.push({ key, label: session.label });
+        }
+        if (deleted.length > 0) await fs.writeFile(SESSIONS_STORE, JSON.stringify(store, null, 2));
+        res.json({ ok: true, deleted, count: deleted.length });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// CRON
+// ══════════════════════════════════════════════════════════
+
 app.get('/api/cron', async (req, res) => {
-    try { res.json(await gw('cron', { action: 'list' })); }
+    try { res.json(await gw('cron', { action: 'list', includeDisabled: true })); }
     catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Tasks
+app.patch('/api/cron/:id', async (req, res) => {
+    try {
+        res.json(await gw('cron', { action: 'update', jobId: req.params.id, patch: req.body }));
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/cron/:id/run', async (req, res) => {
+    try {
+        res.json(await gw('cron', { action: 'run', jobId: req.params.id }));
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// TASKS & AGENTS
+// ══════════════════════════════════════════════════════════
+
 app.get('/api/tasks', async (req, res) => {
     try { res.json(await readData('tasks.json')); }
     catch (e) { res.status(500).json({ error: e.message }); }
@@ -99,17 +353,14 @@ app.post('/api/tasks', async (req, res) => {
         const task = {
             id: data.nextId, title: req.body.title, description: req.body.description || '',
             status: req.body.status || 'backlog', priority: req.body.priority || 'medium',
-            assignedTo: req.body.assignedTo || null,
-            createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), comments: []
+            createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
         };
-        data.tasks.push(task);
-        data.nextId++;
+        data.tasks.push(task); data.nextId++;
         await writeData('tasks.json', data);
         res.json(task);
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Agents
 app.get('/api/agents', async (req, res) => {
     try { res.json(await readData('agents.json')); }
     catch (e) { res.status(500).json({ error: e.message }); }
@@ -117,6 +368,51 @@ app.get('/api/agents', async (req, res) => {
 app.put('/api/agents', async (req, res) => {
     try { await writeData('agents.json', req.body); res.json({ ok: true }); }
     catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
+// FILE API (workspace files)
+// ══════════════════════════════════════════════════════════
+
+const ALLOWED_FILES = {
+    heartbeat: 'HEARTBEAT.md', soul: 'SOUL.md', user: 'USER.md',
+    identity: 'IDENTITY.md', tools: 'TOOLS.md', agents: 'AGENTS.md',
+};
+
+app.get('/api/files/:name', async (req, res) => {
+    const file = ALLOWED_FILES[req.params.name];
+    if (!file) return res.status(404).json({ error: 'Unknown file' });
+    try {
+        const content = await fs.readFile(path.join(WORKSPACE, file), 'utf8');
+        res.json({ name: req.params.name, file, content });
+    } catch (e) {
+        if (e.code === 'ENOENT') return res.json({ name: req.params.name, file, content: '' });
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.put('/api/files/:name', async (req, res) => {
+    const file = ALLOWED_FILES[req.params.name];
+    if (!file) return res.status(404).json({ error: 'Unknown file' });
+    try {
+        await fs.writeFile(path.join(WORKSPACE, file), req.body.content);
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Memory files (read-only)
+app.get('/api/memory/recent', async (req, res) => {
+    try {
+        const memDir = path.join(WORKSPACE, 'memory');
+        const files = await fs.readdir(memDir);
+        const mdFiles = files.filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort().reverse().slice(0, 5);
+        const entries = [];
+        for (const f of mdFiles) {
+            const content = await fs.readFile(path.join(memDir, f), 'utf8');
+            entries.push({ date: f.replace('.md', ''), content: content.slice(0, 2000) });
+        }
+        res.json({ entries });
+    } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // SPA fallback

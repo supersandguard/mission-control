@@ -1,68 +1,48 @@
-const API_BASE = '/api';
-
 async function apiCall(endpoint, options = {}) {
-  try {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(`API call failed: ${endpoint}`, error);
-    throw error;
-  }
+  const token = localStorage.getItem('mc_token')
+  const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {}
+  const r = await fetch(`/api${endpoint}`, {
+    headers: { 'Content-Type': 'application/json', ...authHeaders, ...options.headers },
+    ...options,
+  })
+  if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  return r.json()
 }
 
-// Sessions API
 export const sessionsApi = {
   list: (params = {}) => apiCall(`/sessions?${new URLSearchParams(params)}`),
-  getHistory: (sessionKey, params = {}) => 
-    apiCall(`/sessions/${encodeURIComponent(sessionKey)}/history?${new URLSearchParams(params)}`),
-  sendMessage: (sessionKey, message) => 
-    apiCall(`/sessions/${encodeURIComponent(sessionKey)}/send`, {
-      method: 'POST',
-      body: JSON.stringify({ message }),
+  getHistory: (key, params = {}) =>
+    apiCall(`/sessions/${encodeURIComponent(key)}/history?${new URLSearchParams(params)}`),
+  sendMessage: (key, message) =>
+    apiCall(`/sessions/${encodeURIComponent(key)}/send`, {
+      method: 'POST', body: JSON.stringify({ message }),
     }),
-  spawn: (task, label, model, agentId) =>
-    apiCall('/sessions/spawn', {
-      method: 'POST',
-      body: JSON.stringify({ task, label, model, agentId }),
-    }),
-  getStatus: (sessionKey) =>
-    apiCall(`/sessions/${encodeURIComponent(sessionKey)}/status`),
-};
+  spawn: (body) =>
+    apiCall('/sessions/spawn', { method: 'POST', body: JSON.stringify(body) }),
+  delete: (key) =>
+    apiCall(`/sessions/${encodeURIComponent(key)}`, { method: 'DELETE' }),
+  cleanup: (maxAgeHours = 24) =>
+    apiCall('/sessions/cleanup', { method: 'POST', body: JSON.stringify({ maxAgeHours }) }),
+}
 
-// Agents API
 export const agentsApi = {
   list: () => apiCall('/agents'),
-  update: (agents) => apiCall('/agents', {
-    method: 'PUT',
-    body: JSON.stringify(agents),
-  }),
-};
+  update: (data) => apiCall('/agents', { method: 'PUT', body: JSON.stringify(data) }),
+}
 
-// Tasks API
 export const tasksApi = {
   list: () => apiCall('/tasks'),
-  update: (tasks) => apiCall('/tasks', {
-    method: 'PUT',
-    body: JSON.stringify(tasks),
-  }),
-  create: (task) => apiCall('/tasks', {
-    method: 'POST',
-    body: JSON.stringify(task),
-  }),
-};
+  create: (task) => apiCall('/tasks', { method: 'POST', body: JSON.stringify(task) }),
+  update: (data) => apiCall('/tasks', { method: 'PUT', body: JSON.stringify(data) }),
+}
 
-// Cron API
 export const cronApi = {
   list: () => apiCall('/cron'),
-};
+  toggle: (id, enabled) => apiCall(`/cron/${id}`, { method: 'PATCH', body: JSON.stringify({ enabled }) }),
+  run: (id) => apiCall(`/cron/${id}/run`, { method: 'POST' }),
+}
+
+export const gatewayApi = {
+  getConfig: () => apiCall('/gateway/config'),
+  patchConfig: (patch) => apiCall('/gateway/config', { method: 'PATCH', body: JSON.stringify(patch) }),
+}

@@ -1,14 +1,12 @@
 {
-  "agents": [
-    {
-      "id": "clawd",
-      "name": "Clawd",
-      "role": "Lead / Personal Assistant",
-      "emoji": "🖤",
-      "sessionKey": "agent:main:main",
-      "description": "Squad lead. Handles direct requests, delegates, coordinates.",
-      "level": "lead",
-      "color": "#e94560"
-    }
-  ]
+    "agents": [
+        {
+            "id": "agent-main-main",
+            "name": "Max Umbra",
+            "role": "Lead / Personal Assistant",
+            "emoji": "🖤",
+            "description": "Squad lead. Handles direct requests, delegates, coordinates.",
+            "sessionKey": "agent:main:main"
+        }
+    ]
 }
