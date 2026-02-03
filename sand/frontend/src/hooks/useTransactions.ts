@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Transaction } from '../types'
-import { MOCK_TRANSACTIONS } from '../mockData'
 
 const getApiBase = () => {
   const saved = localStorage.getItem('sand-config')
@@ -26,7 +25,7 @@ const DEFAULT_CONFIG: SafeConfig = {
 }
 
 export function useTransactions() {
-  const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS)
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [config] = useState<SafeConfig>(() => {
@@ -110,7 +109,8 @@ export function useTransactions() {
 
   const fetchTransactions = useCallback(async () => {
     if (!config.address) {
-      setTransactions(MOCK_TRANSACTIONS)
+      setTransactions([])
+      setError('No Safe address configured. Go to Settings to add one.')
       return
     }
 
@@ -136,8 +136,8 @@ export function useTransactions() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Unknown error'
       setError(msg)
-      // Fall back to mock data
-      setTransactions(MOCK_TRANSACTIONS)
+      // Show empty state — never fall back to mock data
+      setTransactions([])
     } finally {
       setLoading(false)
     }

@@ -118,6 +118,17 @@ export interface DecodedTransaction {
   parameters: DecodedParameter[];
   protocol: ProtocolInfo | null;
   contractVerified: boolean;
+  /** Where the function name came from */
+  functionSource?: 'local' | 'etherscan' | 'sourcify' | '4byte' | 'raw';
+  /** True if the target contract is a Safe proxy */
+  isSafeProxy?: boolean;
+  /** If Safe proxy, decoded inner transaction */
+  innerTransaction?: {
+    to: string;
+    value: string;
+    data: string;
+    operation: number;
+  };
 }
 
 export interface DecodedParameter {

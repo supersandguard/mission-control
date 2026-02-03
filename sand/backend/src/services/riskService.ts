@@ -22,6 +22,13 @@ export function assessRisk(req: RiskRequest): RiskResult {
   const isApproval = selector === '0x095ea7b3';
   const isUnlimitedApproval = checkUnlimitedApproval(req.data, req.decoded);
 
+  // Determine if function is unknown
+  const isUnknownFunction = req.decoded
+    ? req.decoded.functionName.startsWith('Unknown') || req.decoded.functionSource === 'raw'
+    : false;
+
+  const isUnverified = req.contractVerified === false || (req.decoded?.contractVerified === false);
+
   // ─── RED flags ───
 
   // 1. Unlimited approval
@@ -34,8 +41,17 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  // 2. Unverified contract
-  if (req.contractVerified === false && !isKnown) {
+  // 2. Unverified contract + unknown function = RED (most dangerous combo)
+  if (isUnverified && !isKnown && isUnknownFunction) {
+    reasons.push({
+      level: 'red',
+      code: 'UNVERIFIED_UNKNOWN',
+      message: 'Unverified contract calling an unknown function. Cannot determine what this transaction does. HIGH RISK.',
+      messageEs: 'Unverified contract calling an unknown function. Cannot determine what this transaction does. HIGH RISK.',
+    });
+  }
+  // 3. Unverified contract (but function is known via 4byte or similar)
+  else if (isUnverified && !isKnown) {
     reasons.push({
       level: 'red',
       code: 'UNVERIFIED_CONTRACT',
@@ -44,7 +60,17 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  // 3. Very new contract (< 7 days)
+  // 4. Unknown function on verified contract
+  if (isUnknownFunction && !isUnverified) {
+    reasons.push({
+      level: 'yellow',
+      code: 'UNKNOWN_FUNCTION',
+      message: 'Function could not be identified. The calldata does not match any known function signature.',
+      messageEs: 'Function could not be identified. The calldata does not match any known function signature.',
+    });
+  }
+
+  // 5. Very new contract (< 7 days)
   if (req.contractAge !== undefined && req.contractAge < NEW_CONTRACT_THRESHOLD) {
     reasons.push({
       level: 'red',
@@ -54,7 +80,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  // 4. Simulation failed
+  // 6. Simulation failed
   if (req.simulation && !req.simulation.success) {
     reasons.push({
       level: 'red',
@@ -64,9 +90,23 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
+  // 7. Proxy without verified implementation
+  if (req.decoded?.isSafeProxy === false && isUnverified && !isKnown) {
+    // Check heuristic: if decoded has functionSource but contract is unverified, it might be a proxy
+    // Only add if we haven't already flagged unverified
+    if (req.decoded?.functionSource === '4byte') {
+      reasons.push({
+        level: 'yellow',
+        code: 'FUNCTION_FROM_4BYTE',
+        message: 'Function name found in signature database but NOT from verified source code. Name may not be accurate.',
+        messageEs: 'Function name found in signature database but NOT from verified source code. Name may not be accurate.',
+      });
+    }
+  }
+
   // ─── YELLOW flags ───
 
-  // 5. Large transfer value
+  // 8. Large transfer value
   const transferValueUsd = estimateTransferValueUsd(req);
   if (transferValueUsd > LARGE_TRANSFER_THRESHOLD) {
     reasons.push({
@@ -77,20 +117,17 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  // 6. Unknown protocol
-  if (!isKnown && !isApproval) {
-    if (req.contractVerified !== false) {
-      // Verified but unknown
-      reasons.push({
-        level: 'yellow',
-        code: 'UNKNOWN_PROTOCOL',
-        message: 'Contract is not a recognized protocol. Proceed with caution.',
-        messageEs: 'Contract is not a recognized protocol. Proceed with caution.',
-      });
-    }
+  // 9. Unknown protocol (verified but not in our list)
+  if (!isKnown && !isApproval && !isUnverified) {
+    reasons.push({
+      level: 'yellow',
+      code: 'UNKNOWN_PROTOCOL',
+      message: 'Contract is not a recognized protocol. Proceed with caution.',
+      messageEs: 'Contract is not a recognized protocol. Proceed with caution.',
+    });
   }
 
-  // 7. Approval to unknown contract
+  // 10. Approval to unknown contract
   if (isApproval && !isUnlimitedApproval && !isKnown) {
     reasons.push({
       level: 'yellow',
@@ -100,7 +137,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  // 8. High gas usage (possible complex interaction)
+  // 11. High gas usage (possible complex interaction)
   if (req.simulation && req.simulation.gasUsed > 500_000) {
     reasons.push({
       level: 'yellow',
@@ -121,12 +158,21 @@ export function assessRisk(req: RiskRequest): RiskResult {
     });
   }
 
-  if (req.contractVerified === true) {
+  if (req.contractVerified === true || (req.decoded?.contractVerified === true)) {
     reasons.push({
       level: 'green',
       code: 'VERIFIED_CONTRACT',
       message: 'Contract source code is verified on block explorer.',
       messageEs: 'Contract source code is verified on block explorer.',
+    });
+  }
+
+  if (req.decoded?.isSafeProxy) {
+    reasons.push({
+      level: 'green',
+      code: 'SAFE_PROXY',
+      message: 'Target is a Safe multisig wallet.',
+      messageEs: 'Target is a Safe multisig wallet.',
     });
   }
 
@@ -147,7 +193,7 @@ export function assessRisk(req: RiskRequest): RiskResult {
     reasons,
     details: {
       contractAge: req.contractAge,
-      contractVerified: req.contractVerified,
+      contractVerified: req.contractVerified ?? req.decoded?.contractVerified,
       isKnownProtocol: isKnown,
       protocolName: protocol?.name,
       transferValueUsd,

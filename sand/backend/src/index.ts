@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 // Rate limiting (apply only to API routes)
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 30, // 30 requests per minute per IP
+  max: 120, // 120 requests per minute per IP (dashboard makes ~4 calls per tx)
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many requests, please try again later.' },

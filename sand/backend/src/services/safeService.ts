@@ -61,6 +61,28 @@ export async function getPendingTransactions(
     }
 
     const data = await response.json() as SafeTransactionsResponse;
+
+    // Filter out superseded transactions:
+    // If executed=false returns txs, check if any nonce already has an executed tx
+    // (i.e., the nonce was used by an on-chain rejection, making the original tx dead)
+    if (data.results && data.results.length > 0) {
+      const executedUrl = `${baseUrl}/api/v1/safes/${checksumAddress}/multisig-transactions/?executed=true&ordering=-nonce&limit=5`;
+      try {
+        const executedRes = await safeFetch(executedUrl);
+        if (executedRes.ok) {
+          const executedData = await executedRes.json() as SafeTransactionsResponse;
+          const executedNonces = new Set(
+            executedData.results?.map((tx: any) => tx.nonce) || []
+          );
+          // Remove pending txs whose nonce is already used by an executed tx
+          data.results = data.results.filter((tx: any) => !executedNonces.has(tx.nonce));
+          data.count = data.results.length;
+        }
+      } catch {
+        // If we can't check executed txs, just return unfiltered (safe fallback)
+      }
+    }
+
     return data;
   } catch (error) {
     if (error instanceof Error && error.message.includes('Safe')) {

@@ -37,6 +37,14 @@ export interface DecodedTransaction {
   parameters: DecodedParameter[];
   protocol: { name: string; category: string } | null;
   contractVerified: boolean;
+  functionSource?: 'local' | 'etherscan' | 'sourcify' | '4byte' | 'raw';
+  isSafeProxy?: boolean;
+  innerTransaction?: {
+    to: string;
+    value: string;
+    data: string;
+    operation: number;
+  };
 }
 
 export interface ExplanationResult {
