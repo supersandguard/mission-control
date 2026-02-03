@@ -278,6 +278,28 @@ app.delete('/api/heartbeat/checks/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// TOOLS STATUS
+// ══════════════════════════════════════════════════════════
+
+const TOOLS_FILE = path.join(__dirname, 'data', 'tools-status.json');
+
+app.get('/api/tools', async (req, res) => {
+    try { res.json(JSON.parse(await fs.readFile(TOOLS_FILE, 'utf8'))); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/tools/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(TOOLS_FILE, 'utf8'));
+        const idx = (data.tools || []).findIndex(t => t.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Tool not found' });
+        data.tools[idx] = { ...data.tools[idx], ...req.body };
+        await fs.writeFile(TOOLS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // PENDIENTES (HEARTBEAT.md checkboxes)
 // ══════════════════════════════════════════════════════════
 

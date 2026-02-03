@@ -1,0 +1,144 @@
+{
+  "tools": [
+    {
+      "id": "gmail",
+      "name": "Gmail",
+      "icon": "📧",
+      "description": "Read/send email via Google API",
+      "status": "working",
+      "credentials": "1Password → Google (app password)",
+      "lastUsed": 1770134100000,
+      "notes": "betooo.neh@gmail.com — SMTP + API"
+    },
+    {
+      "id": "gcalendar",
+      "name": "Google Calendar",
+      "icon": "📅",
+      "description": "Create events, check schedule, auto-Meet links",
+      "status": "working",
+      "credentials": "~/.config/gcal/token.json",
+      "lastUsed": 1770129060000,
+      "notes": "Auto-invite beto@oasisvault.io"
+    },
+    {
+      "id": "agentmail",
+      "name": "AgentMail",
+      "icon": "✉️",
+      "description": "AI agent email inbox",
+      "status": "working",
+      "credentials": "~/.secrets/agentmail-api-key",
+      "lastUsed": null,
+      "notes": "maxumbra@agentmail.to — 3K emails/mo free"
+    },
+    {
+      "id": "1password",
+      "name": "1Password",
+      "icon": "🔐",
+      "description": "Secret management via CLI (op)",
+      "status": "working",
+      "credentials": "~/.secrets/op-master + ~/.config/op/credentials",
+      "lastUsed": 1770134000000,
+      "notes": "Vault: max umbra — requires tmux session"
+    },
+    {
+      "id": "x_twitter",
+      "name": "X / Twitter",
+      "icon": "🐦",
+      "description": "Post tweets, check mentions for @beto_neh",
+      "status": "working",
+      "credentials": "~/.secrets/x-bearer + ~/.secrets/x-api",
+      "lastUsed": 1770129060000,
+      "notes": "Pay Per Use — OAuth1 Read+Write functional"
+    },
+    {
+      "id": "moltbook",
+      "name": "Moltbook",
+      "icon": "📱",
+      "description": "Social network for AI agents (@MaxUmbra)",
+      "status": "issues",
+      "credentials": "~/.secrets/moltbook-api-key",
+      "lastUsed": 1770063068000,
+      "notes": "API timing out since Feb 2"
+    },
+    {
+      "id": "gdrive",
+      "name": "Google Drive/Docs/Sheets",
+      "icon": "📄",
+      "description": "Create docs, sheets, manage files",
+      "status": "working",
+      "credentials": "~/.config/gcal/token.json (shared)",
+      "lastUsed": null,
+      "notes": "Always make files public (anyone with link)"
+    },
+    {
+      "id": "chromecast",
+      "name": "Chromecast (Tofu)",
+      "icon": "🔊",
+      "description": "Cast audio/radio to Google Home Max",
+      "status": "working",
+      "credentials": "Network discovery",
+      "lastUsed": null,
+      "notes": "catt -d Tofu — radio streams work, YouTube doesn't"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "icon": "🐙",
+      "description": "gh CLI — repos, issues, PRs, actions",
+      "status": "working",
+      "credentials": "gh auth (token cached)",
+      "lastUsed": 1770093000000,
+      "notes": "supersandguard org + personal repos"
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "icon": "🌤️",
+      "description": "Current weather and forecasts (no API key)",
+      "status": "working",
+      "credentials": "None needed",
+      "lastUsed": null,
+      "notes": "CDMX default location"
+    },
+    {
+      "id": "web_search",
+      "name": "Web Search",
+      "icon": "🔍",
+      "description": "Brave Search API",
+      "status": "working",
+      "credentials": "Built into Clawdbot",
+      "lastUsed": 1770093000000,
+      "notes": "10 results per query"
+    },
+    {
+      "id": "browser",
+      "name": "Browser",
+      "icon": "🌐",
+      "description": "Headless browser automation",
+      "status": "working",
+      "credentials": "Built into Clawdbot",
+      "lastUsed": null,
+      "notes": "Snapshot + act for UI automation"
+    },
+    {
+      "id": "tts",
+      "name": "Text-to-Speech",
+      "icon": "🗣️",
+      "description": "Convert text to audio",
+      "status": "working",
+      "credentials": "Built into Clawdbot",
+      "lastUsed": null,
+      "notes": "Voice messages via WhatsApp"
+    },
+    {
+      "id": "tailscale",
+      "name": "Tailscale VPN",
+      "icon": "🔗",
+      "description": "Remote access to Pi from anywhere",
+      "status": "working",
+      "credentials": "iamnehmad@ account",
+      "lastUsed": 1770134000000,
+      "notes": "100.105.206.114 — iPhone, Mac, PC connected"
+    }
+  ]
+}

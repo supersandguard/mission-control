@@ -464,6 +464,70 @@ function CronSection() {
 }
 
 // ═══════════════════════════════════════════════════
+// TOOLS SECTION
+// ═══════════════════════════════════════════════════
+function ToolsSection() {
+  const [tools, setTools] = useState([])
+  const [expanded, setExpanded] = useState(null)
+
+  useEffect(() => { load() }, [])
+  const load = async () => { try { const d = await api('/tools'); setTools(d.tools || []) } catch (e) {} }
+
+  const statusStyle = { working: 'bg-green-500', issues: 'bg-yellow-500', broken: 'bg-red-500' }
+  const statusLabel = { working: 'OK', issues: '⚠️', broken: '❌' }
+
+  const updateStatus = async (tool, newStatus) => {
+    setTools(prev => prev.map(t => t.id === tool.id ? { ...t, status: newStatus } : t))
+    await api(`/tools/${tool.id}`, { method: 'PATCH', body: JSON.stringify({ status: newStatus }) })
+  }
+
+  return (
+    <section>
+      <h3 className="text-sm font-semibold text-text mb-3">🧰 Tools</h3>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
+        {tools.map(tool => {
+          const isExp = expanded === tool.id
+          return (
+            <div key={tool.id} className={`bg-surface border border-card rounded-lg overflow-hidden transition-all ${
+              isExp ? 'col-span-2 md:col-span-3' : ''
+            }`}>
+              <button onClick={() => setExpanded(isExp ? null : tool.id)}
+                className="w-full px-3 py-2 flex items-center gap-2 text-left hover:bg-card/50 transition-all">
+                <span className="text-sm">{tool.icon}</span>
+                <span className="text-xs font-medium text-text flex-1 truncate">{tool.name}</span>
+                <span className={`w-2 h-2 rounded-full shrink-0 ${statusStyle[tool.status] || 'bg-gray-500'}`} />
+              </button>
+
+              {isExp && (
+                <div className="px-3 pb-3 border-t border-card pt-2 space-y-1.5">
+                  <p className="text-[10px] text-muted">{tool.description}</p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+                    <span className="text-muted">Credentials: <span className="text-text">{tool.credentials}</span></span>
+                    {tool.lastUsed && <span className="text-muted">Last used: <span className="text-text">{timeAgo(tool.lastUsed)}</span></span>}
+                  </div>
+                  {tool.notes && <p className="text-[10px] text-muted italic">{tool.notes}</p>}
+                  <div className="flex items-center gap-2 pt-1">
+                    <span className="text-[10px] text-muted">Status:</span>
+                    {['working', 'issues', 'broken'].map(s => (
+                      <button key={s} onClick={() => updateStatus(tool, s)}
+                        className={`text-[10px] px-2 py-0.5 rounded transition-all ${
+                          tool.status === s ? `${statusStyle[s]} text-white` : 'bg-card text-muted hover:text-text'
+                        }`}>
+                        {s === 'working' ? '✅ OK' : s === 'issues' ? '⚠️ Issues' : '❌ Broken'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+// ═══════════════════════════════════════════════════
 // CONTROL PANEL
 // ═══════════════════════════════════════════════════
 export default function Control() {
@@ -497,6 +561,9 @@ export default function Control() {
 
       <div className="border-t border-card/50" />
       <CronSection />
+
+      <div className="border-t border-card/50" />
+      <ToolsSection />
     </div>
   )
 }
