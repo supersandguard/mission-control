@@ -95,8 +95,8 @@
       ],
       "model": "anthropic/claude-sonnet-4-20250514",
       "status": "active",
-      "invocations": 1,
-      "lastInvoked": "2026-02-03T21:20:00Z",
+      "invocations": 2,
+      "lastInvoked": "2026-02-03T21:37:00Z",
       "createdAt": "2026-02-03T21:00:00Z"
     }
   ]

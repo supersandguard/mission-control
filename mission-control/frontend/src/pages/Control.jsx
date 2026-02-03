@@ -25,19 +25,20 @@ function timeAgo(ts) {
 // ═══════════════════════════════════════════════════
 // COLLAPSIBLE SECTION WRAPPER
 // ═══════════════════════════════════════════════════
-function Section({ icon, title, badge, defaultOpen = true, children }) {
+function Section({ icon, title, badge, preview, defaultOpen = true, children }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
     <div className="border border-card rounded-lg overflow-hidden">
       <button onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-3 py-2.5 bg-card/30 hover:bg-card/50 transition-all">
-        <div className="flex items-center gap-2">
-          <span className={`text-xs text-muted transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>▶</span>
-          <span className="text-sm font-semibold text-text">{icon} {title}</span>
-          {badge && <span className="text-xs text-muted">{badge}</span>}
+        <div className="flex items-center gap-2 min-w-0">
+          <span className={`text-xs text-muted transition-transform duration-200 shrink-0 ${open ? 'rotate-90' : ''}`}>▶</span>
+          <span className="text-sm font-semibold text-text shrink-0">{icon} {title}</span>
+          {badge && <span className="text-xs text-muted shrink-0">{badge}</span>}
+          {!open && preview && <span className="text-xs text-muted truncate ml-1">{preview}</span>}
         </div>
       </button>
-      {open && <div className="p-3">{children}</div>}
+      {open && <div className="p-3 border-t border-card/50">{children}</div>}
     </div>
   )
 }
@@ -181,20 +182,30 @@ function StatusBar({ status, onPatch }) {
   }
 
   return (
-    <div className="bg-surface border border-card rounded-lg px-3 py-2 relative">
+    <div className={`rounded-lg px-3 py-2 relative ${
+      mem.pct > 85 ? 'bg-red-500/10 border border-red-500/30' : 'bg-surface border border-card'
+    }`}>
       <div className="flex items-center justify-between gap-2">
-        {/* Model - clickable */}
-        <button onClick={() => setShowModelPicker(!showModelPicker)}
-          className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2 py-1 hover:bg-highlight/20 transition-all shrink-0">
-          <span className="text-xs font-medium text-highlight">{model}</span>
-          <span className="text-xs text-muted">▼</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Model - clickable */}
+          <button onClick={() => setShowModelPicker(!showModelPicker)}
+            className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2 py-1 hover:bg-highlight/20 transition-all shrink-0">
+            <span className="text-xs font-medium text-highlight">{model}</span>
+            <span className="text-xs text-muted">▼</span>
+          </button>
+          {/* RAM bar visual */}
+          <div className="flex items-center gap-1.5">
+            <div className="w-16 h-2 bg-card rounded-full overflow-hidden">
+              <div className={`h-full rounded-full transition-all ${mem.pct > 85 ? 'bg-red-500' : mem.pct > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
+                style={{ width: `${mem.pct}%` }} />
+            </div>
+            <span className={`text-xs font-medium ${memColor}`}>{mem.pct}%</span>
+          </div>
+        </div>
 
-        {/* System stats inline */}
-        <div className="flex items-center gap-2 md:gap-3 text-xs text-muted flex-wrap justify-end">
-          <span className={memColor}>{mem.pct}%</span>
-          <span className="hidden md:inline">SD {status.disk?.pct}</span>
-          <span>CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
+        {/* Right side: minimal stats + restart */}
+        <div className="flex items-center gap-2 text-xs text-muted">
+          <span className="hidden md:inline">CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
           <span className="hidden md:inline">Up {fmtUptime(status.systemUptime)}</span>
           <button onClick={doRestart} disabled={restarting}
             className={`px-1.5 py-0.5 rounded text-xs transition-all ${
@@ -955,6 +966,40 @@ export default function Control() {
     setTimeout(load, 3000)
   }
 
+  const [previews, setPreviews] = useState({})
+
+  // Fetch preview summaries for collapsed sections
+  useEffect(() => {
+    const fetchPreviews = async () => {
+      try {
+        const [pend, agents, tools, skills, crons] = await Promise.all([
+          api('/pendientes').catch(() => ({})),
+          api('/subagents').catch(() => ({})),
+          api('/tools').catch(() => ({})),
+          api('/skills').catch(() => ({})),
+          cronApi.list().catch(() => ({})),
+        ])
+        const pendItems = pend.items || []
+        const pendActive = pendItems.filter(i => !i.done).length
+        const agentList = (agents.agents || []).filter(a => a.status === 'active')
+        const toolsOk = (tools.tools || []).filter(t => t.status === 'working').length
+        const toolsTotal = (tools.tools || []).length
+        const activeSkills = (skills.skills || []).filter(s => !s.archived).length
+        const activeCrons = (crons.jobs || []).filter(j => j.enabled).length
+
+        setPreviews({
+          team: agentList.map(a => a.name).join(', '),
+          heartbeat: status?.heartbeat?.every ? `every ${status.heartbeat.every}` : '',
+          pendientes: `${pendActive} pending`,
+          crons: `${activeCrons} active`,
+          tools: `${toolsOk}/${toolsTotal} working`,
+          skills: `${activeSkills} installed`,
+        })
+      } catch (e) {}
+    }
+    fetchPreviews()
+  }, [status])
+
   if (loading) return <div className="flex items-center justify-center h-full text-muted">Loading...</div>
 
   return (
@@ -962,27 +1007,27 @@ export default function Control() {
       <CommandBar />
       <StatusBar status={status} onPatch={patchConfig} />
 
-      <Section icon="👥" title="Team" badge="4 agents" defaultOpen={true}>
+      <Section icon="👥" title="Team" preview={previews.team} defaultOpen={false}>
         <SubAgentsSection />
       </Section>
 
-      <Section icon="💓" title="Heartbeat" defaultOpen={true}>
-        <HeartbeatSection status={status} onPatch={patchConfig} />
-      </Section>
-
-      <Section icon="📝" title="Pendientes" defaultOpen={true}>
+      <Section icon="📝" title="Pendientes" preview={previews.pendientes} defaultOpen={true}>
         <PendientesSection />
       </Section>
 
-      <Section icon="⏰" title="Cron Jobs" defaultOpen={false}>
+      <Section icon="💓" title="Heartbeat" preview={previews.heartbeat} defaultOpen={false}>
+        <HeartbeatSection status={status} onPatch={patchConfig} />
+      </Section>
+
+      <Section icon="⏰" title="Cron Jobs" preview={previews.crons} defaultOpen={false}>
         <CronSection />
       </Section>
 
-      <Section icon="🧰" title="Tools" defaultOpen={false}>
+      <Section icon="🧰" title="Tools" preview={previews.tools} defaultOpen={false}>
         <ToolsSection />
       </Section>
 
-      <Section icon="🧠" title="Skills" defaultOpen={false}>
+      <Section icon="🧠" title="Skills" preview={previews.skills} defaultOpen={false}>
         <SkillsSection />
       </Section>
     </div>
