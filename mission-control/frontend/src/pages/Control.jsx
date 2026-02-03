@@ -22,6 +22,29 @@ function timeAgo(ts) {
   return h < 24 ? `${h}h` : `${Math.floor(h/24)}d`
 }
 
+// ═══════════════════════════════════════════════════
+// COLLAPSIBLE SECTION WRAPPER
+// ═══════════════════════════════════════════════════
+function Section({ icon, title, badge, defaultOpen = true, children }) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div>
+      <button onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-2 border-b border-accent/30 group">
+        <div className="flex items-center gap-2">
+          <span className={`text-xs text-muted transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>▶</span>
+          <h2 className="text-base font-semibold text-text">{icon} {title}</h2>
+          {badge && <span className="text-xs text-muted">{badge}</span>}
+        </div>
+        <span className="text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity">
+          {open ? 'collapse' : 'expand'}
+        </span>
+      </button>
+      {open && <div className="pt-3">{children}</div>}
+    </div>
+  )
+}
+
 const MODELS = [
   { id: 'anthropic/claude-opus-4-5', label: 'Opus 4.5', short: 'opus-4-5' },
   { id: 'anthropic/claude-sonnet-4-20250514', label: 'Sonnet 4', short: 'sonnet-4' },
@@ -250,7 +273,6 @@ function HeartbeatSection({ status, onPatch }) {
       {/* Header with schedule inline */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">💓 Heartbeat</h2>
           <span className={`w-2 h-2 rounded-full ${hb.enabled ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
         </div>
         {!editSchedule ? (
@@ -375,17 +397,11 @@ function PendientesSection() {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">📝 Pendientes</h2>
-          <span className="text-xs text-muted">{pending.length} active</span>
+      <div className="flex items-center justify-end mb-3 gap-3">
+        <div className="w-16 h-1.5 bg-card rounded-full overflow-hidden">
+          <div className="h-full bg-highlight rounded-full transition-all" style={{ width: `${pct}%` }} />
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-16 h-1.5 bg-card rounded-full overflow-hidden">
-            <div className="h-full bg-highlight rounded-full transition-all" style={{ width: `${pct}%` }} />
-          </div>
-          <button onClick={() => setAdding(!adding)} className="text-xs text-highlight hover:underline">+ Add</button>
-        </div>
+        <button onClick={() => setAdding(!adding)} className="text-xs text-highlight hover:underline">+ Add</button>
       </div>
 
       {adding && (
@@ -551,7 +567,6 @@ function CronSection() {
 
   return (
     <section>
-      <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">⏰ Cron Jobs</h2>
       <div className="space-y-1.5">{active.map(renderJob)}</div>
       {archived.length > 0 && (
         <div className="mt-2">
@@ -614,11 +629,6 @@ function SubAgentsSection() {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">👥 Team</h2>
-        <span className="text-xs text-muted">{agents.filter(a => a.status === 'active').length} active</span>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {agents.map(agent => {
           const isExp = expanded === agent.id
@@ -768,7 +778,6 @@ function ToolsSection() {
 
   return (
     <section>
-      <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">🧰 Tools</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
         {tools.map(tool => {
           const isExp = expanded === tool.id
@@ -903,10 +912,6 @@ function SkillsSection() {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">🧠 Skills</h2>
-        <span className="text-xs text-muted">{active.length} active</span>
-      </div>
       <div className="space-y-1.5">{active.map(renderSkill)}</div>
       {archived.length > 0 && (
         <div className="mt-2">
@@ -945,27 +950,33 @@ export default function Control() {
   if (loading) return <div className="flex items-center justify-center h-full text-muted">Loading...</div>
 
   return (
-    <div className="h-full overflow-auto p-3 md:p-6 space-y-5">
+    <div className="h-full overflow-auto p-3 md:p-6 space-y-4">
       <CommandBar />
       <StatusBar status={status} onPatch={patchConfig} />
 
-      <div className="border-t border-card/50" />
-      <SubAgentsSection />
+      <Section icon="👥" title="Team" badge={`${4} agents`} defaultOpen={true}>
+        <SubAgentsSection />
+      </Section>
 
-      <div className="border-t border-card/50" />
-      <HeartbeatSection status={status} onPatch={patchConfig} />
+      <Section icon="💓" title="Heartbeat" defaultOpen={true}>
+        <HeartbeatSection status={status} onPatch={patchConfig} />
+      </Section>
 
-      <div className="border-t border-card/50" />
-      <PendientesSection />
+      <Section icon="📝" title="Pendientes" defaultOpen={true}>
+        <PendientesSection />
+      </Section>
 
-      <div className="border-t border-card/50" />
-      <CronSection />
+      <Section icon="⏰" title="Cron Jobs" defaultOpen={false}>
+        <CronSection />
+      </Section>
 
-      <div className="border-t border-card/50" />
-      <ToolsSection />
+      <Section icon="🧰" title="Tools" defaultOpen={false}>
+        <ToolsSection />
+      </Section>
 
-      <div className="border-t border-card/50" />
-      <SkillsSection />
+      <Section icon="🧠" title="Skills" defaultOpen={false}>
+        <SkillsSection />
+      </Section>
     </div>
   )
 }
