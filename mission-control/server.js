@@ -196,6 +196,78 @@ app.patch('/api/gateway/config', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// HEARTBEAT CHECKS CONFIG
+// ══════════════════════════════════════════════════════════
+
+const HB_CHECKS_FILE = path.join(__dirname, 'data', 'heartbeat-checks.json');
+const HB_STATE_FILE = path.join(WORKSPACE, 'memory', 'heartbeat-state.json');
+
+app.get('/api/heartbeat/checks', async (req, res) => {
+    try {
+        const checks = JSON.parse(await fs.readFile(HB_CHECKS_FILE, 'utf8'));
+        let state = {};
+        try { state = JSON.parse(await fs.readFile(HB_STATE_FILE, 'utf8')); } catch (e) {}
+
+        // Merge last-run times into checks
+        const lastChecks = state.lastChecks || {};
+        const enriched = (checks.checks || []).map(c => {
+            let lastRun = lastChecks[c.id] || null;
+            // Special cases
+            if (c.id === 'daily_review' && state.lastDailyReview) {
+                lastRun = new Date(state.lastDailyReview + 'T21:00:00').getTime() / 1000;
+            }
+            if (c.id === 'moltbook' && state.lastMoltbookCheck) {
+                lastRun = state.lastMoltbookCheck;
+            }
+            const lastRunMs = lastRun ? (lastRun > 1e12 ? lastRun : lastRun * 1000) : null;
+            const overdue = c.enabled && lastRunMs
+                ? (Date.now() - lastRunMs) > (c.frequencyHours * 3600000)
+                : c.enabled && !lastRunMs;
+            return { ...c, lastRun: lastRunMs, overdue };
+        });
+
+        res.json({ checks: enriched, notes: state.notes || null });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/heartbeat/checks', async (req, res) => {
+    try {
+        await fs.writeFile(HB_CHECKS_FILE, JSON.stringify({ checks: req.body.checks }, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/heartbeat/checks/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(HB_CHECKS_FILE, 'utf8'));
+        const idx = (data.checks || []).findIndex(c => c.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Check not found' });
+        data.checks[idx] = { ...data.checks[idx], ...req.body };
+        await fs.writeFile(HB_CHECKS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true, check: data.checks[idx] });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/heartbeat/checks', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(HB_CHECKS_FILE, 'utf8'));
+        data.checks = data.checks || [];
+        data.checks.push(req.body);
+        await fs.writeFile(HB_CHECKS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/heartbeat/checks/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(HB_CHECKS_FILE, 'utf8'));
+        data.checks = (data.checks || []).filter(c => c.id !== req.params.id);
+        await fs.writeFile(HB_CHECKS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // PENDIENTES (HEARTBEAT.md checkboxes)
 // ══════════════════════════════════════════════════════════
 

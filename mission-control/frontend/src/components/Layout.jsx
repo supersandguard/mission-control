@@ -11,7 +11,8 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
   ]
   return (
     <div className="h-screen flex flex-col bg-background">
-      <header className="bg-surface border-b border-card px-4 py-3 flex items-center justify-between shrink-0">
+      {/* Desktop header */}
+      <header className="hidden md:flex bg-surface border-b border-card px-4 py-3 items-center justify-between shrink-0">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <span className="text-lg">🖤</span>
@@ -38,7 +39,36 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
           </div>
         </div>
       </header>
+
+      {/* Mobile header (compact) */}
+      <header className="md:hidden bg-surface border-b border-card px-3 py-2 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2">
+          <span>🖤</span>
+          <h1 className="font-bold text-text text-sm">MC</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <StatusDot active={connected} />
+          <span className={`text-xs ${connected ? 'text-green-400' : 'text-red-400'}`}>
+            {connected ? 'Online' : 'Off'}
+          </span>
+        </div>
+      </header>
+
+      {/* Main */}
       <main className="flex-1 overflow-hidden">{children}</main>
+
+      {/* Mobile bottom nav */}
+      <nav className="md:hidden bg-surface border-t border-card flex shrink-0 safe-area-bottom">
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setCurrentPage(t.id)}
+            className={`flex-1 flex flex-col items-center py-2.5 text-[10px] font-medium transition-all ${
+              currentPage === t.id ? 'text-highlight' : 'text-muted'
+            }`}>
+            <span className="text-lg mb-0.5">{t.icon}</span>
+            {t.label}
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }

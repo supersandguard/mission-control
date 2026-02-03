@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
 
+function authHeaders() {
+  const token = localStorage.getItem('mc_token')
+  return token ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' }
+}
+
 const FILES = [
   { id: 'heartbeat', label: 'HEARTBEAT.md', icon: '💓', desc: 'Checklist de tareas periódicas' },
   { id: 'soul', label: 'SOUL.md', icon: '👻', desc: 'Personalidad y comportamiento' },
@@ -25,7 +30,7 @@ function FileEditor({ fileId, onBack }) {
   const loadFile = async () => {
     setLoading(true)
     try {
-      const r = await fetch(`/api/files/${fileId}`)
+      const r = await fetch(`/api/files/${fileId}`, { headers: authHeaders() })
       const data = await r.json()
       setContent(data.content || '')
       setOriginal(data.content || '')
@@ -38,7 +43,7 @@ function FileEditor({ fileId, onBack }) {
     try {
       await fetch(`/api/files/${fileId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ content }),
       })
       setOriginal(content)
@@ -91,7 +96,7 @@ function MemoryView() {
 
   const loadMemory = async () => {
     try {
-      const r = await fetch('/api/memory/recent')
+      const r = await fetch('/api/memory/recent', { headers: authHeaders() })
       const data = await r.json()
       setEntries(data.entries || [])
     } catch (e) { console.error(e) }

@@ -22,29 +22,31 @@ function Login({ onLogin }) {
       })
       if (r.ok) {
         localStorage.setItem('mc_token', token.trim())
+        // Also store in sessionStorage as backup
+        sessionStorage.setItem('mc_token', token.trim())
         onLogin(token.trim())
       } else {
-        setError('Invalid token')
+        setError('Password incorrecto')
       }
-    } catch (e) { setError('Connection error') }
+    } catch (e) { setError('No se puede conectar') }
     setLoading(false)
   }
 
   return (
-    <div className="h-screen bg-background flex items-center justify-center">
-      <form onSubmit={submit} className="bg-surface border border-card rounded-xl p-8 w-96 shadow-2xl">
+    <div className="h-screen bg-background flex items-center justify-center px-4">
+      <form onSubmit={submit} className="bg-surface border border-card rounded-xl p-6 md:p-8 w-full max-w-sm shadow-2xl">
         <div className="text-center mb-6">
           <span className="text-4xl">🖤</span>
-          <h1 className="text-xl font-bold text-text mt-2">Mission Control</h1>
-          <p className="text-sm text-muted mt-1">Enter access token</p>
+          <h1 className="text-lg md:text-xl font-bold text-text mt-2">Mission Control</h1>
         </div>
         <input type="password" value={token} onChange={e => setToken(e.target.value)} autoFocus
-          placeholder="Token..."
-          className="w-full bg-card border border-accent rounded-lg px-4 py-3 text-sm text-text focus:outline-none focus:border-highlight mb-3" />
+          placeholder="Password"
+          autoComplete="current-password"
+          className="w-full bg-card border border-accent rounded-lg px-4 py-3 text-text focus:outline-none focus:border-highlight mb-3" />
         {error && <div className="text-red-400 text-xs mb-3">{error}</div>}
         <button type="submit" disabled={loading || !token.trim()}
-          className="w-full bg-highlight hover:bg-highlight/80 disabled:opacity-40 text-white py-3 rounded-lg text-sm font-medium transition-all">
-          {loading ? '...' : 'Login'}
+          className="w-full bg-highlight hover:bg-highlight/80 disabled:opacity-40 text-white py-3 rounded-lg font-medium transition-all">
+          {loading ? '...' : 'Entrar'}
         </button>
       </form>
     </div>
@@ -57,16 +59,19 @@ function App() {
   const [sessions, setSessions] = useState([])
   const [connected, setConnected] = useState(false)
 
-  // Check auth on load
+  // Check auth on load — try localStorage, fallback sessionStorage
   useEffect(() => {
-    const saved = localStorage.getItem('mc_token')
+    const saved = localStorage.getItem('mc_token') || sessionStorage.getItem('mc_token')
+    if (saved) localStorage.setItem('mc_token', saved) // sync
     fetch('/api/auth/status', {
       headers: saved ? { 'Authorization': `Bearer ${saved}` } : {}
     }).then(r => r.json()).then(d => {
       if (!d.authRequired || d.authenticated) {
         setAuthed(true)
-        window._mcToken = saved
       } else {
+        // Token expired or wrong, clear
+        localStorage.removeItem('mc_token')
+        sessionStorage.removeItem('mc_token')
         setAuthed(false)
       }
     }).catch(() => setAuthed(false))

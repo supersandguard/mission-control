@@ -189,7 +189,7 @@ function SpawnModal({ onSpawn, onClose }) {
 }
 
 // ─── Session Detail ───────────────────────────────
-function SessionDetail({ session, agent }) {
+function SessionDetail({ session, agent, onBack }) {
   const [history, setHistory] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -230,9 +230,10 @@ function SessionDetail({ session, agent }) {
   return (
     <div className="flex-1 flex flex-col min-w-0">
       {/* Header */}
-      <div className="bg-surface border-b border-card px-5 py-4 shrink-0">
+      <div className="bg-surface border-b border-card px-3 md:px-5 py-3 md:py-4 shrink-0">
         <div className="flex items-center justify-between">
           <div>
+            <button onClick={onBack} className="md:hidden text-xs text-highlight mb-1 block">← Back</button>
             <div className="flex items-center gap-2">
               <span className="text-xl">{icon}</span>
               <h2 className="text-lg font-semibold text-text">{name}</h2>
@@ -411,9 +412,9 @@ export default function Dashboard({ sessions, onRefresh }) {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full flex-col md:flex-row">
       {/* Session list */}
-      <div className="w-80 shrink-0 border-r border-card overflow-auto bg-background">
+      <div className={`${selected ? 'hidden md:block' : ''} w-full md:w-80 shrink-0 border-r border-card overflow-auto bg-background`}>
         <div className="px-4 py-3 border-b border-card flex items-center justify-between">
           <h3 className="text-sm font-medium text-muted uppercase tracking-wider">Sessions</h3>
           <div className="flex gap-2">
@@ -439,7 +440,8 @@ export default function Dashboard({ sessions, onRefresh }) {
       </div>
 
       {/* Detail */}
-      <SessionDetail session={current} agent={current ? agents[current.key] : null} />
+      <SessionDetail session={current} agent={current ? agents[current.key] : null}
+        onBack={() => setSelected(null)} />
 
       {/* Modals */}
       {editingAgent && (

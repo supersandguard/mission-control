@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "id": "email",
+      "name": "📧 Email",
+      "description": "Check Gmail for urgent unread messages",
+      "enabled": true,
+      "frequencyHours": 4,
+      "priority": "high"
+    },
+    {
+      "id": "calendar",
+      "name": "📅 Calendar",
+      "description": "Check upcoming events in next 24-48h",
+      "enabled": true,
+      "frequencyHours": null,
+      "priority": "high"
+    },
+    {
+      "id": "x_mentions",
+      "name": "🐦 X/Twitter",
+      "description": "Check @beto_neh mentions, filter spam, flag interesting replies",
+      "enabled": true,
+      "frequencyHours": 4,
+      "priority": "medium"
+    },
+    {
+      "id": "moltbook",
+      "name": "📱 Moltbook",
+      "description": "Check Moltbook DMs and feed for engagement",
+      "enabled": true,
+      "frequencyHours": 6,
+      "priority": "low"
+    },
+    {
+      "id": "daily_review",
+      "name": "🌙 Daily Review",
+      "description": "Evening review ~9PM: what went well, what didn't, lessons learned",
+      "enabled": true,
+      "frequencyHours": 24,
+      "priority": "medium",
+      "fixedTime": "21:00"
+    }
+  ]
+}
