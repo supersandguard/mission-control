@@ -28,19 +28,16 @@ function timeAgo(ts) {
 function Section({ icon, title, badge, defaultOpen = true, children }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div>
+    <div className="border border-card rounded-lg overflow-hidden">
       <button onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-2 border-b border-accent/30 group">
+        className="w-full flex items-center justify-between px-3 py-2.5 bg-card/30 hover:bg-card/50 transition-all">
         <div className="flex items-center gap-2">
           <span className={`text-xs text-muted transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>▶</span>
-          <h2 className="text-base font-semibold text-text">{icon} {title}</h2>
+          <span className="text-sm font-semibold text-text">{icon} {title}</span>
           {badge && <span className="text-xs text-muted">{badge}</span>}
         </div>
-        <span className="text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity">
-          {open ? 'collapse' : 'expand'}
-        </span>
       </button>
-      {open && <div className="pt-3">{children}</div>}
+      {open && <div className="p-3">{children}</div>}
     </div>
   )
 }
@@ -96,7 +93,7 @@ function CommandBar() {
         <div className="flex-1 relative">
           <input value={text} onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') send() }}
-            placeholder="Tell Max what you want... (e.g. 'Always number your lists')"
+            placeholder="Tell Max what you want..."
             disabled={sending}
             className="w-full bg-surface border border-card rounded-lg px-4 py-3 text-sm text-text placeholder:text-muted/50 focus:outline-none focus:border-highlight transition-all disabled:opacity-50" />
           {sending && <span className="absolute right-3 top-3.5 text-xs text-muted animate-pulse">Sending...</span>}
@@ -184,29 +181,26 @@ function StatusBar({ status, onPatch }) {
   }
 
   return (
-    <div className="bg-surface border border-card rounded-lg p-3 relative">
-      <div className="flex items-center justify-between flex-wrap gap-2">
+    <div className="bg-surface border border-card rounded-lg px-3 py-2 relative">
+      <div className="flex items-center justify-between gap-2">
         {/* Model - clickable */}
         <button onClick={() => setShowModelPicker(!showModelPicker)}
-          className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2.5 py-1 hover:bg-highlight/20 transition-all">
+          className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2 py-1 hover:bg-highlight/20 transition-all shrink-0">
           <span className="text-xs font-medium text-highlight">{model}</span>
-          <span className="text-xs text-muted">ctx {ctx}</span>
           <span className="text-xs text-muted">▼</span>
         </button>
 
         {/* System stats inline */}
-        <div className="flex items-center gap-3 text-xs text-muted">
-          <span className={memColor}>RAM {mem.pct}%</span>
-          <span>SD {status.disk?.pct}</span>
-          {status.ssd?.pct && <span>SSD {status.ssd?.pct}</span>}
+        <div className="flex items-center gap-2 md:gap-3 text-xs text-muted flex-wrap justify-end">
+          <span className={memColor}>{mem.pct}%</span>
+          <span className="hidden md:inline">SD {status.disk?.pct}</span>
           <span>CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
-          <span>Up {fmtUptime(status.systemUptime)}</span>
-          <span className="hidden md:inline font-mono">v{status.session?.version}</span>
+          <span className="hidden md:inline">Up {fmtUptime(status.systemUptime)}</span>
           <button onClick={doRestart} disabled={restarting}
-            className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+            className={`px-1.5 py-0.5 rounded text-xs transition-all ${
               restarting ? 'bg-yellow-500/20 text-yellow-400 animate-pulse' : 'bg-card hover:bg-red-500/20 hover:text-red-400 text-muted'
             }`}>
-            {restarting ? '⏳ Restarting...' : '🔄'}
+            {restarting ? '⏳' : '🔄'}
           </button>
         </div>
       </div>
@@ -964,11 +958,11 @@ export default function Control() {
   if (loading) return <div className="flex items-center justify-center h-full text-muted">Loading...</div>
 
   return (
-    <div className="h-full overflow-auto p-3 md:p-6 space-y-4">
+    <div className="h-full overflow-auto p-3 md:p-6 space-y-2">
       <CommandBar />
       <StatusBar status={status} onPatch={patchConfig} />
 
-      <Section icon="👥" title="Team" badge={`${4} agents`} defaultOpen={true}>
+      <Section icon="👥" title="Team" badge="4 agents" defaultOpen={true}>
         <SubAgentsSection />
       </Section>
 
