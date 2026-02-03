@@ -528,6 +528,116 @@ function ToolsSection() {
 }
 
 // ═══════════════════════════════════════════════════
+// SKILLS SECTION
+// ═══════════════════════════════════════════════════
+function SkillsSection() {
+  const [skills, setSkills] = useState([])
+  const [expanded, setExpanded] = useState(null)
+  const [content, setContent] = useState({})
+  const [loadingContent, setLoadingContent] = useState(null)
+  const [showArchived, setShowArchived] = useState(false)
+
+  useEffect(() => { load() }, [])
+  const load = async () => { try { const d = await api('/skills'); setSkills(d.skills || []) } catch (e) {} }
+
+  const loadContent = async (id) => {
+    if (content[id]) return
+    setLoadingContent(id)
+    try { const d = await api(`/skills/${id}/content`); setContent(prev => ({ ...prev, [id]: d.content })) }
+    catch (e) { setContent(prev => ({ ...prev, [id]: '⚠️ Could not load skill content' })) }
+    setLoadingContent(null)
+  }
+
+  const toggleExpand = (id) => {
+    if (expanded === id) { setExpanded(null); return }
+    setExpanded(id)
+    loadContent(id)
+  }
+
+  const archiveSkill = async (skill) => {
+    const newVal = !skill.archived
+    setSkills(prev => prev.map(s => s.id === skill.id ? { ...s, archived: newVal } : s))
+    await api(`/skills/${skill.id}`, { method: 'PATCH', body: JSON.stringify({ archived: newVal }) })
+  }
+
+  const active = skills.filter(s => !s.archived)
+  const archived = skills.filter(s => s.archived)
+
+  const fmtDate = (d) => {
+    if (!d) return '—'
+    return new Date(d).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })
+  }
+
+  const renderSkill = (skill) => {
+    const isExp = expanded === skill.id
+    return (
+      <div key={skill.id} className={`bg-surface border border-card rounded-lg overflow-hidden ${skill.archived ? 'opacity-50' : ''}`}>
+        <button onClick={() => toggleExpand(skill.id)}
+          className="w-full px-3 py-2.5 flex items-center gap-2 text-left hover:bg-card/50 transition-all">
+          <span className="text-sm">{skill.icon}</span>
+          <div className="flex-1 min-w-0">
+            <span className="text-xs font-medium text-text">{skill.name}</span>
+            <p className="text-[10px] text-muted truncate">{skill.summary}</p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            {skill.lastUsed && <span className="text-[10px] text-muted hidden md:inline">{timeAgo(skill.lastUsed)}</span>}
+            <span className={`text-[10px] text-muted transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</span>
+          </div>
+        </button>
+
+        {isExp && (
+          <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+              <span className="text-muted">Installed: <span className="text-text">{fmtDate(skill.installed)}</span></span>
+              <span className="text-muted">Last used: <span className="text-text">{skill.lastUsed ? timeAgo(skill.lastUsed) : 'never'}</span></span>
+            </div>
+
+            {/* SKILL.md content */}
+            <div className="relative">
+              {loadingContent === skill.id ? (
+                <div className="text-[10px] text-muted py-4 text-center">Loading...</div>
+              ) : content[skill.id] ? (
+                <pre className="text-[10px] md:text-xs text-text whitespace-pre-wrap bg-card rounded-lg p-3 max-h-64 overflow-auto font-mono leading-relaxed">
+                  {content[skill.id]}
+                </pre>
+              ) : null}
+            </div>
+
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-[10px] text-muted font-mono">{skill.id}</span>
+              <button onClick={() => archiveSkill(skill)}
+                className={`text-[10px] ${skill.archived ? 'text-green-400/70 hover:text-green-400' : 'text-yellow-400/70 hover:text-yellow-400'}`}>
+                {skill.archived ? '↩ Restore' : '📦 Archive'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-text">🧠 Skills</h3>
+        <span className="text-[10px] text-muted">{active.length} active</span>
+      </div>
+      <div className="space-y-1.5">{active.map(renderSkill)}</div>
+      {archived.length > 0 && (
+        <div className="mt-2">
+          <button onClick={() => setShowArchived(!showArchived)}
+            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            <span className={`transition-transform ${showArchived ? 'rotate-90' : ''}`}>▶</span>
+            Archived ({archived.length})
+          </button>
+          {showArchived && <div className="space-y-1.5 mt-1">{archived.map(renderSkill)}</div>}
+        </div>
+      )}
+    </section>
+  )
+}
+
+// ═══════════════════════════════════════════════════
 // CONTROL PANEL
 // ═══════════════════════════════════════════════════
 export default function Control() {
@@ -564,6 +674,9 @@ export default function Control() {
 
       <div className="border-t border-card/50" />
       <ToolsSection />
+
+      <div className="border-t border-card/50" />
+      <SkillsSection />
     </div>
   )
 }

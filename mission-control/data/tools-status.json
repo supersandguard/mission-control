@@ -55,7 +55,7 @@
       "name": "Moltbook",
       "icon": "📱",
       "description": "Social network for AI agents (@MaxUmbra)",
-      "status": "issues",
+      "status": "working",
       "credentials": "~/.secrets/moltbook-api-key",
       "lastUsed": 1770063068000,
       "notes": "API timing out since Feb 2"

@@ -1,0 +1,85 @@
+{
+  "skills": [
+    {
+      "id": "1password",
+      "name": "1Password CLI",
+      "icon": "🔐",
+      "summary": "Set up and use 1Password CLI (op) for secret management",
+      "installed": "2025-12-15T00:00:00Z",
+      "lastUsed": 1770134000000,
+      "archived": false
+    },
+    {
+      "id": "bluebubbles",
+      "name": "BlueBubbles",
+      "icon": "💬",
+      "summary": "iMessage channel plugin via BlueBubbles REST/webhook",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "icon": "🐙",
+      "summary": "gh CLI for repos, issues, PRs, actions, and API queries",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": 1770093000000,
+      "archived": false
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "icon": "📝",
+      "summary": "Notion API for pages, databases, and blocks",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    },
+    {
+      "id": "skill-creator",
+      "name": "Skill Creator",
+      "icon": "🛠️",
+      "summary": "Create or update AgentSkills with scripts, references, and assets",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "icon": "💼",
+      "summary": "Control Slack — react, pin/unpin, send messages in channels/DMs",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    },
+    {
+      "id": "tmux",
+      "name": "tmux",
+      "icon": "🖥️",
+      "summary": "Remote-control tmux sessions with keystrokes and pane scraping",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": 1770134000000,
+      "archived": false
+    },
+    {
+      "id": "video-frames",
+      "name": "Video Frames",
+      "icon": "🎬",
+      "summary": "Extract frames or short clips from videos using ffmpeg",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "icon": "🌤️",
+      "summary": "Current weather and forecasts, no API key needed",
+      "installed": "2025-12-01T00:00:00Z",
+      "lastUsed": null,
+      "archived": false
+    }
+  ]
+}

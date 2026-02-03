@@ -1,12 +1,12 @@
 {
-    "agents": [
-        {
-            "id": "agent-main-main",
-            "name": "Max Umbra",
-            "role": "Lead / Personal Assistant",
-            "emoji": "🖤",
-            "description": "Squad lead. Handles direct requests, delegates, coordinates.",
-            "sessionKey": "agent:main:main"
-        }
-    ]
+  "agents": [
+    {
+      "id": "agent-main-main",
+      "name": "Max Umbra",
+      "role": "Lead / Personal Assistant",
+      "emoji": "🖤",
+      "description": "Squad lead. Handles direct requests, delegates, coordinates.",
+      "sessionKey": "agent:main:main"
+    }
+  ]
 }

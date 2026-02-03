@@ -300,6 +300,36 @@ app.patch('/api/tools/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// SKILLS
+// ══════════════════════════════════════════════════════════
+
+const SKILLS_FILE = path.join(__dirname, 'data', 'skills-status.json');
+const SKILLS_DIR = '/usr/lib/node_modules/clawdbot/skills';
+
+app.get('/api/skills', async (req, res) => {
+    try { res.json(JSON.parse(await fs.readFile(SKILLS_FILE, 'utf8'))); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/skills/:id/content', async (req, res) => {
+    try {
+        const content = await fs.readFile(path.join(SKILLS_DIR, req.params.id, 'SKILL.md'), 'utf8');
+        res.json({ content });
+    } catch (e) { res.status(404).json({ error: 'Skill file not found' }); }
+});
+
+app.patch('/api/skills/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(SKILLS_FILE, 'utf8'));
+        const idx = (data.skills || []).findIndex(s => s.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Skill not found' });
+        data.skills[idx] = { ...data.skills[idx], ...req.body };
+        await fs.writeFile(SKILLS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // PENDIENTES (HEARTBEAT.md checkboxes)
 // ══════════════════════════════════════════════════════════
 
