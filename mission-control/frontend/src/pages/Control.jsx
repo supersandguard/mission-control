@@ -29,6 +29,110 @@ const MODELS = [
 ]
 
 // ═══════════════════════════════════════════════════
+// COMMAND BAR — natural language configuration
+// ═══════════════════════════════════════════════════
+function CommandBar() {
+  const [text, setText] = useState('')
+  const [prefs, setPrefs] = useState([])
+  const [sending, setSending] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+
+  useEffect(() => { loadPrefs() }, [])
+  const loadPrefs = async () => { try { const d = await api('/preferences'); setPrefs(d.preferences || []) } catch (e) {} }
+
+  const send = async () => {
+    if (!text.trim() || sending) return
+    setSending(true)
+    try {
+      await api('/preferences', { method: 'POST', body: JSON.stringify({ text: text.trim() }) })
+      setText('')
+      loadPrefs()
+    } catch (e) { alert('Error: ' + e.message) }
+    setSending(false)
+  }
+
+  const removePref = async (id) => {
+    await api(`/preferences/${id}`, { method: 'DELETE' })
+    loadPrefs()
+  }
+
+  const pending = prefs.filter(p => p.status === 'pending')
+  const applied = prefs.filter(p => p.status === 'applied')
+  const categoryColors = {
+    personality: 'bg-purple-500/20 text-purple-300',
+    communication: 'bg-blue-500/20 text-blue-300',
+    routine: 'bg-green-500/20 text-green-300',
+    operation: 'bg-yellow-500/20 text-yellow-300',
+    security: 'bg-red-500/20 text-red-300',
+  }
+
+  return (
+    <section>
+      {/* Input */}
+      <div className="flex gap-2">
+        <div className="flex-1 relative">
+          <input value={text} onChange={e => setText(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') send() }}
+            placeholder="Tell Max what you want... (e.g. 'Always number your lists')"
+            disabled={sending}
+            className="w-full bg-surface border border-card rounded-lg px-4 py-3 text-sm text-text placeholder:text-muted/50 focus:outline-none focus:border-highlight transition-all disabled:opacity-50" />
+          {sending && <span className="absolute right-3 top-3.5 text-xs text-muted animate-pulse">Sending...</span>}
+        </div>
+        <button onClick={send} disabled={!text.trim() || sending}
+          className="bg-highlight text-white px-4 py-3 rounded-lg text-sm font-medium disabled:opacity-30 hover:bg-highlight/80 transition-all shrink-0">
+          Send
+        </button>
+      </div>
+
+      {/* Pending preferences */}
+      {pending.length > 0 && (
+        <div className="mt-3 space-y-1.5">
+          {pending.map(p => (
+            <div key={p.id} className="flex items-center gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-3 py-2">
+              <span className="animate-pulse text-yellow-400 text-xs">⏳</span>
+              <span className="text-xs text-text flex-1">{p.text}</span>
+              <span className="text-[10px] text-yellow-400/70">Processing...</span>
+              <button onClick={() => removePref(p.id)} className="text-[10px] text-muted hover:text-red-400">✕</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Applied preferences */}
+      {applied.length > 0 && (
+        <div className="mt-2">
+          <button onClick={() => setShowHistory(!showHistory)}
+            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            <span className={`transition-transform ${showHistory ? 'rotate-90' : ''}`}>▶</span>
+            Applied ({applied.length})
+          </button>
+          {showHistory && (
+            <div className="space-y-1.5 mt-1">
+              {applied.map(p => (
+                <div key={p.id} className="bg-surface border border-card rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-400 text-xs">✓</span>
+                    <span className="text-xs text-text flex-1">{p.text}</span>
+                    {p.category && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${categoryColors[p.category] || 'bg-card text-muted'}`}>
+                        {p.category}
+                      </span>
+                    )}
+                    <button onClick={() => removePref(p.id)} className="text-[10px] text-muted hover:text-red-400">✕</button>
+                  </div>
+                  {p.response && <p className="text-[10px] text-muted mt-1 pl-5">{p.response}</p>}
+                  {p.target && <span className="text-[10px] text-muted pl-5">→ {p.target}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  )
+}
+
+// ═══════════════════════════════════════════════════
 // STATUS BAR — compact system info + model selector
 // ═══════════════════════════════════════════════════
 function StatusBar({ status, onPatch }) {
@@ -661,6 +765,7 @@ export default function Control() {
 
   return (
     <div className="h-full overflow-auto p-3 md:p-6 space-y-5">
+      <CommandBar />
       <StatusBar status={status} onPatch={patchConfig} />
 
       <div className="border-t border-card/50" />

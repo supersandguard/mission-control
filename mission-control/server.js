@@ -278,6 +278,68 @@ app.delete('/api/heartbeat/checks/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+// PREFERENCES (Command Bar)
+// ══════════════════════════════════════════════════════════
+
+const PREFS_FILE = path.join(__dirname, 'data', 'preferences.json');
+
+app.get('/api/preferences', async (req, res) => {
+    try { res.json(JSON.parse(await fs.readFile(PREFS_FILE, 'utf8'))); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/preferences', async (req, res) => {
+    try {
+        const text = req.body.text;
+        if (!text) return res.status(400).json({ error: 'Text required' });
+        const data = JSON.parse(await fs.readFile(PREFS_FILE, 'utf8'));
+        const pref = {
+            id: 'pref_' + Date.now(),
+            text,
+            category: null,
+            target: null,
+            status: 'pending',
+            createdAt: Date.now(),
+            appliedAt: null,
+            response: null
+        };
+        data.preferences.unshift(pref);
+        await fs.writeFile(PREFS_FILE, JSON.stringify(data, null, 2));
+
+        // Notify main session via gateway
+        try {
+            const gwRes = await fetch('http://127.0.0.1:18789/tools/invoke', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tool: 'sessions_send', args: { message: `[Dashboard Command] New preference: "${text}". Check /home/clawdbot/clawd/mission-control/data/preferences.json, find this preference by id "${pref.id}", categorize it, decide where it goes (SOUL.md, USER.md, HEARTBEAT.md, etc), apply the change to the relevant file, then update the preference in preferences.json with: category, target, status="applied", response explaining what you did.` } })
+            });
+        } catch (e) { console.error('Notify error:', e.message); }
+
+        res.json({ ok: true, preference: pref });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/preferences/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(PREFS_FILE, 'utf8'));
+        const idx = data.preferences.findIndex(p => p.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Not found' });
+        data.preferences[idx] = { ...data.preferences[idx], ...req.body };
+        await fs.writeFile(PREFS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/preferences/:id', async (req, res) => {
+    try {
+        const data = JSON.parse(await fs.readFile(PREFS_FILE, 'utf8'));
+        data.preferences = data.preferences.filter(p => p.id !== req.params.id);
+        await fs.writeFile(PREFS_FILE, JSON.stringify(data, null, 2));
+        res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ══════════════════════════════════════════════════════════
 // TOOLS STATUS
 // ══════════════════════════════════════════════════════════
 
