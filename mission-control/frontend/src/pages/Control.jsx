@@ -2,93 +2,102 @@ import { useState, useEffect, useCallback } from 'react'
 import { cronApi } from '../api'
 
 const API = '/api'
-const json = r => r.json()
 function api(url, opts = {}) {
   const token = localStorage.getItem('mc_token')
   const headers = { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}), ...opts.headers }
-  return fetch(API + url, { ...opts, headers }).then(json)
+  return fetch(API + url, { ...opts, headers }).then(r => r.json())
 }
 
-function fmtBytes(b) {
-  if (b >= 1e9) return `${(b/1e9).toFixed(1)} GB`
-  return `${(b/1e6).toFixed(0)} MB`
-}
+function fmtBytes(b) { return b >= 1e9 ? `${(b/1e9).toFixed(1)}G` : `${(b/1e6).toFixed(0)}M` }
 function fmtUptime(s) {
   const d = Math.floor(s/86400), h = Math.floor((s%86400)/3600), m = Math.floor((s%3600)/60)
-  if (d > 0) return `${d}d ${h}h`
-  if (h > 0) return `${h}h ${m}m`
-  return `${m}m`
+  return d > 0 ? `${d}d${h}h` : h > 0 ? `${h}h${m}m` : `${m}m`
 }
 function timeAgo(ts) {
   if (!ts) return 'never'
-  const diff = Date.now() - ts
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'just now'
-  if (m < 60) return `${m}m ago`
+  const m = Math.floor((Date.now() - ts) / 60000)
+  if (m < 1) return 'now'
+  if (m < 60) return `${m}m`
   const h = Math.floor(m / 60)
-  if (h < 24) return `${h}h ago`
-  return `${Math.floor(h/24)}d ago`
+  return h < 24 ? `${h}h` : `${Math.floor(h/24)}d`
 }
 
 const MODELS = [
-  { id: 'anthropic/claude-opus-4-5', label: 'Opus 4.5', cost: '$$$' },
-  { id: 'anthropic/claude-sonnet-4-20250514', label: 'Sonnet 4', cost: '$$' },
-  { id: 'anthropic/claude-haiku-4-20250514', label: 'Haiku 4', cost: '$' },
+  { id: 'anthropic/claude-opus-4-5', label: 'Opus 4.5', short: 'opus-4-5' },
+  { id: 'anthropic/claude-sonnet-4-20250514', label: 'Sonnet 4', short: 'sonnet-4' },
+  { id: 'anthropic/claude-haiku-4-20250514', label: 'Haiku 4', short: 'haiku-4' },
 ]
 
-// ─── Metric Card ──────────────────────────────────
-function Metric({ label, value, sub, color }) {
-  return (
-    <div className="bg-surface border border-card rounded-lg p-3 md:p-4">
-      <div className={`text-lg md:text-2xl font-bold ${color || 'text-text'}`}>{value}</div>
-      <div className="text-[10px] md:text-xs text-muted mt-0.5">{label}</div>
-      {sub && <div className="text-[10px] text-muted/70">{sub}</div>}
-    </div>
-  )
-}
+// ═══════════════════════════════════════════════════
+// STATUS BAR — compact system info + model selector
+// ═══════════════════════════════════════════════════
+function StatusBar({ status, onPatch }) {
+  const [showModelPicker, setShowModelPicker] = useState(false)
+  const [saving, setSaving] = useState(false)
+  if (!status) return null
 
-// ─── System Status ────────────────────────────────
-function SystemStatus({ status }) {
-  if (!status) return <div className="text-muted text-center py-8">Loading...</div>
   const mem = status.memory || {}
+  const model = (status.model || '').replace('anthropic/claude-','')
   const memColor = mem.pct > 85 ? 'text-red-400' : mem.pct > 70 ? 'text-yellow-400' : 'text-green-400'
-  const ips = Object.entries(status.network || {}).map(([k,v]) => `${k}: ${v}`).join(' | ')
-
-  const modelShort = (status.model || '').replace('anthropic/','').replace('claude-','')
   const ctx = status.session?.context || '?'
-  const ver = status.session?.version || '?'
+
+  const changeModel = async (id) => {
+    setSaving(true)
+    await onPatch({ agents: { defaults: { model: id } } })
+    setShowModelPicker(false)
+    setSaving(false)
+  }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xs md:text-sm font-semibold text-muted uppercase tracking-wider">🖥️ System</h3>
-        <span className="text-[10px] text-muted font-mono">v{ver}</span>
+    <div className="bg-surface border border-card rounded-lg p-3 relative">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        {/* Model - clickable */}
+        <button onClick={() => setShowModelPicker(!showModelPicker)}
+          className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2.5 py-1 hover:bg-highlight/20 transition-all">
+          <span className="text-xs font-medium text-highlight">{model}</span>
+          <span className="text-[10px] text-muted">ctx {ctx}</span>
+          <span className="text-[10px] text-muted">▼</span>
+        </button>
+
+        {/* System stats inline */}
+        <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted">
+          <span className={memColor}>RAM {mem.pct}%</span>
+          <span>SD {status.disk?.pct}</span>
+          {status.ssd?.pct && <span>SSD {status.ssd?.pct}</span>}
+          <span>CPU {status.cpu?.load?.[0]?.toFixed(1)}</span>
+          <span>Up {fmtUptime(status.systemUptime)}</span>
+          <span className="hidden md:inline font-mono">v{status.session?.version}</span>
+        </div>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
-        <Metric label="Uptime" value={fmtUptime(status.systemUptime)} sub={status.hostname} />
-        <Metric label="RAM" value={`${mem.pct}%`} color={memColor}
-          sub={`${fmtBytes(mem.used)}/${fmtBytes(mem.total)}`} />
-        <Metric label="Model" value={modelShort} sub={`Ctx: ${ctx}`} color="text-highlight" />
-        <Metric label="SD Card" value={status.disk?.pct || '?'} sub={`${status.disk?.used || '?'}/${status.disk?.total || '?'}`} />
-        {status.ssd?.pct && <Metric label="SSD" value={status.ssd.pct} sub={`${status.ssd.used}/${status.ssd.total}`} />}
-        <Metric label="CPU" value={status.cpu?.load?.[0]?.toFixed(2) || '?'}
-          sub={`${status.cpu?.cores || '?'} cores`} />
-      </div>
-      <div className="mt-1 text-[10px] text-muted hidden md:block">{ips}</div>
+
+      {/* Model picker dropdown */}
+      {showModelPicker && (
+        <div className="absolute left-0 top-full mt-1 bg-surface border border-card rounded-lg shadow-xl z-10 w-64">
+          {MODELS.map(m => {
+            const active = status.model === m.id
+            return (
+              <button key={m.id} onClick={() => !active && !saving && changeModel(m.id)}
+                className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between hover:bg-card transition-all first:rounded-t-lg last:rounded-b-lg ${active ? 'text-highlight' : 'text-text'}`}>
+                <span>{m.label}</span>
+                {active && <span className="text-xs">● Active</span>}
+              </button>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
 
-// ─── Heartbeat Status ─────────────────────────────
-function HeartbeatStatus({ status, onPatch }) {
+// ═══════════════════════════════════════════════════
+// HEARTBEAT SECTION
+// ═══════════════════════════════════════════════════
+function HeartbeatSection({ status, onPatch }) {
   const hb = status?.heartbeat || {}
-  const enabled = hb.enabled
-  const [editing, setEditing] = useState(false)
+  const [editSchedule, setEditSchedule] = useState(false)
   const [freq, setFreq] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
-
-  // Checks system
   const [checks, setChecks] = useState([])
   const [editingCheck, setEditingCheck] = useState(null)
   const [addingCheck, setAddingCheck] = useState(false)
@@ -101,190 +110,104 @@ function HeartbeatStatus({ status, onPatch }) {
   }, [status])
 
   useEffect(() => { loadChecks() }, [])
-
   const loadChecks = async () => {
-    try {
-      const data = await api('/heartbeat/checks')
-      setChecks(data.checks || [])
-    } catch (e) { console.error(e) }
+    try { const d = await api('/heartbeat/checks'); setChecks(d.checks || []) } catch (e) {}
   }
 
   const saveSchedule = async () => {
-    const patch = { agents: { defaults: { heartbeat: {
-      every: `${freq}min`,
-      activeHours: { start, end }
-    }}}}
-    await onPatch(patch)
-    setEditing(false)
+    await onPatch({ agents: { defaults: { heartbeat: { every: `${freq}min`, activeHours: { start, end } } } } })
+    setEditSchedule(false)
   }
 
   const toggleCheck = async (check) => {
-    const updated = !check.enabled
-    setChecks(prev => prev.map(c => c.id === check.id ? { ...c, enabled: updated } : c))
-    try {
-      await api(`/heartbeat/checks/${check.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: updated }) })
-    } catch (e) { loadChecks() }
+    setChecks(prev => prev.map(c => c.id === check.id ? { ...c, enabled: !c.enabled } : c))
+    try { await api(`/heartbeat/checks/${check.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: !check.enabled }) }) }
+    catch (e) { loadChecks() }
   }
 
   const saveCheck = async (check) => {
-    try {
-      await api(`/heartbeat/checks/${check.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ description: check.description, frequencyHours: check.frequencyHours, priority: check.priority, fixedTime: check.fixedTime || undefined })
-      })
-      setEditingCheck(null)
-      loadChecks()
-    } catch (e) { alert('Error: ' + e.message) }
+    await api(`/heartbeat/checks/${check.id}`, { method: 'PATCH', body: JSON.stringify({ description: check.description, frequencyHours: check.frequencyHours, priority: check.priority, fixedTime: check.fixedTime || undefined }) })
+    setEditingCheck(null); loadChecks()
   }
 
   const addCheck = async () => {
     if (!newCheck.id || !newCheck.name) return
-    try {
-      await api('/heartbeat/checks', { method: 'POST', body: JSON.stringify({ ...newCheck, enabled: true }) })
-      setAddingCheck(false)
-      setNewCheck({ id: '', name: '', description: '', frequencyHours: 4, priority: 'medium' })
-      loadChecks()
-    } catch (e) { alert('Error: ' + e.message) }
+    await api('/heartbeat/checks', { method: 'POST', body: JSON.stringify({ ...newCheck, enabled: true }) })
+    setAddingCheck(false); setNewCheck({ id: '', name: '', description: '', frequencyHours: 4, priority: 'medium' }); loadChecks()
   }
 
   const deleteCheck = async (id) => {
     if (!confirm('Delete this check?')) return
-    try {
-      await api(`/heartbeat/checks/${id}`, { method: 'DELETE' })
-      loadChecks()
-    } catch (e) { alert('Error: ' + e.message) }
+    await api(`/heartbeat/checks/${id}`, { method: 'DELETE' }); loadChecks()
   }
 
-  const priorityColor = { high: 'text-red-400', medium: 'text-yellow-400', low: 'text-muted' }
-
   return (
-    <div>
+    <section>
+      {/* Header with schedule inline */}
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-muted uppercase tracking-wider">💓 Heartbeat</h3>
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-          enabled ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-        }`}>
-          <span className={`w-2 h-2 rounded-full ${enabled ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-          {enabled ? 'Active' : 'Off'}
-        </span>
-      </div>
-
-      {/* Schedule */}
-      <div className="bg-surface border border-card rounded-lg p-3 md:p-4 mb-3">
-        {!editing ? (
-          <div className="flex items-center justify-between">
-            <div className="flex gap-4 md:gap-6">
-              <div><span className="text-[10px] md:text-xs text-muted">Every</span><div className="text-sm md:text-lg font-semibold text-text">{hb.every || '—'}</div></div>
-              <div><span className="text-[10px] md:text-xs text-muted">Hours</span><div className="text-sm md:text-lg font-semibold text-text">{hb.activeHours ? `${hb.activeHours.start}–${hb.activeHours.end}` : '—'}</div></div>
-              <div className="hidden md:block"><span className="text-xs text-muted">Channels</span><div className="text-lg font-semibold text-text">{(status?.gateway?.channels || []).join(', ') || '—'}</div></div>
-            </div>
-            <button onClick={() => setEditing(true)} className="text-xs text-highlight hover:underline">✏️</button>
-          </div>
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-text">💓 Heartbeat</h3>
+          <span className={`w-2 h-2 rounded-full ${hb.enabled ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+        </div>
+        {!editSchedule ? (
+          <button onClick={() => setEditSchedule(true)} className="flex items-center gap-2 text-xs text-muted hover:text-text">
+            <span>every {hb.every || '?'}</span>
+            <span className="hidden md:inline">· {hb.activeHours ? `${hb.activeHours.start}–${hb.activeHours.end}` : '?'}</span>
+            <span>✏️</span>
+          </button>
         ) : (
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="text-xs text-muted block mb-1">Frequency (min)</label>
-                <input type="number" value={freq} onChange={e => setFreq(e.target.value)} min="1" max="120"
-                  className="w-full bg-card border border-accent rounded px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight" />
-              </div>
-              <div>
-                <label className="text-xs text-muted block mb-1">Start</label>
-                <input type="time" value={start} onChange={e => setStart(e.target.value)}
-                  className="w-full bg-card border border-accent rounded px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight" />
-              </div>
-              <div>
-                <label className="text-xs text-muted block mb-1">End</label>
-                <input type="time" value={end} onChange={e => setEnd(e.target.value)}
-                  className="w-full bg-card border border-accent rounded px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight" />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={saveSchedule} className="bg-highlight text-white px-4 py-1.5 rounded text-xs font-medium">Save</button>
-              <button onClick={() => setEditing(false)} className="text-muted hover:text-text px-3 py-1.5 text-xs">Cancel</button>
-            </div>
+          <div className="flex items-center gap-2">
+            <input type="number" value={freq} onChange={e => setFreq(e.target.value)} min="1" max="120"
+              className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
+            <span className="text-xs text-muted">min</span>
+            <input type="time" value={start} onChange={e => setStart(e.target.value)}
+              className="bg-card border border-accent rounded px-1.5 py-1 text-xs text-text w-20" />
+            <span className="text-xs text-muted">–</span>
+            <input type="time" value={end} onChange={e => setEnd(e.target.value)}
+              className="bg-card border border-accent rounded px-1.5 py-1 text-xs text-text w-20" />
+            <button onClick={saveSchedule} className="text-xs text-highlight">✓</button>
+            <button onClick={() => setEditSchedule(false)} className="text-xs text-muted">✕</button>
           </div>
         )}
       </div>
 
       {/* Checks */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs text-muted">Checks — what I monitor each heartbeat</span>
-        <button onClick={() => setAddingCheck(true)} className="text-xs text-highlight hover:underline">+ Add check</button>
-      </div>
-
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {checks.map(check => (
-          <div key={check.id} className={`bg-surface border rounded-lg px-4 py-3 transition-all ${
-            check.overdue ? 'border-yellow-500/50' : 'border-card'
-          } ${!check.enabled ? 'opacity-50' : ''}`}>
+          <div key={check.id} className={`rounded-lg px-3 py-2 transition-all ${
+            check.overdue ? 'bg-yellow-500/5 border border-yellow-500/30' : 'bg-surface border border-card'
+          } ${!check.enabled ? 'opacity-40' : ''}`}>
             {editingCheck === check.id ? (
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">{check.name}</span>
-                  <span className="text-xs text-muted font-mono">{check.id}</span>
-                </div>
                 <textarea value={checks.find(c=>c.id===check.id)?.description || ''}
                   onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, description: e.target.value} : c))}
-                  className="w-full bg-card border border-accent rounded px-3 py-2 text-xs text-text h-16 resize-none focus:outline-none focus:border-highlight"
-                  placeholder="What should I check?" />
-                <div className="flex gap-3 items-center">
-                  <div>
-                    <label className="text-[10px] text-muted">Every (hours)</label>
-                    <input type="number" min="1" max="48"
-                      value={checks.find(c=>c.id===check.id)?.frequencyHours || 4}
-                      onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, frequencyHours: parseInt(e.target.value)} : c))}
-                      className="w-20 bg-card border border-accent rounded px-2 py-1 text-xs text-text ml-1" />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-muted">Priority</label>
-                    <select value={checks.find(c=>c.id===check.id)?.priority || 'medium'}
-                      onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, priority: e.target.value} : c))}
-                      className="bg-card border border-accent rounded px-2 py-1 text-xs text-text ml-1">
-                      <option value="high">High</option>
-                      <option value="medium">Medium</option>
-                      <option value="low">Low</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-muted">Fixed time</label>
-                    <input type="time"
-                      value={checks.find(c=>c.id===check.id)?.fixedTime || ''}
-                      onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, fixedTime: e.target.value} : c))}
-                      className="bg-card border border-accent rounded px-2 py-1 text-xs text-text ml-1" />
-                  </div>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  <button onClick={() => saveCheck(checks.find(c=>c.id===check.id))}
-                    className="bg-highlight text-white px-3 py-1 rounded text-xs">Save</button>
-                  <button onClick={() => { setEditingCheck(null); loadChecks() }}
-                    className="text-muted text-xs hover:text-text">Cancel</button>
-                  <button onClick={() => deleteCheck(check.id)}
-                    className="text-red-400/70 text-xs hover:text-red-400 ml-auto">Delete</button>
+                  className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text h-14 resize-none focus:outline-none focus:border-highlight" />
+                <div className="flex gap-2 items-center">
+                  <input type="number" min="1" max="48" value={checks.find(c=>c.id===check.id)?.frequencyHours || 4}
+                    onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, frequencyHours: parseInt(e.target.value)} : c))}
+                    className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
+                  <span className="text-[10px] text-muted">hours</span>
+                  <button onClick={() => saveCheck(checks.find(c=>c.id===check.id))} className="text-xs text-highlight ml-auto">Save</button>
+                  <button onClick={() => { setEditingCheck(null); loadChecks() }} className="text-xs text-muted">Cancel</button>
+                  <button onClick={() => deleteCheck(check.id)} className="text-xs text-red-400/60 hover:text-red-400">Delete</button>
                 </div>
               </div>
             ) : (
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                <div className="flex items-center gap-2 min-w-0">
                   <button onClick={() => toggleCheck(check)}
-                    className={`w-9 h-[18px] md:w-10 md:h-5 rounded-full transition-all relative shrink-0 ${check.enabled ? 'bg-green-500' : 'bg-gray-600'}`}>
-                    <span className={`absolute top-0.5 w-3.5 h-3.5 md:w-4 md:h-4 bg-white rounded-full transition-all ${check.enabled ? 'left-[18px] md:left-5' : 'left-0.5'}`} />
+                    className={`w-8 h-4 rounded-full transition-all relative shrink-0 ${check.enabled ? 'bg-green-500' : 'bg-gray-600'}`}>
+                    <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${check.enabled ? 'left-[14px]' : 'left-0.5'}`} />
                   </button>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-xs md:text-sm font-medium text-text">{check.name}</span>
-                      <span className={`text-[10px] ${check.overdue ? 'text-yellow-400' : 'text-muted'}`}>
-                        {check.lastRun ? timeAgo(check.lastRun) : 'never'}
-                        {check.overdue && ' ⚠️'}
-                      </span>
-                    </div>
-                    <div className="text-[10px] md:text-xs text-muted truncate">{check.description}</div>
-                  </div>
+                  <span className="text-xs font-medium text-text">{check.name}</span>
+                  <span className="text-[10px] text-muted truncate hidden md:inline">{check.description}</span>
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-[10px] text-muted hidden md:inline">/{check.frequencyHours}h</span>
-                  <button onClick={() => setEditingCheck(check.id)}
-                    className="text-xs text-muted hover:text-text p-1">✏️</button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className={`text-[10px] ${check.overdue ? 'text-yellow-400' : 'text-muted'}`}>
+                    {check.lastRun ? timeAgo(check.lastRun) : '—'}{check.overdue ? ' ⚠️' : ''}
+                  </span>
+                  <span className="text-[10px] text-muted">/{check.frequencyHours}h</span>
+                  <button onClick={() => setEditingCheck(check.id)} className="text-[10px] text-muted hover:text-text">✏️</button>
                 </div>
               </div>
             )}
@@ -292,406 +215,288 @@ function HeartbeatStatus({ status, onPatch }) {
         ))}
       </div>
 
-      {/* Add new check */}
-      {addingCheck && (
-        <div className="bg-surface border border-highlight/30 rounded-lg p-4 mt-2">
-          <div className="grid grid-cols-2 gap-3 mb-2">
+      {/* Add check */}
+      {!addingCheck ? (
+        <button onClick={() => setAddingCheck(true)} className="text-[10px] text-highlight hover:underline mt-2">+ Add check</button>
+      ) : (
+        <div className="bg-surface border border-card rounded-lg p-3 mt-2 space-y-2">
+          <div className="flex gap-2">
             <input value={newCheck.id} onChange={e => setNewCheck(p => ({...p, id: e.target.value.replace(/\s/g,'_')}))}
-              placeholder="check_id" className="bg-card border border-accent rounded px-3 py-2 text-xs text-text focus:outline-none focus:border-highlight" />
+              placeholder="check_id" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
             <input value={newCheck.name} onChange={e => setNewCheck(p => ({...p, name: e.target.value}))}
-              placeholder="📋 Check Name" className="bg-card border border-accent rounded px-3 py-2 text-xs text-text focus:outline-none focus:border-highlight" />
+              placeholder="📋 Name" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
           </div>
-          <textarea value={newCheck.description} onChange={e => setNewCheck(p => ({...p, description: e.target.value}))}
-            placeholder="What should I check?" className="w-full bg-card border border-accent rounded px-3 py-2 text-xs text-text h-12 resize-none focus:outline-none focus:border-highlight mb-2" />
-          <div className="flex gap-3 items-center">
-            <div><label className="text-[10px] text-muted">Every</label>
-              <input type="number" min="1" value={newCheck.frequencyHours}
-                onChange={e => setNewCheck(p => ({...p, frequencyHours: parseInt(e.target.value)}))}
-                className="w-16 bg-card border border-accent rounded px-2 py-1 text-xs text-text ml-1" />
-              <span className="text-[10px] text-muted ml-1">hours</span>
-            </div>
-            <select value={newCheck.priority} onChange={e => setNewCheck(p => ({...p, priority: e.target.value}))}
-              className="bg-card border border-accent rounded px-2 py-1 text-xs text-text">
-              <option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option>
-            </select>
-            <button onClick={addCheck} className="bg-highlight text-white px-3 py-1 rounded text-xs ml-auto">Add</button>
-            <button onClick={() => setAddingCheck(false)} className="text-muted text-xs hover:text-text">Cancel</button>
+          <input value={newCheck.description} onChange={e => setNewCheck(p => ({...p, description: e.target.value}))}
+            placeholder="What to check..." className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+          <div className="flex items-center gap-2">
+            <input type="number" min="1" value={newCheck.frequencyHours} onChange={e => setNewCheck(p => ({...p, frequencyHours: parseInt(e.target.value)}))}
+              className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
+            <span className="text-[10px] text-muted">hours</span>
+            <button onClick={addCheck} className="text-xs text-highlight ml-auto">Add</button>
+            <button onClick={() => setAddingCheck(false)} className="text-xs text-muted">Cancel</button>
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 
-// ─── Model Selector ───────────────────────────────
-function ModelSelector({ status, onPatch }) {
-  const current = status?.model || ''
-  const [saving, setSaving] = useState(false)
-
-  const change = async (modelId) => {
-    setSaving(true)
-    await onPatch({ agents: { defaults: { model: modelId } } })
-    setSaving(false)
-  }
-
-  return (
-    <div>
-      <h3 className="text-xs md:text-sm font-semibold text-muted uppercase tracking-wider mb-2">🧠 Model</h3>
-      <div className="flex gap-2">
-        {MODELS.map(m => {
-          const active = current === m.id
-          return (
-            <button key={m.id} onClick={() => !active && change(m.id)} disabled={saving}
-              className={`flex-1 border rounded-lg p-2.5 md:p-4 text-center transition-all ${
-                active ? 'border-highlight bg-highlight/10' : 'border-card bg-surface hover:border-accent'
-              }`}>
-              <div className="text-xs md:text-sm font-medium text-text">{m.label}</div>
-              <div className="text-[10px] text-muted">{m.cost}</div>
-              {active && <div className="text-[10px] text-highlight mt-0.5">● Active</div>}
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-// ─── Pendientes ───────────────────────────────────
-function Pendientes() {
+// ═══════════════════════════════════════════════════
+// PENDIENTES SECTION
+// ═══════════════════════════════════════════════════
+function PendientesSection() {
   const [items, setItems] = useState([])
-  const [stats, setStats] = useState({ total: 0, done: 0 })
   const [showDone, setShowDone] = useState(false)
   const [adding, setAdding] = useState(false)
   const [newText, setNewText] = useState('')
 
   useEffect(() => { load() }, [])
-
-  const load = async () => {
-    try {
-      const data = await api('/pendientes')
-      setItems(data.items || [])
-      setStats({ total: data.total, done: data.done })
-    } catch (e) { console.error(e) }
-  }
+  const load = async () => { try { const d = await api('/pendientes'); setItems(d.items || []) } catch (e) {} }
 
   const toggle = async (item) => {
-    const newDone = !item.done
-    setItems(prev => prev.map(i => i.line === item.line ? { ...i, done: newDone } : i))
-    setStats(prev => ({ ...prev, done: prev.done + (newDone ? 1 : -1) }))
-    try {
-      await api(`/pendientes/${item.line}`, { method: 'PATCH', body: JSON.stringify({ done: newDone }) })
-    } catch (e) { load() }
+    setItems(prev => prev.map(i => i.line === item.line ? { ...i, done: !i.done } : i))
+    try { await api(`/pendientes/${item.line}`, { method: 'PATCH', body: JSON.stringify({ done: !item.done }) }) }
+    catch (e) { load() }
   }
 
-  const addPendiente = async () => {
+  const addItem = async () => {
     if (!newText.trim()) return
-    try {
-      await api('/pendientes', { method: 'POST', body: JSON.stringify({ text: newText.trim() }) })
-      setNewText('')
-      setAdding(false)
-      load()
-    } catch (e) { alert('Error: ' + e.message) }
+    await api('/pendientes', { method: 'POST', body: JSON.stringify({ text: newText.trim() }) })
+    setNewText(''); setAdding(false); load()
   }
 
   const pending = items.filter(i => !i.done)
   const done = items.filter(i => i.done)
-  const pct = stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0
+  const pct = items.length > 0 ? Math.round((done.length / items.length) * 100) : 0
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xs md:text-sm font-semibold text-muted uppercase tracking-wider">📝 Pendientes</h3>
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-text">📝 Pendientes</h3>
+          <span className="text-[10px] text-muted">{pending.length} active</span>
+        </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-muted">{pending.length} pending</span>
+          <div className="w-16 h-1.5 bg-card rounded-full overflow-hidden">
+            <div className="h-full bg-highlight rounded-full transition-all" style={{ width: `${pct}%` }} />
+          </div>
           <button onClick={() => setAdding(!adding)} className="text-xs text-highlight hover:underline">+ Add</button>
         </div>
       </div>
-      <div className="h-1.5 bg-card rounded-full overflow-hidden mb-3">
-        <div className="h-full bg-highlight rounded-full transition-all" style={{ width: `${pct}%` }} />
-      </div>
 
-      {/* Add new */}
       {adding && (
         <div className="flex gap-2 mb-2">
           <input value={newText} onChange={e => setNewText(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') addPendiente() }}
-            placeholder="Nuevo pendiente..." autoFocus
-            className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-xs md:text-sm text-text focus:outline-none focus:border-highlight" />
-          <button onClick={addPendiente} disabled={!newText.trim()}
+            onKeyDown={e => { if (e.key === 'Enter') addItem() }}
+            placeholder="New task..." autoFocus
+            className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-highlight" />
+          <button onClick={addItem} disabled={!newText.trim()}
             className="bg-highlight text-white px-3 py-2 rounded-lg text-xs font-medium disabled:opacity-40">Add</button>
-          <button onClick={() => { setAdding(false); setNewText('') }}
-            className="text-muted hover:text-text px-2 text-xs">✕</button>
+          <button onClick={() => { setAdding(false); setNewText('') }} className="text-muted text-xs px-1">✕</button>
         </div>
       )}
 
-      {/* Active pendientes */}
-      {pending.length > 0 && (
-        <div className="bg-surface border border-card rounded-lg divide-y divide-card mb-2">
-          {pending.map(item => (
-            <label key={item.line}
-              className="flex items-start gap-2 md:gap-3 px-3 md:px-4 py-2.5 cursor-pointer hover:bg-card/50 transition-all">
-              <input type="checkbox" checked={false} onChange={() => toggle(item)}
-                className="mt-0.5 w-4 h-4 rounded border-accent bg-card text-highlight focus:ring-highlight shrink-0" />
-              <span className="text-xs md:text-sm text-text">{item.text}</span>
-            </label>
-          ))}
-        </div>
-      )}
+      <div className="space-y-1">
+        {pending.map(item => (
+          <label key={item.line} className="flex items-start gap-2 px-3 py-2 bg-surface border border-card rounded-lg cursor-pointer hover:bg-card/50">
+            <input type="checkbox" checked={false} onChange={() => toggle(item)}
+              className="mt-0.5 w-4 h-4 rounded border-accent bg-card text-highlight shrink-0" />
+            <span className="text-xs text-text">{item.text}</span>
+          </label>
+        ))}
+      </div>
 
-      {/* Completed - collapsible */}
       {done.length > 0 && (
-        <div>
+        <div className="mt-2">
           <button onClick={() => setShowDone(!showDone)}
-            className="flex items-center gap-2 text-xs text-muted hover:text-text transition-all py-1.5 w-full">
+            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
             <span className={`transition-transform ${showDone ? 'rotate-90' : ''}`}>▶</span>
-            <span>Completados ({done.length})</span>
+            Completed ({done.length})
           </button>
           {showDone && (
-            <div className="bg-surface border border-card rounded-lg divide-y divide-card mt-1 max-h-48 overflow-auto">
+            <div className="space-y-1 mt-1 max-h-40 overflow-auto">
               {done.map(item => (
-                <label key={item.line}
-                  className="flex items-start gap-2 md:gap-3 px-3 md:px-4 py-2 cursor-pointer hover:bg-card/50 transition-all opacity-40">
+                <label key={item.line} className="flex items-start gap-2 px-3 py-1.5 opacity-40 cursor-pointer hover:opacity-60">
                   <input type="checkbox" checked={true} onChange={() => toggle(item)}
-                    className="mt-0.5 w-4 h-4 rounded border-accent bg-card text-highlight focus:ring-highlight shrink-0" />
-                  <span className="text-xs md:text-sm line-through text-muted">{item.text}</span>
+                    className="mt-0.5 w-4 h-4 rounded border-accent bg-card text-highlight shrink-0" />
+                  <span className="text-[10px] line-through text-muted">{item.text}</span>
                 </label>
               ))}
             </div>
           )}
         </div>
       )}
-    </div>
+    </section>
   )
 }
 
-// ─── Cron Jobs ────────────────────────────────────
-function CronJobs() {
+// ═══════════════════════════════════════════════════
+// CRON SECTION
+// ═══════════════════════════════════════════════════
+function CronSection() {
   const [jobs, setJobs] = useState([])
   const [running, setRunning] = useState(null)
   const [expanded, setExpanded] = useState(null)
   const [editing, setEditing] = useState(null)
-  const [editName, setEditName] = useState('')
-  const [editExpr, setEditExpr] = useState('')
-  const [editText, setEditText] = useState('')
+  const [editFields, setEditFields] = useState({})
   const [showArchived, setShowArchived] = useState(false)
 
   useEffect(() => { load() }, [])
-  const load = async () => {
-    try {
-      const data = await cronApi.list()
-      setJobs(data.jobs || [])
-    } catch (e) { console.error(e) }
-  }
-
-  const toggleJob = async (job) => {
-    try {
-      await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: !job.enabled }) })
-      setJobs(prev => prev.map(j => j.id === job.id ? { ...j, enabled: !j.enabled } : j))
-    } catch (e) { alert('Error: ' + e.message) }
-  }
+  const load = async () => { try { const d = await cronApi.list(); setJobs(d.jobs || []) } catch (e) {} }
 
   const runJob = async (job) => {
     setRunning(job.id)
-    try { await api(`/cron/${job.id}/run`, { method: 'POST' }) }
-    catch (e) { alert('Error: ' + e.message) }
+    try { await api(`/cron/${job.id}/run`, { method: 'POST' }) } catch (e) { alert(e.message) }
     setRunning(null)
+  }
+
+  const archiveJob = async (job) => {
+    await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: !job.enabled }) }); load()
   }
 
   const startEdit = (job) => {
     setEditing(job.id)
-    setEditName(job.name || '')
-    setEditExpr(job.schedule?.expr || '')
-    setEditText(job.payload?.text || '')
+    setEditFields({ name: job.name || '', expr: job.schedule?.expr || '', text: job.payload?.text || '' })
   }
 
   const saveEdit = async (job) => {
-    try {
-      const patch = { name: editName }
-      if (editExpr && editExpr !== job.schedule?.expr) patch.schedule = { kind: 'cron', expr: editExpr }
-      if (editText !== job.payload?.text) patch.payload = { kind: 'systemEvent', text: editText }
-      await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify(patch) })
-      setEditing(null)
-      load()
-    } catch (e) { alert('Error: ' + e.message) }
+    const patch = { name: editFields.name }
+    if (editFields.expr !== job.schedule?.expr) patch.schedule = { kind: 'cron', expr: editFields.expr }
+    if (editFields.text !== job.payload?.text) patch.payload = { kind: 'systemEvent', text: editFields.text }
+    await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify(patch) })
+    setEditing(null); load()
   }
 
-  const cronToHuman = (expr) => {
+  const cronHuman = (expr) => {
     if (!expr) return '?'
-    const parts = expr.split(' ')
-    if (parts.length < 5) return expr
-    const [min, hour, dom, mon, dow] = parts
-    if (dom === '*' && mon === '*' && dow === '*' && hour !== '*') return `Daily at ${hour.padStart(2,'0')}:${min.padStart(2,'0')}`
-    if (hour.includes(',')) return `At ${hour.split(',').map(h => `${h}:${min.padStart(2,'0')}`).join(', ')}`
+    const [min, hour] = expr.split(' ')
+    if (hour && !hour.includes('*')) {
+      if (hour.includes(',')) return `at ${hour.split(',').map(h => `${h}:${min.padStart(2,'0')}`).join(', ')}`
+      return `daily ${hour.padStart(2,'0')}:${min.padStart(2,'0')}`
+    }
     return expr
   }
-
-  if (jobs.length === 0) return null
 
   const active = jobs.filter(j => j.enabled)
   const archived = jobs.filter(j => !j.enabled)
 
   const renderJob = (job) => {
-          const isExpanded = expanded === job.id
-          const isEditing = editing === job.id
-          const lastRun = job.state?.lastRunAtMs
-          const nextRun = job.state?.nextRunAtMs
-
+    const isExp = expanded === job.id
+    const isEdit = editing === job.id
     return (
-            <div key={job.id} className={`bg-surface border rounded-lg transition-all ${
-              !job.enabled ? 'border-card opacity-50' : 'border-card'
-            }`}>
-              {/* Header */}
-              <div className="px-3 md:px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-2 md:gap-3 min-w-0">
-                  <button onClick={() => toggleJob(job)}
-                    className={`w-9 h-[18px] md:w-10 md:h-5 rounded-full transition-all relative shrink-0 ${job.enabled ? 'bg-green-500' : 'bg-gray-600'}`}>
-                    <span className={`absolute top-0.5 w-3.5 h-3.5 md:w-4 md:h-4 bg-white rounded-full transition-all ${job.enabled ? 'left-[18px] md:left-5' : 'left-0.5'}`} />
-                  </button>
-                  <button onClick={() => setExpanded(isExpanded ? null : job.id)} className="text-left min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs md:text-sm font-medium text-text">{job.name || (job.id||'').slice(0,12)}</span>
-                      <span className="text-[10px] text-muted bg-card px-1.5 py-0.5 rounded">{cronToHuman(job.schedule?.expr)}</span>
-                    </div>
-                  </button>
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => runJob(job)} disabled={running === job.id}
-                    className="text-xs text-highlight hover:underline disabled:opacity-50 px-1">
-                    {running === job.id ? '⏳' : '▶'}
-                  </button>
-                  <button onClick={() => setExpanded(isExpanded ? null : job.id)}
-                    className={`text-xs text-muted hover:text-text px-1 transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</button>
-                </div>
-              </div>
+      <div key={job.id} className={`bg-surface border border-card rounded-lg overflow-hidden ${!job.enabled ? 'opacity-50' : ''}`}>
+        <div className="px-3 py-2.5 flex items-center justify-between">
+          <button onClick={() => setExpanded(isExp ? null : job.id)} className="flex items-center gap-2 min-w-0 text-left flex-1">
+            <span className={`w-2 h-2 rounded-full shrink-0 ${job.enabled ? 'bg-green-500' : 'bg-gray-600'}`} />
+            <span className="text-xs font-medium text-text truncate">{job.name || (job.id||'').slice(0,12)}</span>
+            <span className="text-[10px] text-muted">{cronHuman(job.schedule?.expr)}</span>
+          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {job.enabled && (
+              <button onClick={() => runJob(job)} disabled={running === job.id}
+                className="text-[10px] text-highlight px-1.5 py-0.5 rounded hover:bg-highlight/10">
+                {running === job.id ? '⏳' : '▶ Run'}
+              </button>
+            )}
+            <button onClick={() => setExpanded(isExp ? null : job.id)}
+              className={`text-[10px] text-muted px-1 transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</button>
+          </div>
+        </div>
 
-              {/* Expanded details */}
-              {isExpanded && !isEditing && (
-                <div className="px-3 md:px-4 pb-3 border-t border-card pt-3 space-y-2">
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div><span className="text-muted">Schedule</span><div className="text-text font-mono">{job.schedule?.expr || '—'}</div></div>
-                    <div><span className="text-muted">Type</span><div className="text-text">{job.schedule?.kind || '—'}</div></div>
-                    <div><span className="text-muted">Last run</span><div className="text-text">{lastRun ? timeAgo(lastRun) : 'never'}</div></div>
-                    <div><span className="text-muted">Next run</span><div className="text-text">{nextRun ? new Date(nextRun).toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) : '—'}</div></div>
-                  </div>
-                  {job.payload?.text && (
-                    <div>
-                      <span className="text-[10px] text-muted">Instructions</span>
-                      <p className="text-xs text-text mt-1 whitespace-pre-wrap bg-card rounded p-2 max-h-32 overflow-auto">{job.payload.text}</p>
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-[10px] text-muted font-mono">{job.id}</span>
-                    <div className="flex gap-3">
-                      <button onClick={() => startEdit(job)} className="text-xs text-highlight hover:underline">✏️ Edit</button>
-                      {job.enabled ? (
-                        <button onClick={async () => { await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: false }) }); load() }}
-                          className="text-xs text-yellow-400/70 hover:text-yellow-400">📦 Archive</button>
-                      ) : (
-                        <button onClick={async () => { await api(`/cron/${job.id}`, { method: 'PATCH', body: JSON.stringify({ enabled: true }) }); load() }}
-                          className="text-xs text-green-400/70 hover:text-green-400">↩ Restore</button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Edit mode */}
-              {isExpanded && isEditing && (
-                <div className="px-3 md:px-4 pb-3 border-t border-card pt-3 space-y-2">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[10px] text-muted">Name</label>
-                      <input value={editName} onChange={e => setEditName(e.target.value)}
-                        className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text focus:outline-none focus:border-highlight" />
-                    </div>
-                    <div>
-                      <label className="text-[10px] text-muted">Schedule (cron expr)</label>
-                      <input value={editExpr} onChange={e => setEditExpr(e.target.value)}
-                        placeholder="0 8 * * *"
-                        className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text font-mono focus:outline-none focus:border-highlight" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-muted">Instructions</label>
-                    <textarea value={editText} onChange={e => setEditText(e.target.value)}
-                      className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text h-24 resize-none focus:outline-none focus:border-highlight" />
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => saveEdit(job)} className="bg-highlight text-white px-3 py-1.5 rounded text-xs font-medium">Save</button>
-                    <button onClick={() => setEditing(null)} className="text-muted hover:text-text text-xs px-2">Cancel</button>
-                  </div>
-                </div>
-              )}
+        {isExp && !isEdit && (
+          <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
+            <div className="flex gap-4 text-[10px]">
+              <span className="text-muted">expr: <span className="text-text font-mono">{job.schedule?.expr}</span></span>
+              <span className="text-muted">last: <span className="text-text">{job.state?.lastRunAtMs ? timeAgo(job.state.lastRunAtMs) : 'never'}</span></span>
+              {job.state?.nextRunAtMs && <span className="text-muted">next: <span className="text-text">{new Date(job.state.nextRunAtMs).toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}</span></span>}
             </div>
+            {job.payload?.text && (
+              <p className="text-[10px] md:text-xs text-text whitespace-pre-wrap bg-card rounded p-2 max-h-28 overflow-auto">{job.payload.text}</p>
+            )}
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-muted font-mono">{(job.id||'').slice(0,8)}</span>
+              <div className="flex gap-2">
+                <button onClick={() => startEdit(job)} className="text-[10px] text-highlight">✏️ Edit</button>
+                <button onClick={() => archiveJob(job)} className="text-[10px] text-yellow-400/70 hover:text-yellow-400">
+                  {job.enabled ? '📦 Archive' : '↩ Restore'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isExp && isEdit && (
+          <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
+            <div className="flex gap-2">
+              <input value={editFields.name} onChange={e => setEditFields(p => ({...p, name: e.target.value}))}
+                placeholder="Name" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+              <input value={editFields.expr} onChange={e => setEditFields(p => ({...p, expr: e.target.value}))}
+                placeholder="0 8 * * *" className="w-28 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text font-mono" />
+            </div>
+            <textarea value={editFields.text} onChange={e => setEditFields(p => ({...p, text: e.target.value}))}
+              className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text h-20 resize-none" />
+            <div className="flex gap-2">
+              <button onClick={() => saveEdit(job)} className="text-xs text-highlight">Save</button>
+              <button onClick={() => setEditing(null)} className="text-xs text-muted">Cancel</button>
+            </div>
+          </div>
+        )}
+      </div>
     )
   }
 
   return (
-    <div>
-      <h3 className="text-xs md:text-sm font-semibold text-muted uppercase tracking-wider mb-3">⏰ Cron Jobs</h3>
-      <div className="space-y-2">
-        {active.map(renderJob)}
-      </div>
-
+    <section>
+      <h3 className="text-sm font-semibold text-text mb-3">⏰ Cron Jobs</h3>
+      <div className="space-y-1.5">{active.map(renderJob)}</div>
       {archived.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-2">
           <button onClick={() => setShowArchived(!showArchived)}
-            className="flex items-center gap-2 text-xs text-muted hover:text-text transition-all py-1.5 w-full">
+            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
             <span className={`transition-transform ${showArchived ? 'rotate-90' : ''}`}>▶</span>
-            <span>Archived ({archived.length})</span>
+            Archived ({archived.length})
           </button>
-          {showArchived && (
-            <div className="space-y-2 mt-2">
-              {archived.map(renderJob)}
-            </div>
-          )}
+          {showArchived && <div className="space-y-1.5 mt-1">{archived.map(renderJob)}</div>}
         </div>
       )}
-    </div>
+    </section>
   )
 }
 
-// ─── Control Panel ────────────────────────────────
+// ═══════════════════════════════════════════════════
+// CONTROL PANEL
+// ═══════════════════════════════════════════════════
 export default function Control() {
   const [status, setStatus] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const load = useCallback(async () => {
-    try {
-      const data = await api('/status')
-      setStatus(data)
-    } catch (e) { console.error(e) }
+    try { setStatus(await api('/status')) } catch (e) {}
     setLoading(false)
   }, [])
 
   useEffect(() => { load() }, [])
-  useEffect(() => {
-    const id = setInterval(load, 30000)
-    return () => clearInterval(id)
-  }, [load])
+  useEffect(() => { const id = setInterval(load, 30000); return () => clearInterval(id) }, [load])
 
   const patchConfig = async (patch) => {
-    try {
-      await api('/gateway/config', { method: 'PATCH', body: JSON.stringify(patch) })
-      // Reload status after config change (gateway restarts)
-      setTimeout(load, 3000)
-    } catch (e) { alert('Error: ' + e.message) }
+    await api('/gateway/config', { method: 'PATCH', body: JSON.stringify(patch) })
+    setTimeout(load, 3000)
   }
 
   if (loading) return <div className="flex items-center justify-center h-full text-muted">Loading...</div>
 
   return (
-    <div className="h-full overflow-auto p-3 md:p-6 space-y-4 md:space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg md:text-2xl font-bold text-text">🎛️ Control</h2>
-        <button onClick={load} className="text-xs text-highlight hover:underline">↻ Refresh</button>
-      </div>
+    <div className="h-full overflow-auto p-3 md:p-6 space-y-5">
+      <StatusBar status={status} onPatch={patchConfig} />
 
-      <SystemStatus status={status} />
-      <HeartbeatStatus status={status} onPatch={patchConfig} />
-      <ModelSelector status={status} onPatch={patchConfig} />
-      <Pendientes />
-      <CronJobs />
+      <div className="border-t border-card/50" />
+      <HeartbeatSection status={status} onPatch={patchConfig} />
+
+      <div className="border-t border-card/50" />
+      <PendientesSection />
+
+      <div className="border-t border-card/50" />
+      <CronSection />
     </div>
   )
 }
