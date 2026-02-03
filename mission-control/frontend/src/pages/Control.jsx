@@ -79,7 +79,7 @@ function CommandBar() {
           {sending && <span className="absolute right-3 top-3.5 text-xs text-muted animate-pulse">Sending...</span>}
         </div>
         <button onClick={send} disabled={!text.trim() || sending}
-          className="bg-highlight text-white px-4 py-3 rounded-lg text-sm font-medium disabled:opacity-30 hover:bg-highlight/80 transition-all shrink-0">
+          className="bg-highlight hover:bg-highlight/90 text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-30 transition-colors shrink-0">
           Send
         </button>
       </div>
@@ -91,8 +91,8 @@ function CommandBar() {
             <div key={p.id} className="flex items-center gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-3 py-2">
               <span className="animate-pulse text-yellow-400 text-xs">⏳</span>
               <span className="text-xs text-text flex-1">{p.text}</span>
-              <span className="text-[10px] text-yellow-400/70">Processing...</span>
-              <button onClick={() => removePref(p.id)} className="text-[10px] text-muted hover:text-red-400">✕</button>
+              <span className="text-xs text-yellow-400/70">Processing...</span>
+              <button onClick={() => removePref(p.id)} className="text-xs text-muted hover:text-red-400">✕</button>
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ function CommandBar() {
       {applied.length > 0 && (
         <div className="mt-2">
           <button onClick={() => setShowHistory(!showHistory)}
-            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            className="flex items-center gap-1.5 text-xs text-muted hover:text-text py-1">
             <span className={`transition-transform ${showHistory ? 'rotate-90' : ''}`}>▶</span>
             Applied ({applied.length})
           </button>
@@ -114,14 +114,14 @@ function CommandBar() {
                     <span className="text-green-400 text-xs">✓</span>
                     <span className="text-xs text-text flex-1">{p.text}</span>
                     {p.category && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${categoryColors[p.category] || 'bg-card text-muted'}`}>
+                      <span className={`text-xs px-1.5 py-0.5 rounded ${categoryColors[p.category] || 'bg-card text-muted'}`}>
                         {p.category}
                       </span>
                     )}
-                    <button onClick={() => removePref(p.id)} className="text-[10px] text-muted hover:text-red-400">✕</button>
+                    <button onClick={() => removePref(p.id)} className="text-xs text-muted hover:text-red-400">✕</button>
                   </div>
-                  {p.response && <p className="text-[10px] text-muted mt-1 pl-5">{p.response}</p>}
-                  {p.target && <span className="text-[10px] text-muted pl-5">→ {p.target}</span>}
+                  {p.response && <p className="text-xs text-muted mt-1 pl-5">{p.response}</p>}
+                  {p.target && <span className="text-xs text-muted pl-5">→ {p.target}</span>}
                 </div>
               ))}
             </div>
@@ -159,12 +159,12 @@ function StatusBar({ status, onPatch }) {
         <button onClick={() => setShowModelPicker(!showModelPicker)}
           className="flex items-center gap-1.5 bg-highlight/10 border border-highlight/30 rounded-md px-2.5 py-1 hover:bg-highlight/20 transition-all">
           <span className="text-xs font-medium text-highlight">{model}</span>
-          <span className="text-[10px] text-muted">ctx {ctx}</span>
-          <span className="text-[10px] text-muted">▼</span>
+          <span className="text-xs text-muted">ctx {ctx}</span>
+          <span className="text-xs text-muted">▼</span>
         </button>
 
         {/* System stats inline */}
-        <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted">
+        <div className="flex items-center gap-3 text-xs text-muted">
           <span className={memColor}>RAM {mem.pct}%</span>
           <span>SD {status.disk?.pct}</span>
           {status.ssd?.pct && <span>SSD {status.ssd?.pct}</span>}
@@ -250,7 +250,7 @@ function HeartbeatSection({ status, onPatch }) {
       {/* Header with schedule inline */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-text">💓 Heartbeat</h3>
+          <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">💓 Heartbeat</h2>
           <span className={`w-2 h-2 rounded-full ${hb.enabled ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
         </div>
         {!editSchedule ? (
@@ -262,7 +262,7 @@ function HeartbeatSection({ status, onPatch }) {
         ) : (
           <div className="flex items-center gap-2">
             <input type="number" value={freq} onChange={e => setFreq(e.target.value)} min="1" max="120"
-              className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
+              className="w-14 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
             <span className="text-xs text-muted">min</span>
             <input type="time" value={start} onChange={e => setStart(e.target.value)}
               className="bg-card border border-accent rounded px-1.5 py-1 text-xs text-text w-20" />
@@ -285,12 +285,12 @@ function HeartbeatSection({ status, onPatch }) {
               <div className="space-y-2">
                 <textarea value={checks.find(c=>c.id===check.id)?.description || ''}
                   onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, description: e.target.value} : c))}
-                  className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text h-14 resize-none focus:outline-none focus:border-highlight" />
+                  className="w-full bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors h-14 resize-none focus:outline-none focus:border-highlight" />
                 <div className="flex gap-2 items-center">
                   <input type="number" min="1" max="48" value={checks.find(c=>c.id===check.id)?.frequencyHours || 4}
                     onChange={e => setChecks(prev => prev.map(c => c.id===check.id ? {...c, frequencyHours: parseInt(e.target.value)} : c))}
-                    className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
-                  <span className="text-[10px] text-muted">hours</span>
+                    className="w-14 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
+                  <span className="text-xs text-muted">hours</span>
                   <button onClick={() => saveCheck(checks.find(c=>c.id===check.id))} className="text-xs text-highlight ml-auto">Save</button>
                   <button onClick={() => { setEditingCheck(null); loadChecks() }} className="text-xs text-muted">Cancel</button>
                   <button onClick={() => deleteCheck(check.id)} className="text-xs text-red-400/60 hover:text-red-400">Delete</button>
@@ -304,14 +304,14 @@ function HeartbeatSection({ status, onPatch }) {
                     <span className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${check.enabled ? 'left-[14px]' : 'left-0.5'}`} />
                   </button>
                   <span className="text-xs font-medium text-text">{check.name}</span>
-                  <span className="text-[10px] text-muted truncate hidden md:inline">{check.description}</span>
+                  <span className="text-xs text-muted truncate hidden md:inline">{check.description}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className={`text-[10px] ${check.overdue ? 'text-yellow-400' : 'text-muted'}`}>
+                  <span className={`text-xs ${check.overdue ? 'text-yellow-400' : 'text-muted'}`}>
                     {check.lastRun ? timeAgo(check.lastRun) : '—'}{check.overdue ? ' ⚠️' : ''}
                   </span>
-                  <span className="text-[10px] text-muted">/{check.frequencyHours}h</span>
-                  <button onClick={() => setEditingCheck(check.id)} className="text-[10px] text-muted hover:text-text">✏️</button>
+                  <span className="text-xs text-muted">/{check.frequencyHours}h</span>
+                  <button onClick={() => setEditingCheck(check.id)} className="text-xs text-muted hover:text-text">✏️</button>
                 </div>
               </div>
             )}
@@ -321,21 +321,21 @@ function HeartbeatSection({ status, onPatch }) {
 
       {/* Add check */}
       {!addingCheck ? (
-        <button onClick={() => setAddingCheck(true)} className="text-[10px] text-highlight hover:underline mt-2">+ Add check</button>
+        <button onClick={() => setAddingCheck(true)} className="text-xs text-highlight hover:underline mt-2">+ Add check</button>
       ) : (
         <div className="bg-surface border border-card rounded-lg p-3 mt-2 space-y-2">
           <div className="flex gap-2">
             <input value={newCheck.id} onChange={e => setNewCheck(p => ({...p, id: e.target.value.replace(/\s/g,'_')}))}
-              placeholder="check_id" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+              placeholder="check_id" className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
             <input value={newCheck.name} onChange={e => setNewCheck(p => ({...p, name: e.target.value}))}
-              placeholder="📋 Name" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+              placeholder="📋 Name" className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
           </div>
           <input value={newCheck.description} onChange={e => setNewCheck(p => ({...p, description: e.target.value}))}
-            placeholder="What to check..." className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+            placeholder="What to check..." className="w-full bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
           <div className="flex items-center gap-2">
             <input type="number" min="1" value={newCheck.frequencyHours} onChange={e => setNewCheck(p => ({...p, frequencyHours: parseInt(e.target.value)}))}
-              className="w-14 bg-card border border-accent rounded px-2 py-1 text-xs text-text" />
-            <span className="text-[10px] text-muted">hours</span>
+              className="w-14 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
+            <span className="text-xs text-muted">hours</span>
             <button onClick={addCheck} className="text-xs text-highlight ml-auto">Add</button>
             <button onClick={() => setAddingCheck(false)} className="text-xs text-muted">Cancel</button>
           </div>
@@ -377,8 +377,8 @@ function PendientesSection() {
     <section>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-text">📝 Pendientes</h3>
-          <span className="text-[10px] text-muted">{pending.length} active</span>
+          <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">📝 Pendientes</h2>
+          <span className="text-xs text-muted">{pending.length} active</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="w-16 h-1.5 bg-card rounded-full overflow-hidden">
@@ -413,7 +413,7 @@ function PendientesSection() {
       {done.length > 0 && (
         <div className="mt-2">
           <button onClick={() => setShowDone(!showDone)}
-            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            className="flex items-center gap-1.5 text-xs text-muted hover:text-text py-1">
             <span className={`transition-transform ${showDone ? 'rotate-90' : ''}`}>▶</span>
             Completed ({done.length})
           </button>
@@ -423,7 +423,7 @@ function PendientesSection() {
                 <label key={item.line} className="flex items-start gap-2 px-3 py-1.5 opacity-40 cursor-pointer hover:opacity-60">
                   <input type="checkbox" checked={true} onChange={() => toggle(item)}
                     className="mt-0.5 w-4 h-4 rounded border-accent bg-card text-highlight shrink-0" />
-                  <span className="text-[10px] line-through text-muted">{item.text}</span>
+                  <span className="text-xs line-through text-muted">{item.text}</span>
                 </label>
               ))}
             </div>
@@ -493,35 +493,35 @@ function CronSection() {
           <button onClick={() => setExpanded(isExp ? null : job.id)} className="flex items-center gap-2 min-w-0 text-left flex-1">
             <span className={`w-2 h-2 rounded-full shrink-0 ${job.enabled ? 'bg-green-500' : 'bg-gray-600'}`} />
             <span className="text-xs font-medium text-text truncate">{job.name || (job.id||'').slice(0,12)}</span>
-            <span className="text-[10px] text-muted">{cronHuman(job.schedule?.expr)}</span>
+            <span className="text-xs text-muted">{cronHuman(job.schedule?.expr)}</span>
           </button>
           <div className="flex items-center gap-1.5 shrink-0">
             {job.enabled && (
               <button onClick={() => runJob(job)} disabled={running === job.id}
-                className="text-[10px] text-highlight px-1.5 py-0.5 rounded hover:bg-highlight/10">
+                className="text-xs text-highlight px-1.5 py-0.5 rounded hover:bg-highlight/10">
                 {running === job.id ? '⏳' : '▶ Run'}
               </button>
             )}
             <button onClick={() => setExpanded(isExp ? null : job.id)}
-              className={`text-[10px] text-muted px-1 transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</button>
+              className={`text-xs text-muted px-1 transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</button>
           </div>
         </div>
 
         {isExp && !isEdit && (
           <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
-            <div className="flex gap-4 text-[10px]">
+            <div className="flex gap-4 text-xs">
               <span className="text-muted">expr: <span className="text-text font-mono">{job.schedule?.expr}</span></span>
               <span className="text-muted">last: <span className="text-text">{job.state?.lastRunAtMs ? timeAgo(job.state.lastRunAtMs) : 'never'}</span></span>
               {job.state?.nextRunAtMs && <span className="text-muted">next: <span className="text-text">{new Date(job.state.nextRunAtMs).toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}</span></span>}
             </div>
             {job.payload?.text && (
-              <p className="text-[10px] md:text-xs text-text whitespace-pre-wrap bg-card rounded p-2 max-h-28 overflow-auto">{job.payload.text}</p>
+              <p className="text-xs text-text whitespace-pre-wrap bg-card rounded p-2 max-h-28 overflow-auto">{job.payload.text}</p>
             )}
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-muted font-mono">{(job.id||'').slice(0,8)}</span>
+              <span className="text-xs text-muted font-mono">{(job.id||'').slice(0,8)}</span>
               <div className="flex gap-2">
-                <button onClick={() => startEdit(job)} className="text-[10px] text-highlight">✏️ Edit</button>
-                <button onClick={() => archiveJob(job)} className="text-[10px] text-yellow-400/70 hover:text-yellow-400">
+                <button onClick={() => startEdit(job)} className="text-xs text-highlight">✏️ Edit</button>
+                <button onClick={() => archiveJob(job)} className="text-xs text-yellow-400/70 hover:text-yellow-400">
                   {job.enabled ? '📦 Archive' : '↩ Restore'}
                 </button>
               </div>
@@ -533,12 +533,12 @@ function CronSection() {
           <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
             <div className="flex gap-2">
               <input value={editFields.name} onChange={e => setEditFields(p => ({...p, name: e.target.value}))}
-                placeholder="Name" className="flex-1 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text" />
+                placeholder="Name" className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
               <input value={editFields.expr} onChange={e => setEditFields(p => ({...p, expr: e.target.value}))}
-                placeholder="0 8 * * *" className="w-28 bg-card border border-accent rounded px-2 py-1.5 text-xs text-text font-mono" />
+                placeholder="0 8 * * *" className="w-28 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors font-mono" />
             </div>
             <textarea value={editFields.text} onChange={e => setEditFields(p => ({...p, text: e.target.value}))}
-              className="w-full bg-card border border-accent rounded px-2 py-1.5 text-xs text-text h-20 resize-none" />
+              className="w-full bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors h-20 resize-none" />
             <div className="flex gap-2">
               <button onClick={() => saveEdit(job)} className="text-xs text-highlight">Save</button>
               <button onClick={() => setEditing(null)} className="text-xs text-muted">Cancel</button>
@@ -551,12 +551,12 @@ function CronSection() {
 
   return (
     <section>
-      <h3 className="text-sm font-semibold text-text mb-3">⏰ Cron Jobs</h3>
+      <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">⏰ Cron Jobs</h2>
       <div className="space-y-1.5">{active.map(renderJob)}</div>
       {archived.length > 0 && (
         <div className="mt-2">
           <button onClick={() => setShowArchived(!showArchived)}
-            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            className="flex items-center gap-1.5 text-xs text-muted hover:text-text py-1">
             <span className={`transition-transform ${showArchived ? 'rotate-90' : ''}`}>▶</span>
             Archived ({archived.length})
           </button>
@@ -615,8 +615,8 @@ function SubAgentsSection() {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-text">👥 Team</h3>
-        <span className="text-[10px] text-muted">{agents.filter(a => a.status === 'active').length} active</span>
+        <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">👥 Team</h2>
+        <span className="text-xs text-muted">{agents.filter(a => a.status === 'active').length} active</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -642,8 +642,8 @@ function SubAgentsSection() {
                     <p className="text-xs text-muted">{agent.role}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-[10px] text-muted">{modelLabel(agent.model)}</div>
-                    {agent.invocations > 0 && <div className="text-[10px] text-muted">{agent.invocations} runs</div>}
+                    <div className="text-xs text-muted">{modelLabel(agent.model)}</div>
+                    {agent.invocations > 0 && <div className="text-xs text-muted">{agent.invocations} runs</div>}
                   </div>
                 </div>
               </button>
@@ -653,22 +653,22 @@ function SubAgentsSection() {
                 <div className="px-4 pb-4 border-t border-card pt-3 space-y-3">
                   {/* Personality */}
                   <div>
-                    <span className="text-[10px] text-muted uppercase tracking-wider">Personality</span>
+                    <span className="text-xs text-muted uppercase tracking-wider">Personality</span>
                     <p className="text-xs text-text mt-1 leading-relaxed">{agent.personality}</p>
                   </div>
 
                   {/* Expertise tags */}
                   <div>
-                    <span className="text-[10px] text-muted uppercase tracking-wider">Expertise</span>
+                    <span className="text-xs text-muted uppercase tracking-wider">Expertise</span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {agent.expertise.map((tag, i) => (
-                        <span key={i} className="text-[10px] bg-highlight/10 text-highlight px-2 py-0.5 rounded-full">{tag}</span>
+                        <span key={i} className="text-xs bg-highlight/10 text-highlight px-2 py-0.5 rounded-full">{tag}</span>
                       ))}
                     </div>
                   </div>
 
                   {/* Stats */}
-                  <div className="flex gap-4 text-[10px] text-muted">
+                  <div className="flex gap-4 text-xs text-muted">
                     <span>Model: <span className="text-text">{modelLabel(agent.model)}</span></span>
                     <span>Invocations: <span className="text-text">{agent.invocations}</span></span>
                     <span>Last: <span className="text-text">{agent.lastInvoked ? timeAgo(new Date(agent.lastInvoked).getTime()) : 'never'}</span></span>
@@ -695,19 +695,19 @@ function SubAgentsSection() {
                       className="bg-card border border-accent rounded px-3 py-1.5 text-sm text-text" placeholder="Name" />
                   </div>
                   <input value={editFields.role} onChange={e => setEditFields(p => ({...p, role: e.target.value}))}
-                    className="w-full bg-card border border-accent rounded px-3 py-1.5 text-xs text-text" placeholder="Role title" />
+                    className="w-full bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" placeholder="Role title" />
                   <div>
-                    <label className="text-[10px] text-muted">Personality</label>
+                    <label className="text-xs text-muted">Personality</label>
                     <textarea value={editFields.personality} onChange={e => setEditFields(p => ({...p, personality: e.target.value}))}
-                      className="w-full bg-card border border-accent rounded px-3 py-2 text-xs text-text h-20 resize-none mt-1" />
+                      className="w-full bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors h-20 resize-none mt-1" />
                   </div>
 
                   {/* Expertise editor */}
                   <div>
-                    <label className="text-[10px] text-muted">Expertise</label>
+                    <label className="text-xs text-muted">Expertise</label>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {editFields.expertise?.map((tag, i) => (
-                        <span key={i} className="text-[10px] bg-highlight/10 text-highlight px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span key={i} className="text-xs bg-highlight/10 text-highlight px-2 py-0.5 rounded-full flex items-center gap-1">
                           {tag}
                           <button onClick={() => removeExpertise(i)} className="text-highlight/50 hover:text-red-400">×</button>
                         </span>
@@ -716,18 +716,18 @@ function SubAgentsSection() {
                     <div className="flex gap-1 mt-1.5">
                       <input value={newExpertise} onChange={e => setNewExpertise(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addExpertise() } }}
-                        placeholder="Add expertise..." className="flex-1 bg-card border border-accent rounded px-2 py-1 text-[10px] text-text" />
-                      <button onClick={addExpertise} className="text-[10px] text-highlight px-2">+</button>
+                        placeholder="Add expertise..." className="flex-1 bg-card border border-accent rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-highlight transition-colors" />
+                      <button onClick={addExpertise} className="text-xs text-highlight px-2">+</button>
                     </div>
                   </div>
 
                   {/* Model selector */}
                   <div>
-                    <label className="text-[10px] text-muted">Model</label>
+                    <label className="text-xs text-muted">Model</label>
                     <div className="flex gap-2 mt-1">
                       {MODELS.map(m => (
                         <button key={m.id} onClick={() => setEditFields(p => ({...p, model: m.id}))}
-                          className={`text-[10px] px-3 py-1 rounded ${editFields.model === m.id ? 'bg-highlight text-white' : 'bg-card text-muted hover:text-text'}`}>
+                          className={`text-xs px-3 py-1 rounded ${editFields.model === m.id ? 'bg-highlight text-white' : 'bg-card text-muted hover:text-text'}`}>
                           {m.label}
                         </button>
                       ))}
@@ -768,7 +768,7 @@ function ToolsSection() {
 
   return (
     <section>
-      <h3 className="text-sm font-semibold text-text mb-3">🧰 Tools</h3>
+      <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">🧰 Tools</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
         {tools.map(tool => {
           const isExp = expanded === tool.id
@@ -785,17 +785,17 @@ function ToolsSection() {
 
               {isExp && (
                 <div className="px-3 pb-3 border-t border-card pt-2 space-y-1.5">
-                  <p className="text-[10px] text-muted">{tool.description}</p>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+                  <p className="text-xs text-muted">{tool.description}</p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
                     <span className="text-muted">Credentials: <span className="text-text">{tool.credentials}</span></span>
                     {tool.lastUsed && <span className="text-muted">Last used: <span className="text-text">{timeAgo(tool.lastUsed)}</span></span>}
                   </div>
-                  {tool.notes && <p className="text-[10px] text-muted italic">{tool.notes}</p>}
+                  {tool.notes && <p className="text-xs text-muted italic">{tool.notes}</p>}
                   <div className="flex items-center gap-2 pt-1">
-                    <span className="text-[10px] text-muted">Status:</span>
+                    <span className="text-xs text-muted">Status:</span>
                     {['working', 'issues', 'broken'].map(s => (
                       <button key={s} onClick={() => updateStatus(tool, s)}
-                        className={`text-[10px] px-2 py-0.5 rounded transition-all ${
+                        className={`text-xs px-2 py-0.5 rounded transition-all ${
                           tool.status === s ? `${statusStyle[s]} text-white` : 'bg-card text-muted hover:text-text'
                         }`}>
                         {s === 'working' ? '✅ OK' : s === 'issues' ? '⚠️ Issues' : '❌ Broken'}
@@ -862,17 +862,17 @@ function SkillsSection() {
           <span className="text-sm">{skill.icon}</span>
           <div className="flex-1 min-w-0">
             <span className="text-xs font-medium text-text">{skill.name}</span>
-            <p className="text-[10px] text-muted truncate">{skill.summary}</p>
+            <p className="text-xs text-muted truncate">{skill.summary}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {skill.lastUsed && <span className="text-[10px] text-muted hidden md:inline">{timeAgo(skill.lastUsed)}</span>}
-            <span className={`text-[10px] text-muted transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</span>
+            {skill.lastUsed && <span className="text-xs text-muted hidden md:inline">{timeAgo(skill.lastUsed)}</span>}
+            <span className={`text-xs text-muted transition-transform ${isExp ? 'rotate-180' : ''}`}>▼</span>
           </div>
         </button>
 
         {isExp && (
           <div className="px-3 pb-3 border-t border-card pt-2 space-y-2">
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
               <span className="text-muted">Installed: <span className="text-text">{fmtDate(skill.installed)}</span></span>
               <span className="text-muted">Last used: <span className="text-text">{skill.lastUsed ? timeAgo(skill.lastUsed) : 'never'}</span></span>
             </div>
@@ -880,18 +880,18 @@ function SkillsSection() {
             {/* SKILL.md content */}
             <div className="relative">
               {loadingContent === skill.id ? (
-                <div className="text-[10px] text-muted py-4 text-center">Loading...</div>
+                <div className="text-xs text-muted py-4 text-center">Loading...</div>
               ) : content[skill.id] ? (
-                <pre className="text-[10px] md:text-xs text-text whitespace-pre-wrap bg-card rounded-lg p-3 max-h-64 overflow-auto font-mono leading-relaxed">
+                <pre className="text-xs text-text whitespace-pre-wrap bg-card rounded-lg p-3 max-h-64 overflow-auto font-mono leading-relaxed">
                   {content[skill.id]}
                 </pre>
               ) : null}
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[10px] text-muted font-mono">{skill.id}</span>
+              <span className="text-xs text-muted font-mono">{skill.id}</span>
               <button onClick={() => archiveSkill(skill)}
-                className={`text-[10px] ${skill.archived ? 'text-green-400/70 hover:text-green-400' : 'text-yellow-400/70 hover:text-yellow-400'}`}>
+                className={`text-xs ${skill.archived ? 'text-green-400/70 hover:text-green-400' : 'text-yellow-400/70 hover:text-yellow-400'}`}>
                 {skill.archived ? '↩ Restore' : '📦 Archive'}
               </button>
             </div>
@@ -904,14 +904,14 @@ function SkillsSection() {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-text">🧠 Skills</h3>
-        <span className="text-[10px] text-muted">{active.length} active</span>
+        <h2 className="text-base font-semibold text-text pb-2 border-b border-accent/30">🧠 Skills</h2>
+        <span className="text-xs text-muted">{active.length} active</span>
       </div>
       <div className="space-y-1.5">{active.map(renderSkill)}</div>
       {archived.length > 0 && (
         <div className="mt-2">
           <button onClick={() => setShowArchived(!showArchived)}
-            className="flex items-center gap-1.5 text-[10px] text-muted hover:text-text py-1">
+            className="flex items-center gap-1.5 text-xs text-muted hover:text-text py-1">
             <span className={`transition-transform ${showArchived ? 'rotate-90' : ''}`}>▶</span>
             Archived ({archived.length})
           </button>

@@ -79,7 +79,7 @@ function AgentEditor({ session, agent, onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-surface border border-card rounded-xl p-6 w-96 shadow-2xl" onClick={e => e.stopPropagation()}>
+      <div className="bg-surface border border-card rounded-xl p-6 w-full max-w-md mx-4 shadow-xl" onClick={e => e.stopPropagation()}>
         <h3 className="text-lg font-semibold text-text mb-1">Edit Agent</h3>
         <p className="text-xs text-muted font-mono mb-4">{session.key}</p>
 

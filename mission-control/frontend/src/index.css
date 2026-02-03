@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-* { scrollbar-width: thin; scrollbar-color: #2a2a3a transparent; }
+* { scrollbar-width: thin; scrollbar-color: #2a2a3f transparent; }
 body {
   background: #0a0a0f;
-  color: #e5e7eb;
+  color: #f1f5f9;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
 }

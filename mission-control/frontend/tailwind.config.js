@@ -5,12 +5,12 @@ export default {
     extend: {
       colors: {
         background: '#0a0a0f',
-        surface: '#12121a',
-        card: '#1a1a28',
-        accent: '#2a2a3a',
+        surface: '#151520',
+        card: '#1f1f2e',
+        accent: '#2a2a3f',
         highlight: '#6366f1',
-        text: '#e5e7eb',
-        muted: '#6b7280',
+        text: '#f1f5f9',
+        muted: '#94a3b8',
       }
     },
   },
