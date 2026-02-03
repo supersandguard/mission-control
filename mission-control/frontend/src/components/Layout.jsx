@@ -2,9 +2,10 @@ function StatusDot({ active }) {
   return <span className={`inline-block w-2 h-2 rounded-full ${active ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
 }
 
-export default function Layout({ children, currentPage, setCurrentPage, connected, sessionCount }) {
+export default function Layout({ children, currentPage, setCurrentPage, connected, sessionCount, chatUnread }) {
   const tabs = [
     { id: 'control', label: 'Control', icon: '🎛️' },
+    { id: 'chat', label: 'Chat', icon: '💬', badge: chatUnread },
     { id: 'sessions', label: 'Sessions', icon: '⚡' },
     { id: 'work', label: 'Work', icon: '📋' },
     { id: 'config', label: 'Config', icon: '⚙️' },
@@ -61,10 +62,13 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
       <nav className="md:hidden bg-surface border-t border-card flex shrink-0 safe-area-bottom">
         {tabs.map(t => (
           <button key={t.id} onClick={() => setCurrentPage(t.id)}
-            className={`flex-1 flex flex-col items-center py-2.5 text-[10px] font-medium transition-all ${
+            className={`flex-1 flex flex-col items-center py-2.5 text-xs font-medium transition-all relative ${
               currentPage === t.id ? 'text-highlight' : 'text-muted'
             }`}>
-            <span className="text-lg mb-0.5">{t.icon}</span>
+            <span className="text-lg mb-0.5 relative">
+              {t.icon}
+              {t.badge && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-background" />}
+            </span>
             {t.label}
           </button>
         ))}

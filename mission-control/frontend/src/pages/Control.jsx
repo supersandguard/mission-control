@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { cronApi } from '../api'
 
 const API = '/api'
@@ -52,93 +52,6 @@ const MODELS = [
 // ═══════════════════════════════════════════════════
 // COMMAND BAR — natural language configuration
 // ═══════════════════════════════════════════════════
-function CommandBar() {
-  const [text, setText] = useState('')
-  const [prefs, setPrefs] = useState([])
-  const [sending, setSending] = useState(false)
-  const chatRef = useRef(null)
-
-  useEffect(() => { loadPrefs() }, [])
-
-  // Poll for updates on pending items
-  useEffect(() => {
-    const hasPending = prefs.some(p => p.status === 'pending')
-    if (!hasPending) return
-    const id = setInterval(loadPrefs, 5000)
-    return () => clearInterval(id)
-  }, [prefs])
-
-  const loadPrefs = async () => { try { const d = await api('/preferences'); setPrefs(d.preferences || []) } catch (e) {} }
-
-  const send = async () => {
-    if (!text.trim() || sending) return
-    setSending(true)
-    try {
-      await api('/preferences', { method: 'POST', body: JSON.stringify({ text: text.trim() }) })
-      setText('')
-      loadPrefs()
-      setTimeout(() => { chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' }) }, 100)
-    } catch (e) { alert('Error: ' + e.message) }
-    setSending(false)
-  }
-
-  const removePref = async (id) => { await api(`/preferences/${id}`, { method: 'DELETE' }); loadPrefs() }
-
-  const sorted = [...prefs].reverse()
-
-  return (
-    <section className="bg-surface border border-card rounded-lg overflow-hidden">
-      {/* Chat history */}
-      {sorted.length > 0 && (
-        <div ref={chatRef} className="max-h-48 overflow-auto p-3 space-y-2">
-          {sorted.map(p => (
-            <div key={p.id}>
-              {/* User message */}
-              <div className="flex justify-end">
-                <div className="bg-highlight/20 rounded-lg rounded-br-sm px-3 py-2 max-w-[85%]">
-                  <p className="text-xs text-text">{p.text}</p>
-                </div>
-              </div>
-              {/* Response */}
-              {p.status === 'applied' && p.response ? (
-                <div className="flex justify-start mt-1">
-                  <div className="bg-card rounded-lg rounded-bl-sm px-3 py-2 max-w-[85%]">
-                    <p className="text-xs text-text">{p.response}</p>
-                    {p.target && <span className="text-xs text-highlight">→ {p.target}</span>}
-                  </div>
-                </div>
-              ) : p.status === 'pending' ? (
-                <div className="flex justify-start mt-1">
-                  <div className="bg-card/50 rounded-lg rounded-bl-sm px-3 py-2">
-                    <span className="text-xs text-muted animate-pulse flex items-center gap-1.5">
-                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" />
-                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" style={{animationDelay:'0.15s'}} />
-                      <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-bounce" style={{animationDelay:'0.3s'}} />
-                    </span>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Input */}
-      <div className="flex gap-2 p-2 border-t border-card/50">
-        <input value={text} onChange={e => setText(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter') send() }}
-          placeholder="Tell Max what you want..."
-          disabled={sending}
-          className="flex-1 bg-card/50 rounded-lg px-3 py-2.5 text-sm text-text placeholder:text-muted/50 focus:outline-none focus:ring-1 focus:ring-highlight transition-all disabled:opacity-50" />
-        <button onClick={send} disabled={!text.trim() || sending}
-          className="bg-highlight hover:bg-highlight/90 text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-30 transition-colors shrink-0">
-          ↑
-        </button>
-      </div>
-    </section>
-  )
-}
-
 // ═══════════════════════════════════════════════════
 // STATUS BAR — compact system info + model selector
 // ═══════════════════════════════════════════════════
@@ -1039,8 +952,6 @@ export default function Control() {
 
   return (
     <div className="h-full overflow-auto p-3 md:p-6 space-y-2">
-      <CommandBar />
-
       <Section icon="⚙️" title="System" preview={status ? `${(status.model||'').replace('anthropic/claude-','')} · RAM ${status.memory?.pct}%` : ''} defaultOpen={false}>
         <StatusBar status={status} onPatch={patchConfig} />
       </Section>

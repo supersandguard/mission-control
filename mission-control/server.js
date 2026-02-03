@@ -327,7 +327,7 @@ app.post('/api/preferences', async (req, res) => {
             const gwRes = await fetch('http://127.0.0.1:18789/tools/invoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tool: 'sessions_send', args: { message: `[Dashboard Command] New preference: "${text}". Check /home/clawdbot/clawd/mission-control/data/preferences.json, find this preference by id "${pref.id}", categorize it, decide where it goes (SOUL.md, USER.md, HEARTBEAT.md, etc), apply the change to the relevant file, then update the preference in preferences.json with: category, target, status="applied", response explaining what you did.` } })
+                body: JSON.stringify({ tool: 'sessions_send', args: { sessionKey: 'agent:main:main', message: `[Dashboard Command] New preference from the Mission Control chat: "${text}". Process it: read /home/clawdbot/clawd/mission-control/data/preferences.json, find preference id "${pref.id}", categorize it, decide where it goes (SOUL.md, USER.md, HEARTBEAT.md, etc), apply the change to the relevant file, then update the preference entry with: category, target, status="applied", response (short explanation in Spanish of what you did and where).` } })
             });
         } catch (e) { console.error('Notify error:', e.message); }
 

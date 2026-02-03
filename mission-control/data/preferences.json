@@ -1,6 +1,16 @@
 {
   "preferences": [
     {
+      "id": "pref_1770157057533",
+      "text": "Si, y que nombre le ponemos para referirnos a él en WhatsApp?",
+      "category": null,
+      "target": null,
+      "status": "pending",
+      "createdAt": 1770157057533,
+      "appliedAt": null,
+      "response": null
+    },
+    {
       "id": "pref_1770156786453",
       "text": "Donde iría esta manera de hacer los mindmaps o marktrees?",
       "category": "operation",

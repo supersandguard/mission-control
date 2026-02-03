@@ -4,6 +4,7 @@ import Control from './pages/Control'
 import Dashboard from './pages/Dashboard'
 import TasksActivity from './pages/TasksActivity'
 import Config from './pages/Config'
+import Chat from './pages/Chat'
 import { sessionsApi } from './api'
 
 function Login({ onLogin }) {
@@ -58,6 +59,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('control')
   const [sessions, setSessions] = useState([])
   const [connected, setConnected] = useState(false)
+  const [chatUnread, setChatUnread] = useState(false)
 
   // Check auth on load — try localStorage, fallback sessionStorage
   useEffect(() => {
@@ -105,9 +107,10 @@ function App() {
   if (!authed) return <Login onLogin={handleLogin} />
 
   return (
-    <Layout currentPage={currentPage} setCurrentPage={setCurrentPage}
-      connected={connected} sessionCount={sessions.length}>
+    <Layout currentPage={currentPage} setCurrentPage={(p) => { setCurrentPage(p); if (p === 'chat') setChatUnread(false) }}
+      connected={connected} sessionCount={sessions.length} chatUnread={chatUnread}>
       {currentPage === 'control' && <Control />}
+      {currentPage === 'chat' && <Chat onUnread={(v) => { if (currentPage !== 'chat') setChatUnread(v) }} />}
       {currentPage === 'sessions' && <Dashboard sessions={sessions} onRefresh={loadSessions} />}
       {currentPage === 'work' && <TasksActivity sessions={sessions} />}
       {currentPage === 'config' && <Config />}
