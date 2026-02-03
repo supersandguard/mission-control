@@ -1,14 +1,64 @@
 {
   "preferences": [
     {
-      "id": "pref_1770157057533",
-      "text": "Si, y que nombre le ponemos para referirnos a él en WhatsApp?",
+      "id": "pref_1770158063516",
+      "text": "Instálalo",
       "category": null,
       "target": null,
       "status": "pending",
-      "createdAt": 1770157057533,
+      "createdAt": 1770158063517,
       "appliedAt": null,
       "response": null
+    },
+    {
+      "id": "pref_1770157911636",
+      "text": "Checate esto https://markmap.js.org/",
+      "category": "tool",
+      "target": "TOOLS.md",
+      "status": "applied",
+      "createdAt": 1770157911636,
+      "appliedAt": 1770158000000,
+      "response": "Documentado markmap en TOOLS.md — convierte Markdown a mindmaps interactivos (SVG/HTML). CLI aún no instalado en el Pi (npm install pendiente por RAM). Cuando quieras lo instalo."
+    },
+    {
+      "id": "pref_1770157839535",
+      "text": "Como me refiero a este tool?",
+      "category": "naming",
+      "target": null,
+      "status": "applied",
+      "createdAt": 1770157839535,
+      "appliedAt": 1770157950000,
+      "response": "Este tool se llama 'Mission Control' — es tu dashboard para configurar preferencias y ver el estado del sistema. En WhatsApp puedes decirme 'mission control', 'dashboard', o 'panel' y entiendo. Internamente vive en /clawd/mission-control/."
+    },
+    {
+      "id": "pref_1770157761076",
+      "text": "Donde iría esta manera de hacer los mindmaps o marktrees? 04:13 p.m. Los mindmaps/marktrees podrían ir como un nuevo Tool (si usamos una herramienta externa como markmap) o como un Skill (si es una capacidad que aprendo). Lo más práctico: instalar markmap-cli como Tool y documentarlo en TOOLS.md. ¿Quieres que lo explore? 📍 TOOLS.md or new skill operation Si, y que nombre le ponemos para referirnos a él en WhatsApp? 04:17 p.m.",
+      "category": "naming",
+      "target": null,
+      "status": "applied",
+      "createdAt": 1770157761076,
+      "appliedAt": 1770157900000,
+      "response": "Es un duplicado del hilo anterior (pref_1770156786453 + pref_1770157057533). La pregunta real es: ¿cómo nombrar al Mission Control en WhatsApp? Sugerencias: 'Mission Control', 'Dashboard', 'Control', o 'Panel'. Alberto decide — mándame por WhatsApp cuál prefiere y lo configuro."
+    },
+    {
+      "id": "pref_1770157711671",
+      "text": "?",
+      "category": "none",
+      "target": null,
+      "status": "applied",
+      "createdAt": 1770157711671,
+      "appliedAt": 1770157800000,
+      "response": "Solo un '?' — no es una preferencia accionable. Ignorado."
+    },
+    {
+      "id": "pref_1770157057533",
+      "text": "Si, y que nombre le ponemos para referirnos a él en WhatsApp?",
+      "category": "naming",
+      "target": null,
+      "status": "applied",
+      "createdAt": 1770157057533,
+      "appliedAt": 1770157900000,
+      "response": "Pregunta sobre cómo nombrar el Mission Control en WhatsApp. Opciones: 'Mission Control', 'Dashboard', 'Control', 'Panel'. Esperando que Alberto elija por WhatsApp."
     },
     {
       "id": "pref_1770156786453",
