@@ -50,6 +50,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.use('/api', auth);
 
 // Serve static files
+app.use('/mindmap', express.static(path.join(__dirname, 'mindmap.html')));
 app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
 // ── Gateway proxy ────────────────────────────────────────

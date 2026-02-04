@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control - Mindmap</title>
+<style>
+  * { margin: 0; padding: 0; }
+  html, body, #mindmap { width: 100vw; height: 100vh; background: #0a0a0f; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18.12/dist/browser/index.js"></script>
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script>
+const md = `# Mission Control
+
+## 🎛️ Control
+### System
+- CPU / RAM / Storage
+- Model Selector
+- Restart Gateway
+### 👥 Team
+- Zury ⚖️ Legal
+- Saylor 📊 Strategy
+- Cobie 🎯 Marketing
+- Johnny 🎨 Design
+### 📋 Pendientes
+- Synced from HEARTBEAT.md
+### 💗 Heartbeat
+- Interval config
+- Check timestamps
+### ⏰ Cron Jobs
+- View / Edit / Archive
+### 🧰 Tools (15)
+- Gmail / Calendar / Drive
+- AgentMail / 1Password
+- X Twitter / Moltbook
+- GitHub / Chromecast
+- Weather / Search / Browser
+- TTS / Tailscale / Markmap
+### 🧠 Skills (9)
+- 1Password / GitHub / Slack
+- tmux / Weather / more
+
+## 💬 Chat
+### Natural Language Config
+- Type what you want
+- AI categorizes & applies
+### Preferences API
+- POST → notify gateway
+- Poll every 5s
+
+## ⚡ Sessions
+### Live Monitoring
+- Session keys / models
+- WebSocket real-time
+
+## 📋 Work
+### Tasks & Activity
+- Sub-agent runs
+- Activity log
+
+## ⚙️ Config
+### Settings
+- Auth / Theme
+
+## 🏗️ Stack
+### Frontend
+- React + Vite + Tailwind
+- PWA
+### Backend
+- Express (port 3847)
+- JSON storage
+- Gateway proxy
+### Hardware
+- Raspberry Pi 3B
+- 1GB RAM / SD+SSD
+### Infra
+- systemd service
+- LAN 192.168.86.40`;
+
+const { Transformer } = window.markmap;
+const transformer = new Transformer();
+const { root } = transformer.transform(md);
+const { Markmap } = window.markmap;
+const mm = Markmap.create('#mindmap', {
+  colorFreezeLevel: 2,
+  initialExpandLevel: 2,
+  spacingVertical: 8,
+  spacingHorizontal: 80,
+  paddingX: 16,
+  autoFit: true,
+  duration: 500,
+  zoom: true,
+  pan: true
+}, root);
+
+// Dark theme overrides
+setTimeout(() => {
+  document.querySelectorAll('text').forEach(t => t.style.fill = '#e0e0e0');
+  document.querySelectorAll('line, path').forEach(l => { if(l.style) l.style.stroke = l.style.stroke || '#555'; });
+}, 500);
+</script>
+</body>
+</html>
