@@ -89,16 +89,8 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
       </main>
 
       {/* Mobile bottom nav - hide when keyboard is open */}
-      <nav className={`
-        md:hidden bg-surface/95 backdrop-blur border-t border-card/50 flex shrink-0 transition-all duration-200 ease-out
-        ${keyboardOpen 
-          ? 'transform translate-y-full opacity-0 pointer-events-none' 
-          : 'transform translate-y-0 opacity-100'
-        }
-      `}
-      style={{
-        paddingBottom: `max(env(safe-area-inset-bottom, 0px), ${keyboardOpen ? '0px' : '8px'})`
-      }}>
+      {currentPage !== 'chat' && <nav className="md:hidden bg-surface/95 backdrop-blur border-t border-card/50 flex shrink-0"
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}>
         {tabs.map(t => (
           <button key={t.id} onClick={() => setCurrentPage(t.id)}
             className={`flex-1 flex flex-col items-center py-3 transition-all relative ${
@@ -129,7 +121,7 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
             )}
           </button>
         ))}
-      </nav>
+      </nav>}
     </div>
   )
 }

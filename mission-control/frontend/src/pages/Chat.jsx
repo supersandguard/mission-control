@@ -68,6 +68,13 @@ export default function Chat({ onUnread, onBack }) {
 
   return (
     <div className="h-full flex flex-col bg-background">
+      {/* Mobile back bar (since nav is hidden in chat) */}
+      <div className="md:hidden flex items-center justify-between px-3 py-2 border-b border-card/30 bg-surface/50 shrink-0">
+        <button onClick={onBack} className="text-muted hover:text-text text-sm flex items-center gap-1">
+          ← Back
+        </button>
+        <span className="text-xs text-muted">{prefs.length} preferences</span>
+      </div>
       {/* Messages area */}
       <div ref={chatRef} className="flex-1 overflow-auto px-4 py-3">
         {sorted.length === 0 ? (

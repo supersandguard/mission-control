@@ -69,7 +69,7 @@
         "Audience building",
         "Meme literacy"
       ],
-      "model": "anthropic/claude-sonnet-4-20250514",
+      "model": "anthropic/claude-opus-4-5",
       "status": "active",
       "invocations": 1,
       "lastInvoked": "2026-02-03T22:53:00Z",
@@ -94,7 +94,7 @@
         "Product thinking",
         "User research"
       ],
-      "model": "anthropic/claude-sonnet-4-20250514",
+      "model": "anthropic/claude-opus-4-5",
       "status": "active",
       "invocations": 3,
       "lastInvoked": "2026-02-03T22:53:00Z",
