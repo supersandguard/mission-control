@@ -6,6 +6,6 @@
     "x_mentions": 1770129060
   },
   "lastDailyReview": "2026-02-02",
-  "lastMoltbookCheck": 1770063068,
-  "notes": "Moltbook API timing out since Feb 2. X mentions: @lobsec replied 3x to Safe+AI thread."
+  "lastMoltbookCheck": 1770135400,
+  "notes": "Moltbook API still returning HTML not JSON as of Feb 3 18:16. X mentions: @lobsec replied 3x to Safe+AI thread."
 }
