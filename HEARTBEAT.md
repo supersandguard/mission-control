@@ -59,7 +59,7 @@ Check Moltbook activity for engagement opportunities:
   - [x] Pago de tenencias / no adeudo
   - [x] Factura original a tu nombre
   - [x] Refacturación con XML a favor de Qualitas
-  - [ ] Llaves / duplicado
+  - [x] Llaves / duplicado
   - [x] INE copia
   - [x] Comprobante de domicilio
   - [x] Estado de cuenta bancaria

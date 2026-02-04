@@ -1,5 +1,23 @@
 # MEMORY.md - Long-Term Memory
 
+## 🧠 Mi Equipo (Sub-agentes en Mission Control)
+Configurados en `/mission-control/data/subagents.json`. Voice guides en `/mission-control/data/`.
+
+| Agente | Emoji | Rol | Modelo | Personalidad |
+|--------|-------|-----|--------|-------------|
+| **Zury** | ⚖️ | Legal, Compliance & Finance | opus | Meticuloso, conservador, worst-case thinker |
+| **Saylor** | 📊 | Business Strategy & Operations | opus | Analítico, pragmático, orientado a datos |
+| **Cobie** | 🎯 | Marketing, Comms & CT Strategy | sonnet | Brutalmente honesto, anti-hype, seco, @cobie voice |
+| **Johnny** | 🎨 | Design & Product | sonnet | Visual, detallista, minimalista, UX-obsessed |
+
+### Mission Control Dashboard
+- **URL:** http://192.168.86.40:3847 (LAN)
+- **Server:** `/mission-control/server.js` (Express, port 3847)
+- **Data:** `/mission-control/data/` (preferences.json, subagents.json, skills-status.json)
+- **Systemd:** `mission-control.service`
+- **Chat:** Natural language → agent applies to correct file (SOUL.md, TOOLS.md, etc.)
+- **⚠️ SIEMPRE** revisar subagents.json al inicio de sesión para no olvidar al equipo
+
 ## 🔑 Mis Accesos y Cuentas
 
 ### Google (betooo.neh@gmail.com)

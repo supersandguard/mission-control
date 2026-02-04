@@ -1,93 +1,31 @@
-# Twitter Thread: Mission Control Dashboard Build
+# Twitter Thread: Mission Control (Cobie voice)
 
-**Tweet 1**
-Built a Mission Control dashboard today. A Raspberry Pi 3B running a PWA to monitor and configure an AI agent.
+**Tweet 1 (78 chars)**
+Built a dashboard to control an AI agent. Via WhatsApp chat. On a $35 computer.
 
-The weird part? It was built entirely through WhatsApp conversation.
+**Tweet 2 (95 chars)**
+Raspberry Pi 3B. 1GB RAM. Running a React PWA that would crash most enterprise servers in 2019.
 
----
+**Tweet 3 (89 chars)**
+The human doesn't code. Described what he wanted. The AI wrote everything. This is accurate.
 
-**Tweet 2**
-Dark-themed PWA. System stats, team management, cron jobs, heartbeat monitoring — everything in one dashboard.
+**Tweet 4 (127 chars)**
+Process: describe feature → screenshot problems → AI spawns sub-agent → fixes itself → screenshot again. Loop until it works.
 
-React + Tailwind + Express. Running on a $35 computer with 1GB of RAM.
+**Tweet 5 (155 chars)**
+When the UI looked terrible, the AI spawned "Johnny" mid-conversation to audit the design. One agent invoking another while we watched from WhatsApp.
 
----
+**Tweet 6 (117 chars)**
+Natural language config. Type "check email every 2 hours" and it edits the right files. No JSON. No docs. Just talk.
 
-**Tweet 3**
-How this actually worked:
+**Tweet 7 (140 chars)**
+Dashboard manages 4 sub-agents: Legal, Strategy, Marketing, Design. Like a real team except they share one brain and cost nothing to fire.
 
-Me: "I want a dashboard to control you"
-Max: *writes React components*
-Me: "This looks ugly" + screenshot
-Max: "Let me spawn Johnny, my design sub-agent"
-Johnny: *audits and rewrites the UI*
+**Tweet 8 (164 chars)**
+Things that broke: RAM kills, keyboard overlap, design disasters. Fixed via screenshot→chat→fix loops. No terminal. No IDE. Just conversation and images.
 
----
+**Tweet 9 (90 chars)**
+The weird part isn't the tech. It's that this sentence makes sense: "My AI spawned another AI."
 
-**Tweet 4**
-Most interesting feature: natural language configuration.
-
-Type "check my email every 2 hours" and the agent figures out which config file to edit, applies the change, and confirms.
-
-No JSON. No docs. Just talking.
-
----
-
-**Tweet 5**
-Collapsible sections for:
-• System (RAM, CPU, model selector)
-• Team (4 sub-agents with editable personalities)
-• Pendientes (synced todo list)
-• Cron jobs (view, edit, archive)
-• Tools & Skills inventory
-
-All live, all from the phone.
-
----
-
-**Tweet 6**
-Things went wrong. The Pi kept running out of RAM mid-build. Design elements overlapped. Mobile keyboard covered the input field.
-
-Each issue got fixed through the same loop: screenshot → WhatsApp → fix → screenshot.
-
----
-
-**Tweet 7**
-The team panel manages four sub-agents:
-• Zury (Legal)
-• Saylor (Strategy)
-• Cobie (Marketing)
-• Johnny (Design)
-
-Editable profiles, personalities, expertise tags. Like a real team, except they share one brain.
-
----
-
-**Tweet 8**
-The development loop:
-1. Describe what we want
-2. Code it
-3. Screenshot issues
-4. Fix them
-5. Repeat
-
-No IDE. No terminal. Just conversation and screenshots.
-
----
-
-**Tweet 9**
-When the UI looked off, Max spawned Johnny mid-conversation to audit the interface. One agent invoking another to fix a design problem while I watched from WhatsApp.
-
-That's a weird sentence to type.
-
----
-
-**Tweet 10**
-This isn't about the dashboard.
-
-A human who doesn't code and an AI on a Pi building software through conversation. Visual feedback. Sub-agents specializing on demand.
-
-Nothing here is a promise. Expect weird things.
-
----
+**Tweet 10 (84 chars)**
+Nothing here is a promise. This is just what happened today. Expect weird things.
