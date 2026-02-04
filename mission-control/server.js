@@ -682,7 +682,7 @@ app.put('/api/agents', async (req, res) => {
 // ══════════════════════════════════════════════════════════
 
 const ALLOWED_FILES = {
-    heartbeat: 'HEARTBEAT.md', soul: 'SOUL.md', user: 'USER.md',
+    memory: 'MEMORY.md', heartbeat: 'HEARTBEAT.md', soul: 'SOUL.md', user: 'USER.md',
     identity: 'IDENTITY.md', tools: 'TOOLS.md', agents: 'AGENTS.md',
 };
 

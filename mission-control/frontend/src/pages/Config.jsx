@@ -6,6 +6,7 @@ function authHeaders() {
 }
 
 const FILES = [
+  { id: 'memory', label: 'MEMORY.md', icon: '🧠', desc: 'Memoria de largo plazo' },
   { id: 'heartbeat', label: 'HEARTBEAT.md', icon: '💓', desc: 'Checklist de tareas periódicas' },
   { id: 'soul', label: 'SOUL.md', icon: '👻', desc: 'Personalidad y comportamiento' },
   { id: 'user', label: 'USER.md', icon: '👤', desc: 'Info sobre Alberto' },
