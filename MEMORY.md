@@ -11,11 +11,14 @@ Configurados en `/mission-control/data/subagents.json`. Voice guides en `/missio
 | **Johnny** | 🎨 | Design & Product | sonnet | Visual, detallista, minimalista, UX-obsessed |
 
 ### Mission Control Dashboard
-- **URL:** http://192.168.86.40:3847 (LAN)
-- **Server:** `/mission-control/server.js` (Express, port 3847)
+- **URL:** http://192.168.86.40:3333 (LAN)
+- **GitHub:** https://github.com/supersandguard/mission-control (pendiente rename a maxumbra)
+- **Server:** `/mission-control/server.js` (Express, port 3333)
 - **Data:** `/mission-control/data/` (preferences.json, subagents.json, skills-status.json)
 - **Systemd:** `mission-control.service`
 - **Chat:** Natural language → agent applies to correct file (SOUL.md, TOOLS.md, etc.)
+- **Config:** Files editor (MEMORY.md, SOUL.md, etc) + Memory viewer (daily notes)
+- **Open source:** MIT license, portable (env vars MC_PORT, MC_WORKSPACE)
 - **⚠️ SIEMPRE** revisar subagents.json al inicio de sesión para no olvidar al equipo
 
 ## 🔑 Mis Accesos y Cuentas

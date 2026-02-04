@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { scrollbar-width: thin; scrollbar-color: #2a2a3f transparent; }
+body {
+  background: #0a0a0f;
+  color: #f1f5f9;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* PWA safe areas */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Prevent overscroll on iOS */
+html, body, #root {
+  overscroll-behavior: none;
+  height: 100%;
+}
+
+/* Better touch targets on mobile */
+@media (max-width: 768px) {
+  button, a, label { min-height: 36px; }
+  input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
+}

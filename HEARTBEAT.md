@@ -70,7 +70,7 @@ Check Moltbook activity for engagement opportunities:
 - [ ] Escribir en el Discord de Morpho
 - [x] Registrar maxumbra.eth — completado
 - [x] Explorar AgentMail — maxumbra@agentmail.to activo
-- [ ] pagar renta duraznos
+- [x] pagar renta duraznos
 - [ ] Pagar agua
 - [ ] Pagar predial
 - [x] Oasis vault staging / yield

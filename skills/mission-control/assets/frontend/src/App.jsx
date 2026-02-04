@@ -4,9 +4,7 @@ import Control from './pages/Control'
 import Dashboard from './pages/Dashboard'
 import TasksActivity from './pages/TasksActivity'
 import Config from './pages/Config'
-import Files from './pages/Files'
 import Chat from './pages/Chat'
-import Entregables from './pages/Entregables'
 import { sessionsApi } from './api'
 
 function Login({ onLogin }) {
@@ -115,8 +113,6 @@ function App() {
       {currentPage === 'chat' && <Chat onUnread={(v) => { if (currentPage !== 'chat') setChatUnread(v) }} onBack={() => setCurrentPage('control')} />}
       {currentPage === 'sessions' && <Dashboard sessions={sessions} onRefresh={loadSessions} />}
       {currentPage === 'work' && <TasksActivity sessions={sessions} />}
-      {currentPage === 'entregables' && <Entregables />}
-      {currentPage === 'files' && <Files />}
       {currentPage === 'config' && <Config />}
     </Layout>
   )

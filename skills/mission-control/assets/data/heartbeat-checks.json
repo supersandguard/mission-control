@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "id": "email",
+      "name": "📧 Email Check",
+      "description": "Check for important unread emails",
+      "enabled": true,
+      "frequencyHours": 4,
+      "priority": "high"
+    },
+    {
+      "id": "calendar",
+      "name": "📅 Calendar Review",
+      "description": "Check upcoming calendar events",
+      "enabled": true,
+      "frequencyHours": 6,
+      "priority": "medium"
+    },
+    {
+      "id": "system_health",
+      "name": "🔧 System Health",
+      "description": "Monitor system resources and performance",
+      "enabled": true,
+      "frequencyHours": 2,
+      "priority": "high"
+    },
+    {
+      "id": "social_monitoring",
+      "name": "🌐 Social Media",
+      "description": "Check mentions and social media activity",
+      "enabled": false,
+      "frequencyHours": 8,
+      "priority": "low"
+    }
+  ]
+}

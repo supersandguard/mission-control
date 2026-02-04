@@ -1,0 +1,12 @@
+{
+  "agents": [
+    {
+      "id": "agent-main-main",
+      "name": "Main Agent",
+      "role": "Primary Assistant",
+      "emoji": "🤖",
+      "description": "Primary agent handling direct user requests and coordination",
+      "sessionKey": "agent:main:main"
+    }
+  ]
+}

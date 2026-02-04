@@ -57,6 +57,32 @@ from googleapiclient.discovery import build
 - **AI Coolnessssss** (136 videos): Covers AI estilo vintage/soul/jazz
   https://youtube.com/playlist?list=PLFGFdz3qV0K-PdvB-ee_GsfLOlguXHMgY
 
+## Tailscale (VPN / Mesh Network)
+- **Instalado:** ✅ (`/usr/bin/tailscale`)
+- **Hostname Tailscale:** max-umbra-2
+- **IP Tailscale:** 100.105.206.114
+- **Cuenta:** iamnehmad@
+- **Dispositivos en tailnet:**
+  - `max-umbra-2` (este Pi) — 100.105.206.114
+  - `betos-macbook-air` — 100.82.120.49
+  - `iphone-14-pro` — 100.86.157.26
+  - `pciam` (Windows) — 100.101.205.112
+  - `pciam2` (Windows) — 100.75.161.54
+  - `umbrel-1` (Linux) — 100.89.104.123
+  - `google-pixel-3` (Android) — 100.82.128.91
+- **Uso:** Acceso remoto entre dispositivos sin port forwarding, VPN mesh
+
+## Syncthing (Sincronización de archivos)
+- **Servicio:** `syncthing@clawdbot` (systemd)
+- **GUI:** http://localhost:8384 (o http://192.168.86.40:8384 desde la red)
+- **API Key:** NfvuC7QyCxQoNzb2JtwbNdihPSFPYt4N
+- **Device ID Pi:** VEN2BSI-XXR5HF2-JEHLTMY-A5F2ADL-LNSPFDE-LR4D7WE-GBFHXHQ-GQZSOAT
+- **Conectado a:** Umbrel (XZ22EHK-GCGWPOP-...)
+- **Carpetas compartidas:**
+  1. `clawdbot syncthing` → `~/clawdbot syncthing/`
+  2. `Default Folder` → `/media/clawdbot/ssd/syncthing/`
+- **Config:** `~/.local/state/syncthing/config.xml`
+
 ## Network
 - eth0: 192.168.86.40 (cable)
 - wlan0: 192.168.84.24 (wifi)

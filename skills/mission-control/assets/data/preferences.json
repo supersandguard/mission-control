@@ -1,0 +1,8 @@
+{
+  "theme": "dark",
+  "autoRefresh": true,
+  "refreshInterval": 5000,
+  "gatewayUrl": "ws://localhost:8080",
+  "port": 3001,
+  "logLevel": "info"
+}

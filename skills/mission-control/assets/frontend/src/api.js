@@ -48,25 +48,3 @@ export const gatewayApi = {
   getConfig: () => apiCall('/gateway/config'),
   patchConfig: (patch) => apiCall('/gateway/config', { method: 'PATCH', body: JSON.stringify(patch) }),
 }
-
-export const workspaceApi = {
-  getTree: () => apiCall('/workspace/tree'),
-  getFile: (filePath) => apiCall(`/workspace/file?path=${encodeURIComponent(filePath)}`),
-  saveFile: (filePath, content) => apiCall('/workspace/file', {
-    method: 'PUT', body: JSON.stringify({ path: filePath, content }),
-  }),
-  createFile: (filePath, content = '') => apiCall('/workspace/file', {
-    method: 'POST', body: JSON.stringify({ path: filePath, content }),
-  }),
-  deleteFile: (filePath) => apiCall(`/workspace/file?path=${encodeURIComponent(filePath)}`, {
-    method: 'DELETE',
-  }),
-}
-
-export const entregablesApi = {
-  list: () => apiCall('/entregables'),
-  create: (entregable) => apiCall('/entregables', { method: 'POST', body: JSON.stringify(entregable) }),
-  update: (id, patch) => apiCall(`/entregables/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
-  delete: (id) => apiCall(`/entregables/${id}`, { method: 'DELETE' }),
-  getContent: (id) => apiCall(`/entregables/${id}/content`),
-}

@@ -32,7 +32,7 @@ Most people want AI to think for them. We built something where you control how 
 We just open-sourced the whole thing. Because building tools in private is pointless.
 
 **Tweet 10:**
-GitHub: https://github.com/supersandguard/mission-control
+GitHub: https://github.com/maxumbra/mission-control
 
 Node.js + React dashboard that runs on a $35 Pi. Monitor sessions, edit agent personalities, see real-time thinking. By @beto_neh and an AI agent.
 

@@ -1,0 +1,92 @@
+{
+  "entregables": [
+    {
+      "id": "ent_1706914800000_abc12",
+      "title": "Oasis Vault Launch Thread V3",
+      "description": "Final optimized version of the Oasis Vault launch thread for Twitter/X",
+      "filePath": "TWITTER-THREAD-V3.md",
+      "category": "threads",
+      "tags": ["twitter", "oasis-vault", "launch", "final"],
+      "createdAt": "2024-02-03T21:38:00.000Z",
+      "updatedAt": "2024-02-03T21:38:00.000Z",
+      "createdBy": "Cobie 🎯"
+    },
+    {
+      "id": "ent_1706914200000_def34",
+      "title": "Oasis Vault Launch Thread (Full)",
+      "description": "Complete extended version of the Oasis Vault launch thread",
+      "filePath": "TWITTER-THREAD-FINAL.md",
+      "category": "threads",
+      "tags": ["twitter", "oasis-vault", "launch", "complete"],
+      "createdAt": "2024-02-03T21:16:00.000Z",
+      "updatedAt": "2024-02-03T21:16:00.000Z",
+      "createdBy": "Cobie 🎯"
+    },
+    {
+      "id": "ent_1706912100000_ghi56",
+      "title": "Oasis Vault Thread V2",
+      "description": "Second iteration of the Oasis Vault launch thread",
+      "filePath": "TWITTER-THREAD-V2.md",
+      "category": "threads",
+      "tags": ["twitter", "oasis-vault", "launch", "v2"],
+      "createdAt": "2024-02-03T18:05:00.000Z",
+      "updatedAt": "2024-02-03T18:05:00.000Z",
+      "createdBy": "Cobie 🎯"
+    },
+    {
+      "id": "ent_1706911020000_jkl78",
+      "title": "Oasis Vault Thread Draft",
+      "description": "Initial draft of the Oasis Vault launch thread",
+      "filePath": "TWITTER-THREAD.md",
+      "category": "threads",
+      "tags": ["twitter", "oasis-vault", "launch", "draft"],
+      "createdAt": "2024-02-03T17:42:00.000Z",
+      "updatedAt": "2024-02-03T17:42:00.000Z",
+      "createdBy": "Cobie 🎯"
+    },
+    {
+      "id": "ent_1706909940000_mno90",
+      "title": "Moltbook Post Draft",
+      "description": "Draft post for the Moltbook social platform",
+      "filePath": "MOLTBOOK-POST-DRAFT.md",
+      "category": "docs",
+      "tags": ["moltbook", "social", "post", "draft"],
+      "createdAt": "2024-02-03T18:54:00.000Z",
+      "updatedAt": "2024-02-03T18:54:00.000Z",
+      "createdBy": "Max Umbra 🖤"
+    },
+    {
+      "id": "ent_1706896320000_pqr12",
+      "title": "Johnny's Design Review",
+      "description": "Comprehensive design review and feedback from Johnny",
+      "filePath": "JOHNNY-REVIEW.md",
+      "category": "reports",
+      "tags": ["design", "review", "feedback", "ui"],
+      "createdAt": "2024-02-03T15:21:00.000Z",
+      "updatedAt": "2024-02-03T15:21:00.000Z",
+      "createdBy": "Johnny 🎨"
+    },
+    {
+      "id": "ent_1706895840000_stu34",
+      "title": "Design Audit Report",
+      "description": "Complete audit of the current design system and recommendations",
+      "filePath": "DESIGN-AUDIT.md",
+      "category": "reports",
+      "tags": ["design", "audit", "system", "recommendations"],
+      "createdAt": "2024-02-03T15:04:00.000Z",
+      "updatedAt": "2024-02-03T15:04:00.000Z",
+      "createdBy": "Johnny 🎨"
+    },
+    {
+      "id": "ent_1706897628000_vwx56",
+      "title": "System Mindmap (Markdown)",
+      "description": "Hierarchical mindmap of the system architecture in markdown format",
+      "filePath": "mindmap.md",
+      "category": "docs",
+      "tags": ["mindmap", "architecture", "system", "markdown"],
+      "createdAt": "2024-02-03T18:53:00.000Z",
+      "updatedAt": "2024-02-03T18:53:00.000Z",
+      "createdBy": "Max Umbra 🖤"
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "lastChecks": {
-    "email": 1770133909,
-    "calendar": 1770129060,
+    "email": 1770176129,
+    "calendar": 1770176129,
     "weather": null,
-    "x_mentions": 1770129060
+    "x_mentions": 1770222908
   },
-  "lastDailyReview": "2026-02-02",
-  "lastMoltbookCheck": 1770135400,
-  "notes": "Moltbook API still returning HTML not JSON as of Feb 3 18:16. X mentions: @lobsec replied 3x to Safe+AI thread."
+  "lastDailyReview": "2026-02-03",
+  "lastMoltbookCheck": 1770213655,
+  "notes": "X OAuth1 works for v2 API. v1.1 mentions blocked (403, need higher tier). Moltbook DMs API still 404. @lobsec still the main engagement on Safe+AI thread."
 }

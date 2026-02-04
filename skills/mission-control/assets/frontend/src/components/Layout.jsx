@@ -28,8 +28,6 @@ export default function Layout({ children, currentPage, setCurrentPage, connecte
     { id: 'chat', label: 'Chat', icon: '💬', badge: chatUnread },
     { id: 'sessions', label: 'Sessions', icon: '⚡' },
     { id: 'work', label: 'Work', icon: '📋' },
-    { id: 'entregables', label: 'Entregables', icon: '📦' },
-    { id: 'files', label: 'Files', icon: '📁' },
     { id: 'config', label: 'Config', icon: '⚙️' },
   ]
 
