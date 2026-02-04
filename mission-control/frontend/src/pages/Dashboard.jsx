@@ -29,7 +29,7 @@ const MODELS = [
 const EMOJIS = ['🖤','🤖','🔧','👥','💬','🧠','🔬','✍️','🎨','📊','🛡️','⚡','🦊','👻','🎯','🔥']
 
 // ─── Session Row ──────────────────────────────────
-function SessionRow({ session, agent, onSelect, selected, onEditAgent, onDelete }) {
+function SessionRow({ session, agent, onSelect, selected, onEditAgent, onDelete, onReset }) {
   const active = isActive(session)
   const isSub = (session.key||'').includes('subagent')
   const dead = isSub && !active
@@ -58,6 +58,8 @@ function SessionRow({ session, agent, onSelect, selected, onEditAgent, onDelete 
       <div className="flex shrink-0 mr-2 gap-0.5">
         <button onClick={() => onEditAgent(session, agent)}
           className="px-1.5 py-1 text-muted hover:text-text text-xs" title="Edit">✏️</button>
+        <button onClick={() => onReset(session)}
+          className="px-1.5 py-1 text-muted hover:text-yellow-400 text-xs" title="Reset Session">🔄</button>
         {isSub && (
           <button onClick={() => onDelete(session)}
             className="px-1.5 py-1 text-muted hover:text-red-400 text-xs" title="Delete">🗑️</button>
@@ -363,6 +365,17 @@ export default function Dashboard({ sessions, onRefresh }) {
     } catch (e) { alert('Error: ' + e.message) }
   }
 
+  const resetSession = async (session) => {
+    const name = session.label || session.key
+    if (!confirm(`Reset session "${name}"?\nThis clears the conversation history and fixes corrupted states.`)) return
+    try {
+      await sessionsApi.reset(session.key)
+      if (selected?.key === session.key) setSelected(null)
+      onRefresh()
+      alert('Session reset successfully')
+    } catch (e) { alert('Error: ' + e.message) }
+  }
+
   const cleanupOld = async () => {
     setCleaning(true)
     try {
@@ -405,6 +418,7 @@ export default function Dashboard({ sessions, onRefresh }) {
           <SessionRow key={s.key} session={s} agent={agents[s.key]}
             onSelect={setSelected} selected={selected?.key === s.key}
             onEditAgent={(sess, ag) => setEditingAgent({ session: sess, agent: ag })}
+            onReset={resetSession}
             onDelete={deleteSession} />
         ))}
       </>

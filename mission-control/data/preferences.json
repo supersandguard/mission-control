@@ -1,3 +1,24 @@
 {
-  "preferences": []
+  "preferences": [
+    {
+      "id": "pref_1770173343663",
+      "text": "hola?",
+      "category": null,
+      "target": null,
+      "status": "pending",
+      "createdAt": 1770173343663,
+      "appliedAt": null,
+      "response": null
+    },
+    {
+      "id": "pref_1770173116224",
+      "text": "revisa todo",
+      "category": null,
+      "target": null,
+      "status": "pending",
+      "createdAt": 1770173116224,
+      "appliedAt": null,
+      "response": null
+    }
+  ]
 }

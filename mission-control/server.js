@@ -574,6 +574,24 @@ app.get('/api/sessions/:key/status', async (req, res) => {
     catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+app.post('/api/sessions/:key/reset', async (req, res) => {
+    try {
+        // Call gateway to clear session
+        await fetch(`${GATEWAY}/tools/invoke`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                tool: 'exec',
+                args: { command: `clawdbot sessions clear "${req.params.key}"` }
+            })
+        });
+        res.json({ success: true, message: 'Session reset successfully' });
+    } catch (e) { 
+        console.error('Session reset failed:', e);
+        res.status(500).json({ error: e.message }); 
+    }
+});
+
 // ── Session cleanup ──────────────────────────────────────
 app.delete('/api/sessions/:key', async (req, res) => {
     try {

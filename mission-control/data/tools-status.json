@@ -85,7 +85,7 @@
       "name": "GitHub",
       "icon": "🐙",
       "description": "gh CLI — repos, issues, PRs, actions",
-      "status": "working",
+      "status": "issues",
       "credentials": "gh auth (token cached)",
       "lastUsed": 1770093000000,
       "notes": "supersandguard org + personal repos"
@@ -145,7 +145,7 @@
       "name": "Markmap",
       "icon": "🗺️",
       "description": "Markdown → mindmaps interactivos (SVG/HTML)",
-      "status": "working",
+      "status": "broken",
       "version": "v0.18.12"
     }
   ]

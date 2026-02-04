@@ -21,6 +21,8 @@ export const sessionsApi = {
     apiCall('/sessions/spawn', { method: 'POST', body: JSON.stringify(body) }),
   delete: (key) =>
     apiCall(`/sessions/${encodeURIComponent(key)}`, { method: 'DELETE' }),
+  reset: (key) =>
+    apiCall(`/sessions/${encodeURIComponent(key)}/reset`, { method: 'POST' }),
   cleanup: (maxAgeHours = 24) =>
     apiCall('/sessions/cleanup', { method: 'POST', body: JSON.stringify({ maxAgeHours }) }),
 }
