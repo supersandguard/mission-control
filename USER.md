@@ -8,6 +8,7 @@
 - **Timezone:** America/Mexico_City
 - **Email:** beto@oasisvault.io (siempre enviar calendar invites aquí, no preguntar)
 - **Twitter/X:** @beto_neh
+- **Kindle email:** famnehmad_F6mPnr@kindle.com
 - **Notes:** 
 
 ## Context

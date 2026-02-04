@@ -66,6 +66,10 @@ from googleapiclient.discovery import build
 - **potato** - red principal (potato07)
 - **patata** - red guest (patata07)
 
+## Kindle (Alberto)
+- **Send-to-Kindle email:** famnehmad_F6mPnr@kindle.com
+- Enviar docs/ebooks a este email para que lleguen al Kindle de Alberto
+
 ## Email (Gmail)
 - **Account:** betooo.neh@gmail.com
 - **SMTP:** smtp.gmail.com:587 (STARTTLS)
