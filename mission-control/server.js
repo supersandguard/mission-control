@@ -712,13 +712,36 @@ app.get('/api/memory/recent', async (req, res) => {
     try {
         const memDir = path.join(WORKSPACE, 'memory');
         const files = await fs.readdir(memDir);
-        const mdFiles = files.filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort().reverse().slice(0, 5);
+        const mdFiles = files.filter(f => /^\d{4}-\d{2}-\d{2}\.md$/.test(f)).sort().reverse().slice(0, 10);
         const entries = [];
         for (const f of mdFiles) {
             const content = await fs.readFile(path.join(memDir, f), 'utf8');
-            entries.push({ date: f.replace('.md', ''), content: content.slice(0, 2000) });
+            entries.push({ date: f.replace('.md', ''), content });
         }
         res.json({ entries });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Read a specific memory day file
+app.get('/api/memory/:date', async (req, res) => {
+    const date = req.params.date;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: 'Invalid date format' });
+    try {
+        const content = await fs.readFile(path.join(WORKSPACE, 'memory', `${date}.md`), 'utf8');
+        res.json({ date, content });
+    } catch (e) {
+        if (e.code === 'ENOENT') return res.json({ date, content: '' });
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Write a specific memory day file
+app.put('/api/memory/:date', async (req, res) => {
+    const date = req.params.date;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: 'Invalid date format' });
+    try {
+        await fs.writeFile(path.join(WORKSPACE, 'memory', `${date}.md`), req.body.content || '');
+        res.json({ ok: true });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
